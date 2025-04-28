@@ -6,7 +6,7 @@
 
 The following guideline outlines the coding standards for our merger project. It is derived from the existing ruleset, with some unnecessary or unlikely warnings/errors removed. Adhering to these guidelines will minimize the need for edits before server deployment to ensure compliance with the code ruleset.
 
-**! Note:** This ruleset is **not definitive as of 28 April 2025**. Some rules may be removed or modified. If working before the final update, prioritize **readability, naming, and spacing** rules, as these are most likely to remain unchanged or see only minor adjustments. **!**
+**! Note:** This ruleset is **not definitive as of 28 April 2025**. Some rules may be modified. If working before the final update, prioritize **readability, naming, and spacing** rules. **!**
 
 Make sure the code you are pushing on this repository does **NOT** contain any unnecessary bin/cache files, only containing the code source files. The .gitignore file that team Neoisis used for our assignment worked well enough, perhaps needing slight adjustment. If needed I will upload it.
 
