@@ -8,6 +8,8 @@ The following guideline outlines the coding standards for our merger project. It
 
 **! Note:** This ruleset is **not definitive as of 28 April 2025**. Some rules may be removed or modified. If working before the final update, prioritize **readability, naming, and spacing** rules, as these are most likely to remain unchanged or see only minor adjustments. **!**
 
+Make sure the code you are pushing on this repository does **NOT** contain any unnecessary bin/cache files, only containing the code source files. The .gitignore file that team Neoisis used for our assignment worked well enough, perhaps needing slight adjustment. If needed I will upload it.
+
 ### Spacing Rules
 
 - **SA1000–SA1005, SA1008–SA1022, SA1024–SA1026, SA1028 (Error):**
