@@ -6,7 +6,7 @@ using LoanShark.Domain;
 using LoanShark.Data;
 using Microsoft.Data.SqlClient;
 
-namespace LoanShark.Repository
+namespace LoanShark.Repository.BankRepository
 {
     public class TransactionsRepository : ITransactionsRepository
     {

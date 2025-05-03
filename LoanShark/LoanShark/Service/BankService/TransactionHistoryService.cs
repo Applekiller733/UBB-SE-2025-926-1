@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LoanShark.Domain;
-using LoanShark.Repository;
+using LoanShark.Repository.BankRepository;
 
-namespace LoanShark.Service
+namespace LoanShark.Service.BankService
 {
     public class TransactionHistoryService
     {

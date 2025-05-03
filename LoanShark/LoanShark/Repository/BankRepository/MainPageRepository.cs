@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using LoanShark.Data;
 
-namespace LoanShark.Repository
+namespace LoanShark.Repository.BankRepository
 {
     public interface IMainPageRepository
     {

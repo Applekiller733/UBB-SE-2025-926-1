@@ -2,9 +2,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using LoanShark.Domain;
-using LoanShark.Repository;
+using LoanShark.Repository.BankRepository;
 
-namespace LoanShark.Service
+namespace LoanShark.Service.BankService
 {
     public class UserService
     {
@@ -80,11 +80,12 @@ namespace LoanShark.Service
         }
 
         // creates a new user
-        public async Task CreateUser(string cnp, string firstName, string lastName, string email, string phoneNumber, string password)
+        public async Task CreateUser(string cnp, string userName, string firstName, string lastName, string email, string phoneNumber, string password)
         {
             User user = new User(
                 -1,
                 new Cnp(cnp),
+                userName,
                 firstName,
                 lastName,
                 new Email(email),

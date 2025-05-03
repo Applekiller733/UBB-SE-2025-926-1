@@ -7,7 +7,7 @@ using LoanShark.Data;
 using LoanShark.Domain;
 using Microsoft.Data.SqlClient;
 
-namespace LoanShark.Repository
+namespace LoanShark.Repository.BankRepository
 {
     /// <summary>
     /// Interface for bank account data access operations

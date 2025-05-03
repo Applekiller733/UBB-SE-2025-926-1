@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using LoanShark.Data;
 using LoanShark.Domain;
-using LoanShark.Repository;
+using LoanShark.Repository.BankRepository;
 
-namespace LoanShark.Service
+namespace LoanShark.Service.BankService
 {
     public class TransactionsService
     {
