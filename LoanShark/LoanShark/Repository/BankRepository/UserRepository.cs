@@ -7,7 +7,7 @@ using LoanShark.Data;
 using LoanShark.Domain;
 using Microsoft.Data.SqlClient;
 
-namespace LoanShark.Repository
+namespace LoanShark.Repository.BankRepository
 {
     public interface IUserRepository
     {
@@ -81,6 +81,7 @@ namespace LoanShark.Repository
                 return new User(
                     userId,
                     new Cnp(dataRow["cnp"].ToString() ?? string.Empty),
+                    dataRow["user_name"].ToString() ?? string.Empty,
                     dataRow["first_name"].ToString() ?? string.Empty,
                     dataRow["last_name"].ToString() ?? string.Empty,
                     new Email(dataRow["email"].ToString() ?? string.Empty),
@@ -163,6 +164,7 @@ namespace LoanShark.Repository
                 return new User(
                     Convert.ToInt32(dataRow["id_user"]),
                     new Cnp(dataRow["cnp"].ToString() ?? string.Empty),
+                    dataRow["user_name"].ToString() ?? string.Empty,
                     dataRow["first_name"].ToString() ?? string.Empty,
                     dataRow["last_name"].ToString() ?? string.Empty,
                     new Email(dataRow["email"].ToString() ?? string.Empty),
@@ -195,6 +197,7 @@ namespace LoanShark.Repository
                 return new User(
                     Convert.ToInt32(dataRow["id_user"]),
                     new Cnp(dataRow["cnp"].ToString() ?? string.Empty),
+                    dataRow["user_name"].ToString() ?? string.Empty,
                     dataRow["first_name"].ToString() ?? string.Empty,
                     dataRow["last_name"].ToString() ?? string.Empty,
                     new Email(dataRow["email"].ToString() ?? string.Empty),
@@ -227,6 +230,7 @@ namespace LoanShark.Repository
                 return new User(
                     Convert.ToInt32(dataRow["id_user"]),
                     new Cnp(dataRow["cnp"].ToString() ?? string.Empty),
+                    dataRow["user_name"].ToString() ?? string.Empty,
                     dataRow["first_name"].ToString() ?? string.Empty,
                     dataRow["last_name"].ToString() ?? string.Empty,
                     new Email(dataRow["email"].ToString() ?? string.Empty),

@@ -3,8 +3,8 @@ using System.Data;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using LoanShark.Domain;
-using LoanShark.Repository;
-namespace LoanShark.Service
+using LoanShark.Repository.BankRepository;
+namespace LoanShark.Service.BankService
 {
     public class LoginService
     {
