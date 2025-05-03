@@ -4,9 +4,9 @@
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-using SocialStuff.View;
+using LoanShark.View.SocialView;
 
-namespace LoanShark
+namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
     using LoanShark.Repository.SocialRepository;
@@ -33,7 +33,7 @@ namespace LoanShark
             this.InitializeComponent();
 
             this.mainWindow = this;
-            IRepository repo = new Repository.SocialRepository.Repository();
+            IRepository repo = new Repository();
             this.notificationService = new NotificationService(repo);
             this.userService = new UserService(repo, this.notificationService);
             this.chatService = new ChatService(repo);

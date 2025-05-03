@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace SocialStuff.View
+namespace LoanShark.View.SocialView
 {
     using System;
     using Microsoft.UI.Xaml;

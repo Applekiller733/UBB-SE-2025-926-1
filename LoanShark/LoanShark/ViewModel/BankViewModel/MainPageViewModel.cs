@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using LoanShark.Domain;
-using LoanShark.Service;
-using LoanShark.View;
+using LoanShark.Service.BankService;
+using LoanShark.View.BankView;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
@@ -187,7 +187,7 @@ namespace LoanShark.ViewModel
                 return "Transaction history is not available, please create a bank account first";
             }
 
-            TransactionHistoryView transactionHistoryView = new TransactionHistoryView();
+            View.BankView.TransactionHistoryView transactionHistoryView = new View.BankView.TransactionHistoryView();
             transactionHistoryView.Activate();
             return null;
         }
@@ -220,7 +220,7 @@ namespace LoanShark.ViewModel
             {
                 return "Please create a bank account to initiate a loan";
             }
-            LoanView loanView = new LoanView();
+            View.BankView.LoanView loanView = new View.BankView.LoanView();
             loanView.Activate();
             return null;
         }

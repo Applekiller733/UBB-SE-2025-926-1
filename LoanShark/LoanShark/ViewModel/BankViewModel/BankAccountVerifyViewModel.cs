@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using LoanShark.Helper;
-using LoanShark.Service;
+using LoanShark.Service.BankService;
 using LoanShark.Domain;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     /// <summary>
     /// ViewModel for verifying user credentials before deleting a bank account

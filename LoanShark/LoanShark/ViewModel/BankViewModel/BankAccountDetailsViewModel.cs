@@ -5,9 +5,9 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 using LoanShark.Domain;
 using LoanShark.Helper;
-using LoanShark.Service;
+using LoanShark.Service.BankService;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     /// <summary>
     /// ViewModel for displaying bank account details

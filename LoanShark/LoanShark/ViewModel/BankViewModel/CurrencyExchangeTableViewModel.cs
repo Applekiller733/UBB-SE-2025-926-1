@@ -2,10 +2,10 @@
 using System.Windows.Input;
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
-using LoanShark.Service;
+using LoanShark.Service.BankService;
 using LoanShark.Domain;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     public class CurrencyExchangeTableViewModel : ObservableObject
     {

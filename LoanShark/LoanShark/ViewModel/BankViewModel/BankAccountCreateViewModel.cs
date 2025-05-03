@@ -6,10 +6,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using LoanShark.Helper;
-using LoanShark.Service;
+using LoanShark.Service.BankService;
 using LoanShark.Domain;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     /// <summary>
     /// ViewModel for creating a new bank account

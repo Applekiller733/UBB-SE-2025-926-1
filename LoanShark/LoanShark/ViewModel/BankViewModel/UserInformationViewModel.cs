@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using LoanShark.Domain;
 using LoanShark.Helper;
-using LoanShark.Service;
-using LoanShark.View;
+using LoanShark.Service.BankService;
+using LoanShark.View.BankView;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     public class UserInformationViewModel : INotifyPropertyChanged
     {
         private UserService userService = new UserService();
         private string firstName = string.Empty;
         private string lastName = string.Empty;
+        private string username = string.Empty;
         private string phoneNumber = string.Empty;
         private string email = string.Empty;
         private string currentPassword = string.Empty;
@@ -23,6 +24,7 @@ namespace LoanShark.ViewModel
         private string confirmNewPassword = string.Empty;
         private string firstNameError = string.Empty;
         private string lastNameError = string.Empty;
+        private string userNameError = string.Empty;
         private string phoneNumberError = string.Empty;
         private string emailError = string.Empty;
         private string currentPasswordError = string.Empty;
@@ -54,6 +56,19 @@ namespace LoanShark.ViewModel
                     lastName = value;
                     OnPropertyChanged(nameof(LastName));
                     LastNameError = string.Empty;
+                }
+            }
+        }
+
+        public string Username
+        {
+            get => username;
+            set
+            {
+                if (username != value)
+                {
+                    username = value;
+                    OnPropertyChanged(nameof(Username));
                 }
             }
         }
@@ -150,6 +165,19 @@ namespace LoanShark.ViewModel
                 {
                     lastNameError = value;
                     OnPropertyChanged(nameof(LastNameError));
+                }
+            }
+        }
+
+        public string UserNameError
+        {
+            get => userNameError;
+            set
+            {
+                if (userNameError != value)
+                {
+                    userNameError = value;
+                    OnPropertyChanged(nameof(UserNameError));
                 }
             }
         }
@@ -252,6 +280,7 @@ namespace LoanShark.ViewModel
             CloseCommand = new RelayCommand(() => CloseAction?.Invoke());
             FirstName = UserSession.Instance.GetUserData("first_name") ?? string.Empty;
             LastName = UserSession.Instance.GetUserData("last_name") ?? string.Empty;
+            Username = UserSession.Instance.GetUserData("user_name") ?? string.Empty;
             PhoneNumber = UserSession.Instance.GetUserData("phone_number") ?? string.Empty;
             Email = UserSession.Instance.GetUserData("email") ?? string.Empty;
         }
@@ -367,6 +396,7 @@ namespace LoanShark.ViewModel
                     user = new User(
                         int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"),
                         new Cnp(UserSession.Instance.GetUserData("cnp") ?? string.Empty),
+                        Username,
                         FirstName,
                         LastName,
                         new Email(Email),
@@ -379,6 +409,7 @@ namespace LoanShark.ViewModel
                     user = new User(
                         int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0"),
                         new Cnp(UserSession.Instance.GetUserData("cnp") ?? string.Empty),
+                        Username,
                         FirstName,
                         LastName,
                         new Email(Email),
@@ -412,7 +443,7 @@ namespace LoanShark.ViewModel
         // opens the delete user confirmation window
         public void DeleteUser()
         {
-            DeleteAccountView deleteAccountWindow = new DeleteAccountView();
+            View.BankView.DeleteAccountView deleteAccountWindow = new View.BankView.DeleteAccountView();
             deleteAccountWindow.Activate();
         }
     }

@@ -9,7 +9,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
 
-namespace LoanShark
+namespace LoanShark.View.BankView
 {
     public sealed partial class TransactionHistoryGraphicalRepresentationView : Window
     {

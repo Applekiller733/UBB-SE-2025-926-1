@@ -4,10 +4,10 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using LoanShark.Domain;
-using LoanShark.Service;
+using LoanShark.Service.BankService;
 using Microsoft.UI.Xaml;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     public class SendMoneyViewModel : INotifyPropertyChanged
     {

@@ -9,7 +9,7 @@ namespace LoanShark.Service.SocialService.Interfaces
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using SocialStuff.Data;
+    using LoanShark.Data;
     using LoanShark.Domain;
 
     /// <summary>

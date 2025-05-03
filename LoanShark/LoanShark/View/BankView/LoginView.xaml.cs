@@ -2,11 +2,11 @@ using System;
 using System.Diagnostics;
 using LoanShark.Domain;
 using LoanShark.Helper;
-using LoanShark.ViewModel;
+using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
 
-namespace LoanShark.View
+namespace LoanShark.View.BankView
 {
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.

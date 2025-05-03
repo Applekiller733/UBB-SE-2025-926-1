@@ -1,12 +1,12 @@
 using System;
 using LoanShark.Domain;
-using LoanShark.ViewModel;
+using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using WinRT.Interop;
 
-namespace LoanShark
+namespace LoanShark.View.BankView
 {
     // this displays the details of a transaction, no biggie
     public sealed partial class TransactionDetailsView : Window

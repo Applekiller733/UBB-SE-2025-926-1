@@ -1,13 +1,13 @@
 ﻿using System.Diagnostics;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using LoanShark.ViewModel;
+using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI.Windowing;
 using Microsoft.UI;
 using WinRT.Interop;
 using LoanShark.Helper;
 
-namespace LoanShark
+namespace LoanShark.View.BankView
 {
     public partial class LoanView : Window
     {
@@ -43,7 +43,7 @@ namespace LoanShark
             var textBox = sender as TextBox;
             if (textBox != null)
             {
-                if (MainGrid.DataContext is ViewModel.LoanViewModel viewModel)
+                if (MainGrid.DataContext is LoanViewModel viewModel)
                 {
                     if (string.IsNullOrWhiteSpace(textBox.Text))
                     {

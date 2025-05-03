@@ -18,7 +18,6 @@ namespace LoanShark.ViewModel.SocialViewModel
     using LoanShark.Domain.MessageClasses;
     using LoanShark.Service.SocialService.Interfaces;
     using LoanShark.View.SocialView;
-    using SocialStuff.Views;
     using Windows.Media.AppBroadcasting;
     using Windows.Storage;
     using Windows.Storage.Pickers;
@@ -174,7 +173,6 @@ namespace LoanShark.ViewModel.SocialViewModel
                 {
                     return childOfChild;
                 }
-
             }
 
             return null;

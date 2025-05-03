@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LoanShark.Data;
 using LoanShark.Domain;
 using Microsoft.Data.SqlClient;
-namespace LoanShark.Repository
+namespace LoanShark.Repository.BankRepository
 {
     public interface ILoanRepository
     { // here this is like a list of functions

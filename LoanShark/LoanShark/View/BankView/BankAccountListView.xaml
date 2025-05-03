@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window
-    x:Class="LoanShark.View.BankAccountListView"
+    x:Class="LoanShark.View.BankView.BankAccountListView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:LoanShark.View"
+    xmlns:local="using:LoanShark.View.BankView"
     xmlns:conv="using:LoanShark.Helper"
     xmlns:dom="using:LoanShark.Domain"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

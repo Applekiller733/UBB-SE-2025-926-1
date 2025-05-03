@@ -6,11 +6,11 @@ using System.Diagnostics;
 using System.Windows.Input;
 using LoanShark.Data;
 using LoanShark.Domain;
-using LoanShark.Repository;
-using LoanShark.Service;
+using LoanShark.Repository.BankRepository;
+using LoanShark.Service.BankService;
 using Microsoft.UI.Xaml;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     public class LoanViewModel : INotifyPropertyChanged
     {

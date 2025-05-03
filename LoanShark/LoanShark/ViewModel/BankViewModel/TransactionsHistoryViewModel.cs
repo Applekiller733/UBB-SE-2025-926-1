@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using LoanShark.Domain;
-using LoanShark.Service;
+using LoanShark.Service.BankService;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     // transactions View Model class needs an iban to be passed in the constructor
     // this iban is used to filter the transactions by the sender iban or receiver iban

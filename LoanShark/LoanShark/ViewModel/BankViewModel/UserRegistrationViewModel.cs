@@ -5,15 +5,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LoanShark.Domain;
-using LoanShark.Service;
+using LoanShark.Service.BankService;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     public class UserRegistrationViewModel : INotifyPropertyChanged
     {
         private UserService userService = new UserService();
         private string firstName = string.Empty;
         private string lastName = string.Empty;
+        private string userName = string.Empty;
         private string cnp = string.Empty;
         private string phoneNumber = string.Empty;
         private string email = string.Empty;
@@ -21,6 +22,7 @@ namespace LoanShark.ViewModel
         private string confirmPassword = string.Empty;
         private string firstNameError = string.Empty;
         private string lastNameError = string.Empty;
+        private string userNameError = string.Empty;
         private string cnpError = string.Empty;
         private string phoneNumberError = string.Empty;
         private string emailError = string.Empty;
@@ -52,6 +54,20 @@ namespace LoanShark.ViewModel
                     lastName = value;
                     OnPropertyChanged(nameof(LastName));
                     LastNameError = string.Empty;
+                }
+            }
+        }
+
+        public string UserName
+        {
+            get => userName;
+            set
+            {
+                if (userName != value)
+                {
+                    userName = value;
+                    OnPropertyChanged(nameof(UserName));
+                    UserNameError = string.Empty;
                 }
             }
         }
@@ -148,6 +164,19 @@ namespace LoanShark.ViewModel
                 {
                     lastNameError = value;
                     OnPropertyChanged(nameof(LastNameError));
+                }
+            }
+        }
+
+        public string UserNameError
+        {
+            get => userNameError;
+            set
+            {
+                if (userNameError != value)
+                {
+                    userNameError = value;
+                    OnPropertyChanged(nameof(UserNameError));
                 }
             }
         }
@@ -258,6 +287,10 @@ namespace LoanShark.ViewModel
             {
                 LastNameError = "Last name is required";
             }
+            if (string.IsNullOrWhiteSpace(UserName))
+            {
+                UserNameError = "User name is required";
+            }
             if (string.IsNullOrWhiteSpace(Cnp))
             {
                 CnpError = "CNP is required";
@@ -329,6 +362,7 @@ namespace LoanShark.ViewModel
             {
                 FirstNameError,
                 LastNameError,
+                UserNameError,
                 CnpError,
                 PhoneNumberError,
                 EmailError,
@@ -344,7 +378,7 @@ namespace LoanShark.ViewModel
             // Create user
             try
             {
-                await userService.CreateUser(Cnp, FirstName, LastName, Email, PhoneNumber, Password);
+                await userService.CreateUser(Cnp, FirstName, LastName, UserName, Email, PhoneNumber, Password);
             }
             catch (Exception ex)
             {

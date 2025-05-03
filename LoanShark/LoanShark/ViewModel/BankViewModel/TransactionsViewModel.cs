@@ -1,10 +1,10 @@
 ﻿using System.Windows.Input;
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
-using LoanShark.View;
+using LoanShark.View.BankView;
 using Microsoft.UI.Xaml;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     public class TransactionsViewModel : ObservableObject
     {
@@ -30,7 +30,7 @@ namespace LoanShark.ViewModel
 
         private void OpenPayLoanWindow()
         {
-            OpenChildWindow(new LoanView());
+            OpenChildWindow(new View.BankView.LoanView());
         }
 
         private void OpenCurrencyExchangeWindow()

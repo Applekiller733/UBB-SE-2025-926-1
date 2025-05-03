@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.View.SocialView;
+
 namespace LoanShark.ViewModel.SocialViewModel
 {
     using System;

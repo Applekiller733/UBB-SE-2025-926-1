@@ -10,7 +10,7 @@ namespace LoanShark.Domain
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.Data.SqlClient;
-    using SocialStuff.Data.Database;
+    using LoanShark.Data;
     using LoanShark.Domain.MessageClasses;
 
     /// <summary>

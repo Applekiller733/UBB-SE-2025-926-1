@@ -1,11 +1,11 @@
 ﻿using Microsoft.UI.Xaml;
-using LoanShark.ViewModel;
+using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI.Windowing;
 using Microsoft.UI;
 using WinRT.Interop;
 using LoanShark.Helper;
 
-namespace LoanShark.View
+namespace LoanShark.View.BankView
 {
     public sealed partial class TransactionsView : Window
     {

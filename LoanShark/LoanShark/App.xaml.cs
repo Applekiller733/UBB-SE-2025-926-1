@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.UI.Xaml;
-using LoanShark.View;
+using LoanShark.View.BankView;
 using LoanShark.Data;
 
 namespace LoanShark

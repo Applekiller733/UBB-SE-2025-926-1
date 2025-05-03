@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using LoanShark.Helper;
-using LoanShark.ViewModel;
+using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
@@ -9,7 +9,7 @@ using Microsoft.UI.Xaml.Controls;
 
 using WinRT.Interop;
 
-namespace LoanShark.View
+namespace LoanShark.View.BankView
 {
     public sealed partial class SendMoneyView : Window
     {

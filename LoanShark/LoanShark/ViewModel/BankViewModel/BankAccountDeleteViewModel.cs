@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.Windows.Input;
 using LoanShark.Helper;
-using LoanShark.Service;
+using LoanShark.Service.BankService;
 using LoanShark.View;
 using LoanShark.Domain;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     /// <summary>
     /// ViewModel for the bank account deletion confirmation view
@@ -60,7 +60,7 @@ namespace LoanShark.ViewModel
         public void OnYesButtonClicked()
         {
             Debug.WriteLine("Yes button");
-            BankAccountVerifyView window = new BankAccountVerifyView();
+            View.BankView.BankAccountVerifyView window = new View.BankView.BankAccountVerifyView();
             window.Activate();
             WindowManager.ShouldReloadBankAccounts = false;
             OnClose?.Invoke();

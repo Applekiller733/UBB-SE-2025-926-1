@@ -3,13 +3,13 @@ using System.Diagnostics;
 using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using LoanShark.ViewModel;
+using LoanShark.ViewModel.BankViewModel;
 using LoanShark.Helper;
 using Windows.UI.Notifications;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
-namespace LoanShark.View
+namespace LoanShark.View.BankView
 {
     /// <summary>
     /// Window for updating bank account details.

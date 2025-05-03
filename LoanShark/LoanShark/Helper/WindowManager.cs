@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.UI.Xaml;
 using LoanShark.Data;
 using LoanShark.Domain;
-using LoanShark.View;
+using LoanShark.View.BankView;
 
 namespace LoanShark.Helper
 {

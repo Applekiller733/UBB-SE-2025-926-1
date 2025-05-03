@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using LoanShark.Service;
+using LoanShark.Service.BankService;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     public class DeleteAccountViewModel
     {

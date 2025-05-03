@@ -5,10 +5,10 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using LoanShark.Domain;
-using LoanShark.Service;
-using LoanShark.View;
+using LoanShark.Service.BankService;
+using LoanShark.View.BankView;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     /// <summary>
     /// ViewModel for displaying and managing a list of bank accounts
@@ -99,7 +99,7 @@ namespace LoanShark.ViewModel
             Debug.WriteLine(SelectedBankAccount.Iban);
             if (SelectedBankAccount != null)
             {
-                var window = new BankAccountDetailsView();
+                var window = new View.BankView.BankAccountDetailsView();
                 window.Activate();
             }
         }

@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using LoanShark.Domain;
-using LoanShark.Service;
-using LoanShark.View;
+using LoanShark.Service.BankService;
+using LoanShark.View.BankView;
 
-namespace LoanShark.ViewModel
+namespace LoanShark.ViewModel.BankViewModel
 {
     public class BankAccountUpdateViewModel : INotifyPropertyChanged
     {
