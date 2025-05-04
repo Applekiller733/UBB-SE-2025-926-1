@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using LoanShark.Domain;
 using LoanShark.Helper;
+using LoanShark.View.SocialView;
 using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -143,6 +144,14 @@ namespace LoanShark.View.BankView
                 XamlRoot = this.Content.XamlRoot
             };
             await dialog.ShowAsync();
+        }
+
+        private void GoToSocialButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            // throw new NotImplementedException();
+            MainWindow socialWindow = new MainWindow();
+            socialWindow.Activate();
+            this.Close();
         }
     }
 }

@@ -37,6 +37,11 @@
                             <FontIcon Glyph="&#xE10A;"/>
                         </MenuFlyoutItem.Icon>
                     </MenuFlyoutItem>
+                    <MenuFlyoutItem x:Name="goToSocialButton" Text="Go To SocialStuff" Click="GoToSocialButton_OnClick">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon Glyph="&#xE144;"/>
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
                 </MenuFlyout>
             </DropDownButton.Flyout>
         </DropDownButton>

@@ -105,7 +105,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             foreach (var friend in this.allFriends.Where(f =>
                          string.IsNullOrEmpty(this.SearchQuery) ||
                          f.Username.Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                         f.PhoneNumber.Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase)))
+                         f.PhoneNumber.ToString().Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase)))
             {
                 this.FriendsList.Add(friend);
             }
