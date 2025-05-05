@@ -1,5 +1,6 @@
 ﻿using LoanShark.Domain;
-using LoanShark.Repository;
+using LoanShark.EF.Repository;
+using LoanShark.EF.Repository.BankRepository;
 using Moq;
 using System;
 using System.Collections.Generic;

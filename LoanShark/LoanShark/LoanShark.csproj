@@ -14,10 +14,10 @@
 	  <CodeAnalysisRuleSet>SE.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="NewFolder\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
-    <None Remove="NewFolder\**" />
-    <Page Remove="NewFolder\**" />
+    <Compile Remove="Service\**" />
+    <EmbeddedResource Remove="Service\**" />
+    <None Remove="Service\**" />
+    <Page Remove="Service\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,25 +33,16 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="BCrypt.Net" Version="0.1.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.3" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250228001" />
-    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.3" />
-    <PackageReference Include="System.Security.Permissions" Version="9.0.3" />
-    <PackageReference Include="xunit" Version="2.9.3" />
   </ItemGroup>
 
   <!--
@@ -71,9 +62,6 @@
     <PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <ItemGroup>
-    <PRIResource Remove="NewFolder\**" />
-  </ItemGroup>
   <ItemGroup>
     <Page Update="View\MainPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +119,11 @@
     <None Remove="TransactionHistory.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LoanShark.Domain\LoanShark.Domain.csproj" />
+    <ProjectReference Include="..\LoanShark.EF\LoanShark.EF.csproj" />
+    <ProjectReference Include="..\LoanShark.Service\LoanShark.Service.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="View\TransactionHistoryGraphicalRepresentation.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -144,5 +137,11 @@
     <Page Update="TransactionHistory.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Remove="Service\**" />
   </ItemGroup>
 </Project>

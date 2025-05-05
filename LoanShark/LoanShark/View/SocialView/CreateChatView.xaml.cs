@@ -10,14 +10,14 @@ namespace LoanShark.View.SocialView
 
     public sealed partial class CreateChatView : Page
     {
-        public IChatService chatService;
-        public IUserService userService;
+        public IChatService ChatService;
+        public IUserService UserService;
 
         public CreateChatView(ChatListViewModel chatListViewModel, IChatService chatService, IUserService userService)
         {
             this.InitializeComponent();
-            this.chatService = chatService;
-            this.userService = userService;
+            this.ChatService = chatService;
+            this.UserService = userService;
 
             this.MainGrid.DataContext = new CreateChatViewModel(chatListViewModel, chatService, userService);
         }

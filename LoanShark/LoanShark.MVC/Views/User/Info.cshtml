@@ -1,0 +1,17 @@
+﻿@model LoanShark.Domain.User
+
+@{
+    ViewData["Title"] = "User Info";
+}
+
+<h2>User Information</h2>
+
+<table class="table">
+    <tr><th>ID</th><td>@Model.UserID</td></tr>
+    <tr><th>Username</th><td>@Model.Username</td></tr>
+    <tr><th>First Name</th><td>@Model.FirstName</td></tr>
+    <tr><th>Last Name</th><td>@Model.LastName</td></tr>
+    <tr><th>Email</th><td>@Model.Email</td></tr>
+    <tr><th>Phone</th><td>@Model.PhoneNumber</td></tr>
+    <tr><th>CNP</th><td>@Model.Cnp</td></tr>
+</table>

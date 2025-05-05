@@ -4,8 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LoanShark.Repository;
+using LoanShark.EF.Repository;
+using LoanShark.EF.Repository.BankRepository;
 using LoanShark.Service;
+using LoanShark.Service.BankService;
 using Moq;
 using Xunit;
 

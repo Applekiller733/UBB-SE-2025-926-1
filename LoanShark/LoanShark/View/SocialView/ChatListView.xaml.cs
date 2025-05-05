@@ -18,37 +18,37 @@ namespace LoanShark.View.SocialView
     public sealed partial class ChatListView : Page
     {
         private ChatListViewModel chatListViewModel;
-        public IUserService userService;
-        public IChatService chatService;
-        public IMessageService messageService;
-        public IReportService reportService;
+        public IUserService UserService;
+        public IChatService ChatService;
+        public IMessageService MessageService;
+        public IReportService ReportService;
         public Frame RightFrame;
-        public Window mainWindow;
+        public Window MainFrame;
 
-        public ChatListView(Window mainWindow, IChatService chatService, IUserService userService, IReportService reportService, IMessageService messageService, Frame RightFrame)
+        public ChatListView(Window mainFrame, IChatService chatService, IUserService userService, IReportService reportService, IMessageService messageService, Frame rightFrame)
         {
             this.InitializeComponent();
 
-            this.mainWindow = mainWindow;
-            this.userService = userService;
-            this.chatService = chatService;
-            this.messageService = messageService;
-            this.reportService = reportService;
-            this.RightFrame = RightFrame;
-            this.chatListViewModel = new ChatListViewModel(chatService, userService);
+            this.MainFrame = mainFrame;
+            this.UserService = userService;
+            this.ChatService = chatService;
+            this.MessageService = messageService;
+            this.ReportService = reportService;
+            this.RightFrame = rightFrame;
+            this.chatListViewModel = new ChatListViewModel(ChatService, UserService);
             this.MainGrid.DataContext = this.chatListViewModel;
         }
 
         private void CreateChat_Click(object sender, RoutedEventArgs e)
         {
-            this.RightFrame.Content = new CreateChatView(this.chatListViewModel, this.chatService, this.userService);
+            this.RightFrame.Content = new CreateChatView(this.chatListViewModel, this.ChatService, this.UserService);
         }
 
         private void ChatList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (this.ChatList.SelectedItem is Chat selectedChat)
             {
-                this.RightFrame.Content = new ChatMessagesView(this.chatListViewModel, this.mainWindow, this.RightFrame, selectedChat.getChatID(), this.userService, this.chatService, this.messageService, this.reportService);
+                this.RightFrame.Content = new ChatMessagesView(this.chatListViewModel, this.MainFrame, this.RightFrame, selectedChat.getChatID(), this.UserService, this.ChatService, this.MessageService, this.ReportService);
             }
         }
     }

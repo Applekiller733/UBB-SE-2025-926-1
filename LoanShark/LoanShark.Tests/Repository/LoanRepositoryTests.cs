@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Moq;
 using LoanShark.Data;
-using LoanShark.Repository;
+using LoanShark.EF.Repository;
 using Xunit;
 using LoanShark.Domain;
 using LoanShark.Service;
 using System.Data;
+using LoanShark.EF.Repository.BankRepository;
 
 namespace LoanShark.Tests.Repository
 {

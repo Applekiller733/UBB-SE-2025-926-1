@@ -25,16 +25,16 @@ namespace LoanShark.ViewModel.SocialViewModel
 
     public class ChatMessagesViewModel : INotifyPropertyChanged
     {
-        private readonly Window _window;
+        private readonly Window window;
 
         public ObservableCollection<Message> ChatMessages { get; set; }
 
         public ListView ChatListView { get; set; } = null!;
 
-        public IMessageService messageService;
-        public IChatService chatService;
-        public IUserService userService;
-        public IReportService reportService;
+        public IMessageService MessageService;
+        public IChatService ChatService;
+        public IUserService UserService;
+        public IReportService ReportService;
         private MessageTemplateSelector templateSelector;
 
         public int CurrentChatID { get; set; }
@@ -44,8 +44,8 @@ namespace LoanShark.ViewModel.SocialViewModel
         public string CurrentChatName { get; set; }
 
         // For message polling
-        private Timer? _messagePollingTimer;
-        private DateTime _lastMessageTimestamp = DateTime.MinValue;
+        private Timer? messagePollingTimer;
+        private DateTime lastMessageTimestamp = DateTime.MinValue;
         private const int POLLING_INTERVAL = 2000; // 2 seconds
 
         public string CurrentChatParticipantsString => string.Join(", ", this.CurrentChatParticipants ?? new List<string>());
@@ -96,7 +96,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         private void SendMessage()
         {
             string convertedContent = EmoticonConverter.ConvertEmoticonsToEmojis(this.MessageContent);
-            this.messageService.SendMessage(this.CurrentUserID, this.CurrentChatID, convertedContent);
+            this.MessageService.SendMessage(this.CurrentUserID, this.CurrentChatID, convertedContent);
             this.CheckForNewMessages();
             this.MessageContent = string.Empty;
         }
@@ -115,14 +115,14 @@ namespace LoanShark.ViewModel.SocialViewModel
             picker.FileTypeFilter.Add(".jpeg");
             picker.FileTypeFilter.Add(".png");
 
-            var hwnd = WindowNative.GetWindowHandle(this._window);
+            var hwnd = WindowNative.GetWindowHandle(this.window);
             InitializeWithWindow.Initialize(picker, hwnd);
 
             StorageFile file = await picker.PickSingleFileAsync();
             if (file != null)
             {
                 string imageUrl = await ImgurImageUploader.UploadImageAndGetUrl(file);
-                this.messageService.SendImage(this.CurrentUserID, this.CurrentChatID, imageUrl);
+                this.MessageService.SendImage(this.CurrentUserID, this.CurrentChatID, imageUrl);
                 this.CheckForNewMessages();
             }
         }
@@ -143,7 +143,7 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         private void DeleteMessage(Message message)
         {
-            this.messageService.DeleteMessage(message);
+            this.MessageService.DeleteMessage(message);
             this.LoadAllMessagesForChat();
         }
 
@@ -151,9 +151,7 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         private void ReportMessage(Message message)
         {
-            // Navigate to ReportView
-
-            ReportView reportView = new ReportView(this.userService, this.reportService, message.GetSenderID(), message.GetMessageID());
+            ReportView reportView = new ReportView(this.UserService, this.ReportService, message.GetSenderID(), message.GetMessageID());
             reportView.Activate();
         }
 
@@ -187,21 +185,21 @@ namespace LoanShark.ViewModel.SocialViewModel
         /// <param name="msgService">The message service instance.</param>
         /// <param name="chtService">The chat service instance.</param>
         /// <param name="usrService">The user service instance.</param>
-        /// <param name="reportService">The report service instance.</param>
+        /// <param name="ReportService">The report service instance.</param>
         public ChatMessagesViewModel(Window window, Frame rightFrame, int currentChatID, IMessageService msgService, IChatService chtService, IUserService usrService, IReportService reportService)
         {
-            this._window = window;
+            this.window = window;
             this.ChatMessages = new ObservableCollection<Message>();
-            this.messageService = msgService;
-            this.chatService = chtService;
-            this.userService = usrService;
-            this.reportService = reportService;
+            this.MessageService = msgService;
+            this.ChatService = chtService;
+            this.UserService = usrService;
+            this.ReportService = reportService;
             this.CurrentChatID = currentChatID;
-            this.CurrentUserID = this.userService.GetCurrentUser();
+            this.CurrentUserID = this.UserService.GetCurrentUser();
             this.SendMessageCommand = new RelayCommand(this.SendMessage);
             this.SendImageCommand = new RelayCommand(this.SendImage);
-            this.CurrentChatName = this.chatService.GetChatNameByID(this.CurrentChatID);
-            this.CurrentChatParticipants = this.chatService.GetChatParticipantsStringList(this.CurrentChatID);
+            this.CurrentChatName = this.ChatService.GetChatNameByID(this.CurrentChatID);
+            this.CurrentChatParticipants = this.ChatService.GetChatParticipantsStringList(this.CurrentChatID);
             this.DeleteMessageCommand = new RelayCommand<Message>(this.DeleteMessage);
             this.ReportMessageCommand = new RelayCommand<Message>(this.ReportMessage);
 
@@ -229,7 +227,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         private void LoadAllMessagesForChat()
         {
             this.ChatMessages.Clear();
-            var messages = this.chatService.GetChatHistory(this.CurrentChatID);
+            var messages = this.ChatService.GetChatHistory(this.CurrentChatID);
 
             foreach (var message in messages)
             {
@@ -239,7 +237,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             // Update the last message timestamp
             if (this.ChatMessages.Any())
             {
-                this._lastMessageTimestamp = this.ChatMessages.Max(m => m.GetTimestamp());
+                this.lastMessageTimestamp = this.ChatMessages.Max(m => m.GetTimestamp());
             }
 
             this.ScrollToBottom();
@@ -249,10 +247,10 @@ namespace LoanShark.ViewModel.SocialViewModel
         private void StartMessagePolling()
         {
             // Dispose of existing timer if it exists
-            this._messagePollingTimer?.Dispose();
+            this.messagePollingTimer?.Dispose();
 
             // Create new timer that checks for new messages
-            this._messagePollingTimer = new Timer(
+            this.messagePollingTimer = new Timer(
                 _ => this.ChatListView?.DispatcherQueue.TryEnqueue(() => this.CheckForNewMessages()),
                 null,
                 0,
@@ -262,28 +260,28 @@ namespace LoanShark.ViewModel.SocialViewModel
         // Stop polling for messages
         public void StopMessagePolling()
         {
-            this._messagePollingTimer?.Dispose();
-            this._messagePollingTimer = null;
+            this.messagePollingTimer?.Dispose();
+            this.messagePollingTimer = null;
         }
 
         // Check for new messages by comparing timestamps
         private void CheckForNewMessages()
         {
-            var messages = this.chatService.GetChatHistory(this.CurrentChatID);
+            var messages = this.ChatService.GetChatHistory(this.CurrentChatID);
             bool hasNewMessages = false;
 
             foreach (var message in messages)
             {
                 // If the message timestamp is newer than the last message we processed
-                if (message.GetTimestamp() > this._lastMessageTimestamp)
+                if (message.GetTimestamp() > this.lastMessageTimestamp)
                 {
                     this.AddMessageToChat(message);
                     hasNewMessages = true;
 
                     // Update the last message timestamp if this is newer
-                    if (message.GetTimestamp() > this._lastMessageTimestamp)
+                    if (message.GetTimestamp() > this.lastMessageTimestamp)
                     {
-                        this._lastMessageTimestamp = message.GetTimestamp();
+                        this.lastMessageTimestamp = message.GetTimestamp();
                     }
                 }
             }
@@ -308,7 +306,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                     textMessage.GetTimestamp(),
                     textMessage.GetContent(),
                     textMessage.GetUsersReport());
-                newTextMessage.SenderUsername = this.userService.GetUserById(textMessage.GetSenderID()).GetUsername();
+                newTextMessage.SenderUsername = this.UserService.GetUserById(textMessage.GetSenderID()).GetUsername();
                 this.ChatMessages.Add(newTextMessage);
             }
             else if (message is ImageMessage imageMessage)
@@ -320,7 +318,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                     imageMessage.GetTimestamp(),
                     imageMessage.GetImageURL(),
                     imageMessage.GetUsersReport());
-                newImageMessage.SenderUsername = this.userService.GetUserById(imageMessage.GetSenderID()).GetUsername();
+                newImageMessage.SenderUsername = this.UserService.GetUserById(imageMessage.GetSenderID()).GetUsername();
                 this.ChatMessages.Add(newImageMessage);
             }
             else if (message is TransferMessage transferMessage)
@@ -333,7 +331,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                     transferMessage.GetAmount(),
                     transferMessage.GetDescription(),
                     transferMessage.GetCurrency());
-                newTransferMessage.SenderUsername = this.userService.GetUserById(transferMessage.GetSenderID()).GetUsername();
+                newTransferMessage.SenderUsername = this.UserService.GetUserById(transferMessage.GetSenderID()).GetUsername();
                 this.ChatMessages.Add(newTransferMessage);
             }
             else if (message is RequestMessage requestMessage)
@@ -346,7 +344,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                     requestMessage.GetAmount(),
                     requestMessage.GetDescription(),
                     requestMessage.GetCurrency());
-                newRequestMessage.SenderUsername = this.userService.GetUserById(requestMessage.GetSenderID()).GetUsername();
+                newRequestMessage.SenderUsername = this.UserService.GetUserById(requestMessage.GetSenderID()).GetUsername();
                 this.ChatMessages.Add(newRequestMessage);
             }
         }

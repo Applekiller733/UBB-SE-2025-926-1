@@ -11,7 +11,7 @@
         private IUserService userService;
         private IChatService chatService;
         private ChatListViewModel lastViewModel;
-        private int ChatID;
+        private int chatID;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -20,11 +20,11 @@
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public LeaveChatViewModel(IUserService userService, IChatService chatService, ChatListViewModel chatMessagesViewModel, int ChatID)
+        public LeaveChatViewModel(IUserService userService, IChatService chatService, ChatListViewModel chatMessagesViewModel, int chatID)
         {
             this.LeaveChatCommand = new RelayCommand(this.LeaveChat);
 
-            this.ChatID = ChatID;
+            this.chatID = chatID;
             this.userService = userService;
             this.chatService = chatService;
             this.lastViewModel = chatMessagesViewModel;
@@ -32,7 +32,7 @@
 
         public void LeaveChat()
         {
-            this.userService.LeaveChat(this.userService.GetCurrentUser(), this.ChatID);
+            this.userService.LeaveChat(this.userService.GetCurrentUser(), this.chatID);
 
             this.lastViewModel.LoadChats();
         }

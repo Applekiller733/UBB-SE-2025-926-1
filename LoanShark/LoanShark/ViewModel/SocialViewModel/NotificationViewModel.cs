@@ -38,11 +38,6 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         private readonly INotificationService notificationService;
 
-        // public NotificationViewModel()
-        // {
-        //    // constructor
-        // }
-
         public NotificationViewModel(INotificationService service, int userID)
         {
             this.notificationService = service;

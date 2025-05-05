@@ -26,9 +26,9 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         private string searchQuery;
 
-        public List<User> allUsers { get; set; }
+        public List<User> AllUsers { get; set; }
 
-        public IUserService userService { get; set; }
+        public IUserService UserService { get; set; }
 
         public ICommand AddFriendCommand { get; set; }
 
@@ -46,11 +46,11 @@ namespace LoanShark.ViewModel.SocialViewModel
             }
         }
 
-        public  AddFriendsViewModel(FriendsListViewModel friendsListViewModel, IUserService userService)
+        public AddFriendsViewModel(FriendsListViewModel friendsListViewModel, IUserService userService)
         {
-            this.userService = userService;
+            this.UserService = userService;
             this.friendsListViewModel = friendsListViewModel;
-            this.allUsers = userService.GetNonFriendsUsers(userService.GetCurrentUser());
+            this.AllUsers = UserService.GetNonFriendsUsers(UserService.GetCurrentUser());
             this.UsersList = new ObservableCollection<User>();
             this.AddFriendCommand = new RelayCommand<object>(AddFriend);
 
@@ -66,14 +66,14 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             var friend = user as User;
 
-            this.userService.AddFriend(this.userService.GetCurrentUser(), friend!.GetUserId());
+            this.UserService.AddFriend(this.UserService.GetCurrentUser(), friend!.GetUserId());
             this.friendsListViewModel.LoadFriends();
             this.LoadUsers();
         }
 
         private void LoadUsers()
         {
-            this.allUsers = this.userService.GetNonFriendsUsers(this.userService.GetCurrentUser());
+            this.AllUsers = this.UserService.GetNonFriendsUsers(this.UserService.GetCurrentUser());
             this.FilterUsers();
         }
 
@@ -81,7 +81,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             this.UsersList.Clear();
 
-            foreach (var friend in this.allUsers.Where(f =>
+            foreach (var friend in this.AllUsers.Where(f =>
                          string.IsNullOrEmpty(this.SearchQuery) ||
                          f.Username.Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase)))
             {

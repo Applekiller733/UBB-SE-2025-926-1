@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0-windows10.0.19041</TargetFramework>
+		<TargetFrameworks>net8.0-windows10.0.19041.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Platforms>AnyCPU;x64</Platforms>
@@ -17,6 +17,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\LoanShark.Domain\LoanShark.Domain.csproj" />
+		<ProjectReference Include="..\LoanShark.EF\LoanShark.EF.csproj" />
+		<ProjectReference Include="..\LoanShark.Service\LoanShark.Service.csproj" />
 		<ProjectReference Include="..\LoanShark\LoanShark.csproj" />
 	</ItemGroup>
 

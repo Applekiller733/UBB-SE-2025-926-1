@@ -1,6 +1,8 @@
 ﻿using LoanShark.Domain;
-using LoanShark.Repository;
+using LoanShark.EF.Repository;
+using LoanShark.EF.Repository.BankRepository;
 using LoanShark.Service;
+using LoanShark.Service.BankService;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -47,6 +49,7 @@ namespace LoanShark.Tests.Service
             var existingUser = new User(
                 2,
                 new Cnp(cnp),
+                "John",
                 "Test",
                 "User",
                 new Email("test@example.com"),
@@ -79,6 +82,7 @@ namespace LoanShark.Tests.Service
             var existingUser = new User(
                 2,
                 new Cnp("1234567890123"),
+                "Test",
                 "Jane",
                 "Doe",
                 new Email(email),
@@ -126,6 +130,7 @@ namespace LoanShark.Tests.Service
             var existingUser = new User(
                 2,
                 new Cnp("1234567890123"),
+                "tESTG2",
                 "Test",
                 "User",
                 new Email("test@example.com"),
@@ -151,6 +156,7 @@ namespace LoanShark.Tests.Service
             return new User(
                 id,
                 new Cnp("1234567890123"),
+                "Test",
                 "John",
                 "Doe",
                 new Email("john@example.com"),
@@ -233,6 +239,7 @@ namespace LoanShark.Tests.Service
             var user = new User(
                 1,
                 new Cnp("1234567890123"),
+                "TestUser",
                 "John",
                 "Doe",
                 new Email("john.doe@example.com"),
@@ -294,7 +301,7 @@ namespace LoanShark.Tests.Service
                 
 
             // Act
-            await service.CreateUser(cnp, firstName, lastName, email, phoneNumber, password);
+            await service.CreateUser(cnp, "tEST", firstName, lastName, email, phoneNumber, password);
 
             // Assert
             mockRepo.Verify(r => r.CreateUser(It.IsAny<User>()), Times.Once);

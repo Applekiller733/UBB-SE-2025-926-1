@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
-using LoanShark.Repository;
+using LoanShark.EF.Repository;
 using LoanShark.Service;
 using LoanShark.Domain;
 using Xunit;
 using Windows.System;
 using Moq.Protected;
+using LoanShark.EF.Repository.BankRepository;
+using LoanShark.Service.BankService;
 namespace LoanShark.Tests.Service
 {
     public class LoanServiceTests

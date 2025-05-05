@@ -9,7 +9,7 @@ using LoanShark.View.SocialView;
 namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
-    using LoanShark.Repository.SocialRepository;
+    using LoanShark.EF.Repository.SocialRepository;
     using LoanShark.Service.SocialService.Implementations;
     using LoanShark.Service.SocialService.Interfaces;
     using LoanShark.View.SocialView;

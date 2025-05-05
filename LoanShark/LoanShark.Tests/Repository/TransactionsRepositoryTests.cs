@@ -1,6 +1,7 @@
 ﻿using LoanShark.Data;
 using LoanShark.Domain;
-using LoanShark.Repository;
+using LoanShark.EF.Repository;
+using LoanShark.EF.Repository.BankRepository;
 using Microsoft.Data.SqlClient;
 using Moq;
 using System;

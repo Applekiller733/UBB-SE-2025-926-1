@@ -18,16 +18,16 @@ namespace LoanShark.View.SocialView
         private IChatService chatService;
         private IUserService userService;
         private IMessageService messageService;
-        private Frame RightFrame;
-        private Page AddFriendsPage;
+        private Frame rightFrame;
+        private Page addFriendsPage;
 
-        public FriendsListView(IChatService chatService, IUserService userService, IMessageService messageService, Frame RightFrame)
+        public FriendsListView(IChatService chatService, IUserService userService, IMessageService messageService, Frame rightFrame)
         {
             this.InitializeComponent();
             this.chatService = chatService;
             this.userService = userService;
             this.messageService = messageService;
-            this.RightFrame = RightFrame;
+            this.rightFrame = rightFrame;
             this.friendsListViewModel = new FriendsListViewModel(chatService, userService, messageService);
 
             this.DataContext = this.friendsListViewModel;
@@ -35,7 +35,7 @@ namespace LoanShark.View.SocialView
 
         private void AddFriend_Click(object sender, RoutedEventArgs e)
         {
-            this.RightFrame.Content = new AddFriendsView(this.friendsListViewModel, this.userService);
+            this.rightFrame.Content = new AddFriendsView(this.friendsListViewModel, this.userService);
         }
     }
 }

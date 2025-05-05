@@ -1,6 +1,6 @@
 ﻿using LoanShark.Data;
 using LoanShark.Domain;
-using LoanShark.Repository;
+using LoanShark.EF.Repository;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Moq;
 using Xunit;
 using System.Data;
+using LoanShark.EF.Repository.BankRepository;
 
 namespace LoanShark.Tests.Repository
 {
@@ -32,11 +33,13 @@ namespace LoanShark.Tests.Repository
             var user = new User(
                 0,
                 new Cnp("1234567890123"),
+                "JohnDoe",
                 "John",
                 "Doe",
                 new Email("john.doe@example.com"),
                 new PhoneNumber("0712345678"),
                 new HashedPassword("hashedpassT!123")
+
             );
 
             var sqlParamsCapture = new SqlParameter[8];
@@ -64,6 +67,7 @@ namespace LoanShark.Tests.Repository
             var user = new User(
                 0,
                 new Cnp("1234567890123"),
+                "JohnDoe",
                 "John",
                 "Doe",
                 new Email("john.doe@example.com"),
@@ -343,6 +347,7 @@ namespace LoanShark.Tests.Repository
             var user = new User(
                 1,
                 new Cnp("1234567890123"),
+                "JohnDoe",
                 "John",
                 "Doe",
                 new Email("john.doe@example.com"),
@@ -367,6 +372,7 @@ namespace LoanShark.Tests.Repository
             var user = new User(
                 2,
                 new Cnp("9876543210987"),
+                "BobDoe",
                 "Bob",
                 "Jones",
                 new Email("bob@example.com"),

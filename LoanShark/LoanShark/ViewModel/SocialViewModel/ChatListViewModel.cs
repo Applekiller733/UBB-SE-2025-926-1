@@ -28,9 +28,9 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public ObservableCollection<Chat> ChatList { get; set; }
 
-        public List<Chat> currentUserChats;
-        public IChatService chatService;
-        public IUserService userService;
+        public List<Chat> CurrentUserChats;
+        public IChatService ChatService;
+        public IUserService UserService;
 
         public CountToVisibilityConverter CountToVisibilityConverter { get; set; }
 
@@ -51,9 +51,9 @@ namespace LoanShark.ViewModel.SocialViewModel
         public ChatListViewModel(IChatService chatS, IUserService userS)
         {
             this.ChatList = new ObservableCollection<Chat>();
-            this.chatService = chatS;
-            this.userService = userS;
-            this.currentUserChats = this.userService.GetCurrentUserChats();
+            this.ChatService = chatS;
+            this.UserService = userS;
+            this.CurrentUserChats = this.UserService.GetCurrentUserChats();
             this.CountToVisibilityConverter = new CountToVisibilityConverter();
 
             this.LoadChats();
@@ -67,8 +67,8 @@ namespace LoanShark.ViewModel.SocialViewModel
         public void FilterChats()
         {
             this.ChatList.Clear();
-            this.currentUserChats = this.userService.GetCurrentUserChats();
-            foreach (var chat in this.currentUserChats)
+            this.CurrentUserChats = this.UserService.GetCurrentUserChats();
+            foreach (var chat in this.CurrentUserChats)
             {
                 if (string.IsNullOrEmpty(this.SearchQuery) ||
                     chat.getChatName().IndexOf(this.SearchQuery, StringComparison.OrdinalIgnoreCase) >= 0)
@@ -78,7 +78,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             }
 
             // sort chats by last message time
-            this.ChatList = new ObservableCollection<Chat>(this.ChatList.OrderByDescending(chat => this.chatService.GetLastMessageTimeStamp(chat.getChatID())));
+            this.ChatList = new ObservableCollection<Chat>(this.ChatList.OrderByDescending(chat => this.ChatService.GetLastMessageTimeStamp(chat.getChatID())));
         }
     }
 }

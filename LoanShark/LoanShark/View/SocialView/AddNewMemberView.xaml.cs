@@ -15,25 +15,25 @@ namespace LoanShark.View.SocialView
         private IUserService userService;
         private AddNewMemberViewModel addNewMemberViewModel;
         private Page lastChat;
-        private Frame RightFrame;
+        private Frame rightFrame;
         private ChatMessagesViewModel chatMessagesViewModel;
 
-        public AddNewMemberView(ChatMessagesViewModel chatMessagesViewModel, Page lastChat, Frame rightFrame, int ChatID, IChatService chatService, IUserService userService)
+        public AddNewMemberView(ChatMessagesViewModel chatMessagesViewModel, Page lastChat, Frame rightFrame, int chatID, IChatService chatService, IUserService userService)
         {
             this.InitializeComponent();
             this.chatMessagesViewModel = chatMessagesViewModel;
             this.lastChat = lastChat;
-            this.RightFrame = rightFrame;
+            this.rightFrame = rightFrame;
             this.chatService = chatService;
             this.userService = userService;
-            this.addNewMemberViewModel = new AddNewMemberViewModel(chatMessagesViewModel, lastChat, ChatID, chatService, userService);
+            this.addNewMemberViewModel = new AddNewMemberViewModel(chatMessagesViewModel, lastChat, chatID, chatService, userService);
 
             this.DataContext = this.addNewMemberViewModel;
         }
 
         public void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            this.RightFrame.Content = this.lastChat;
+            this.rightFrame.Content = this.lastChat;
         }
     }
 }

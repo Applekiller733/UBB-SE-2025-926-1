@@ -7,6 +7,9 @@ namespace LoanShark.View.SocialView
 
     public sealed partial class MessageTemplates : Page
     {
-        public MessageTemplates() { }
+        public MessageTemplates()
+        {
+            // do nothing
+        }
     }
 }

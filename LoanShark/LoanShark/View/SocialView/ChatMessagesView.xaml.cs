@@ -14,24 +14,24 @@ namespace LoanShark.View.SocialView
         public int SelectedChat { get; set; }
 
         private ChatMessagesViewModel chatMessagesViewModel;
-        private Frame RightFrame;
+        private Frame rightFrame;
         private IUserService userService;
         private IChatService chatService;
         private IReportService reportService;
         private ChatListViewModel chatListViewModel;
-        private GenerateTransferViewModel GenerateTransferViewModel;
+        private GenerateTransferViewModel generateTransferViewModel;
 
-        public ChatMessagesView(ChatListViewModel chatListViewModel, Window mainWindow, Frame RightFrame, int ChatID, IUserService userService, IChatService chatService, IMessageService messageService, IReportService reportService)
+        public ChatMessagesView(ChatListViewModel chatListViewModel, Window mainWindow, Frame rightFrame, int chatID, IUserService userService, IChatService chatService, IMessageService messageService, IReportService reportService)
         {
             this.InitializeComponent();
-            this.SelectedChat = ChatID;
+            this.SelectedChat = chatID;
             this.chatListViewModel = chatListViewModel;
             this.userService = userService;
             this.chatService = chatService;
             this.reportService = reportService;
-            this.RightFrame = RightFrame;
-            this.chatMessagesViewModel = new ChatMessagesViewModel(mainWindow, RightFrame, ChatID, messageService, chatService, userService, reportService);
-            this.GenerateTransferViewModel = new GenerateTransferViewModel(chatService, ChatID);
+            this.rightFrame = rightFrame;
+            this.chatMessagesViewModel = new ChatMessagesViewModel(mainWindow, rightFrame, chatID, messageService, chatService, userService, reportService);
+            this.generateTransferViewModel = new GenerateTransferViewModel(chatService, chatID);
             this.chatMessagesViewModel.ChatListView = this.ChatListView;
             this.chatMessagesViewModel.SetupMessageTracking();
 
@@ -40,17 +40,17 @@ namespace LoanShark.View.SocialView
 
         public void AddNewMember_Click(object sender, RoutedEventArgs e)
         {
-            this.RightFrame.Content = new AddNewMemberView(this.chatMessagesViewModel, this, this.RightFrame, this.SelectedChat, this.chatService, this.userService);
+            this.rightFrame.Content = new AddNewMemberView(this.chatMessagesViewModel, this, this.rightFrame, this.SelectedChat, this.chatService, this.userService);
         }
 
         public void LeaveChat_Click(object sender, RoutedEventArgs e)
         {
-            this.RightFrame.Content = new LeaveChatView(this.SelectedChat, this.chatListViewModel, this, this.RightFrame, this.chatService, this.userService);
+            this.rightFrame.Content = new LeaveChatView(this.SelectedChat, this.chatListViewModel, this, this.rightFrame, this.chatService, this.userService);
         }
 
         public void SendTransfer_Click(object sender, RoutedEventArgs e)
         {
-            this.RightFrame.Content = new GenerateTransferView(this.GenerateTransferViewModel, this, this.RightFrame, this.SelectedChat, this.chatService);
+            this.rightFrame.Content = new GenerateTransferView(this.generateTransferViewModel, this, this.rightFrame, this.SelectedChat, this.chatService);
         }
     }
 }

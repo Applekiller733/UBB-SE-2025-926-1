@@ -23,13 +23,13 @@ namespace LoanShark.View.SocialView
         private Page lastChat;
         private Frame rightFrame;
 
-        public GenerateTransferView(GenerateTransferViewModel GenerateTransferViewModel, Page lastChat, Frame rightFrame, int ChatID, IChatService chatService)
+        public GenerateTransferView(GenerateTransferViewModel generateTransferViewModel, Page lastChat, Frame rightFrame, int chatID, IChatService chatService)
         {
             // Create repository and services (this would typically be injected)
             this.chatService = chatService;
 
             // Initialize ViewModel
-            this.ViewModel = GenerateTransferViewModel;
+            this.ViewModel = generateTransferViewModel;
             this.lastChat = lastChat;
             this.rightFrame = rightFrame;
             this.InitializeComponent();

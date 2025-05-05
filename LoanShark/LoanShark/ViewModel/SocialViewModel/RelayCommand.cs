@@ -9,15 +9,17 @@
     /// <typeparam name="T">The type of the parameter.</typeparam>
     public class RelayCommand<T> : ICommand
     {
-        private readonly Action<T> _execute;
-        private readonly Predicate<T> _canExecute;
+        private readonly Action<T> execute;
+        private readonly Predicate<T> canExecute;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelayCommand{T}"/> class.
         /// </summary>
         /// <param name="execute">The action to execute.</param>
         public RelayCommand(Action<T> execute)
-            : this(execute, null) { }
+        {
+            this.execute = execute;
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelayCommand{T}"/> class.
@@ -26,8 +28,8 @@
         /// <param name="canExecute">The predicate to determine if the action can execute.</param>
         public RelayCommand(Action<T> execute, Predicate<T> canExecute)
         {
-            this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            this._canExecute = canExecute;
+            this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.canExecute = canExecute;
         }
 
         public event EventHandler CanExecuteChanged;
@@ -47,7 +49,7 @@
         /// <returns>True if the command can execute; otherwise, false.</returns>
         public bool CanExecute(object? parameter)
         {
-            return this._canExecute == null || this._canExecute((T)parameter);
+            return this.canExecute == null || this.canExecute((T)parameter);
         }
 
         /// <summary>
@@ -56,7 +58,7 @@
         /// <param name="parameter">The parameter.</param>
         public void Execute(object? parameter)
         {
-            this._execute((T)parameter);
+            this.execute((T)parameter);
         }
     }
 
@@ -65,7 +67,7 @@
     /// </summary>
     public class RelayCommand : ICommand
     {
-        private readonly Action _execute;
+        private readonly Action execute;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelayCommand"/> class.
@@ -73,7 +75,7 @@
         /// <param name="execute">The action to execute.</param>
         public RelayCommand(Action execute)
         {
-            this._execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
         }
 
         public event EventHandler? CanExecuteChanged;
@@ -94,7 +96,7 @@
         /// <param name="parameter">The parameter.</param>
         public void Execute(object? parameter)
         {
-            this._execute();
+            this.execute();
         }
 
         /// <summary>

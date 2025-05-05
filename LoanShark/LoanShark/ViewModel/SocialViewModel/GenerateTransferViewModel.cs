@@ -20,14 +20,14 @@ namespace LoanShark.ViewModel.SocialViewModel
         private bool isFormValid;
         private bool hasSufficientFunds = true;
         private bool isCheckingFunds = false;
-        private int ChatID;
+        private int chatID;
 
         private readonly IChatService chatService;
 
-        public GenerateTransferViewModel(IChatService chatService,int ChatID)
+        public GenerateTransferViewModel(IChatService chatService, int chatID)
         {
             this.chatService = chatService;
-            this.ChatID = ChatID;
+            this.chatID = chatID;
             this.SendMessageCommand = new RelayCommand(this.ExecuteSendMessage);
 
             // Set default values
@@ -183,14 +183,14 @@ namespace LoanShark.ViewModel.SocialViewModel
                 switch (this.SelectedTransferType)
                 {
                     case "Transfer Money":
-                        this.chatService.SendMoneyViaChat(this.Amount, this.Currency, this.Description, this.ChatID);
+                        this.chatService.SendMoneyViaChat(this.Amount, this.Currency, this.Description, this.chatID);
                         break;
                     case "Request Money":
-                        this.chatService.RequestMoneyViaChat(this.Amount, this.Currency, this.ChatID, this.Description);
+                        this.chatService.RequestMoneyViaChat(this.Amount, this.Currency, this.chatID, this.Description);
                         break;
                     case "Split Bill":
-                        float SplitAmount = this.Amount / (this.chatService.GetNumberOfParticipants(this.ChatID));
-                        this.chatService.RequestMoneyViaChat(SplitAmount, this.Currency, this.ChatID, this.description);
+                        float splitAmount = this.Amount / (this.chatService.GetNumberOfParticipants(this.chatID));
+                        this.chatService.RequestMoneyViaChat(splitAmount, this.Currency, this.chatID, this.description);
                         break;
                     default:
                         throw new InvalidOperationException("Invalid transfer type selected.");
@@ -279,7 +279,7 @@ namespace LoanShark.ViewModel.SocialViewModel
 
             try
             {
-                int chatID = this.ChatID;
+                int chatID = this.chatID;
                 int currentUserID = this.chatService.GetCurrentUserID();
 
                 // Calculate total amount based on number of participants

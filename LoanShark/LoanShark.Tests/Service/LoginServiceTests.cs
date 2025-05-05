@@ -8,7 +8,9 @@ using LoanShark.Domain;
 using LoanShark.Service;
 using Moq;
 using Xunit;
-using LoanShark.Repository;
+using LoanShark.EF.Repository;
+using LoanShark.EF.Repository.BankRepository;
+using LoanShark.Service.BankService;
 
 namespace LoanShark.Tests.Service
 {

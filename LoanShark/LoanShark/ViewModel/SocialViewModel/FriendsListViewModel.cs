@@ -16,31 +16,31 @@ namespace LoanShark.ViewModel.SocialViewModel
 
     public class FriendsListViewModel : INotifyPropertyChanged
     {
-        public List<User> allFriends { get; set; }
+        public List<User> AllFriends { get; set; }
 
         public ObservableCollection<User> FriendsList { get; set; }
 
-        public IUserService userService { get; set; }
+        public IUserService UserService { get; set; }
 
-        public IChatService chatService { get; set; }
+        public IChatService ChatService { get; set; }
 
-        public IMessageService messageService { get; set; }
+        public IMessageService MessageService { get; set; }
 
         public ICommand RemoveFriend { get; }
 
-        private Visibility _noFriendsVisibility = Visibility.Collapsed;
+        private Visibility noFriendsVisibility = Visibility.Collapsed;
 
         public Visibility NoFriendsVisibility
         {
             get
             {
-                return this._noFriendsVisibility;
+                return this.noFriendsVisibility;
             }
 
             set
             {
-                this._noFriendsVisibility = value;
-                this.OnPropertyChanged(nameof(this.NoFriendsVisibility));
+                this.noFriendsVisibility = value;
+                this.OnPropertyChanged(nameof(this.noFriendsVisibility));
             }
         }
 
@@ -69,10 +69,10 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public FriendsListViewModel(IChatService chat, IUserService user, IMessageService message)
         {
-            this.userService = user;
-            this.chatService = chat;
-            this.messageService = message;
-            this.allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser());
+            this.UserService = user;
+            this.ChatService = chat;
+            this.MessageService = message;
+            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser());
             this.FriendsList = new ObservableCollection<User>();
             this.RemoveFriend = new RelayCommand<object>(this.RemoveFriendFromList);
 
@@ -84,17 +84,17 @@ namespace LoanShark.ViewModel.SocialViewModel
             var friend = user as User;
             if (friend != null)
             {
-                this.userService.RemoveFriend(this.userService.GetCurrentUser(), friend.GetUserId());
+                this.UserService.RemoveFriend(this.UserService.GetCurrentUser(), friend.GetUserId());
             }
 
-            this.allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser());
+            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser());
 
             this.LoadFriends();
         }
 
         public void LoadFriends()
         {
-            this.allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser());
+            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser());
             this.FilterFriends();
         }
 
@@ -102,7 +102,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             this.FriendsList.Clear();
 
-            foreach (var friend in this.allFriends.Where(f =>
+            foreach (var friend in this.AllFriends.Where(f =>
                          string.IsNullOrEmpty(this.SearchQuery) ||
                          f.Username.Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
                          f.PhoneNumber.ToString().Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase)))
@@ -110,12 +110,12 @@ namespace LoanShark.ViewModel.SocialViewModel
                 this.FriendsList.Add(friend);
             }
 
-            this.UpdateNoFriendsVisibility();
+            this.UpdatenoFriendsVisibility();
         }
 
-        private void UpdateNoFriendsVisibility()
+        private void UpdatenoFriendsVisibility()
         {
-            this.NoFriendsVisibility = (this.FriendsList == null || this.FriendsList.Count == 0)
+            this.noFriendsVisibility = (this.FriendsList == null || this.FriendsList.Count == 0)
                 ? Visibility.Visible
                 : Visibility.Collapsed;
         }

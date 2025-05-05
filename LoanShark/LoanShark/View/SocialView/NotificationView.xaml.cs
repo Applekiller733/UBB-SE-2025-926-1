@@ -6,7 +6,7 @@ namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
     using Microsoft.UI.Xaml.Controls;
-    using LoanShark.Repository.SocialRepository;
+    using LoanShark.EF.Repository.SocialRepository;
     using LoanShark.Service.SocialService.Implementations;
     using LoanShark.ViewModel.SocialViewModel;
 

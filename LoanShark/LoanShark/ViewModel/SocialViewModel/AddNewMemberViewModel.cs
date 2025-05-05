@@ -21,7 +21,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         private IChatService chatService;
         private Page lastChat;
         private string searchQuery;
-        private int ChatID;
+        private int chatID;
         private ChatMessagesViewModel chatMessagesViewModel;
 
         /// <summary>
@@ -48,14 +48,14 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public AddNewMemberViewModel(ChatMessagesViewModel chatMessagesViewModel, Page lastChat, int ChatID, IChatService chat, IUserService user)
+        public AddNewMemberViewModel(ChatMessagesViewModel chatMessagesViewModel, Page lastChat, int chatID, IChatService chat, IUserService user)
         {
             this.chatMessagesViewModel = chatMessagesViewModel;
-            this.ChatID = ChatID;
+            this.chatID = chatID;
             this.lastChat = lastChat;
             this.userService = user;
             this.chatService = chat;
-            this.ChatName = this.chatService.GetChatNameByID(ChatID);
+            this.ChatName = this.chatService.GetChatNameByID(chatID);
 
             this.UnaddedFriends = new ObservableCollection<User>();
             this.CurrentChatMembers = new ObservableCollection<User>();
@@ -72,13 +72,13 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             foreach (User user in this.NewlyAddedFriends)
             {
-                this.chatService.AddUserToChat(user.GetUserId(), this.ChatID);
+                this.chatService.AddUserToChat(user.GetUserId(), this.chatID);
             }
 
             this.NewlyAddedFriends.Clear();
             this.UpdateObservableLists();
 
-            this.chatMessagesViewModel.CurrentChatParticipants = this.chatService.GetChatParticipantsStringList(ChatID);
+            this.chatMessagesViewModel.CurrentChatParticipants = this.chatService.GetChatParticipantsStringList(chatID);
         }
 
         public void AddToSelected(User user)
@@ -114,7 +114,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         public void LoadAllUnaddedFriendsList()
         {
             var allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser());
-            var currentChatParticipants = this.chatService.GetChatParticipantsList(this.ChatID);
+            var currentChatParticipants = this.chatService.GetChatParticipantsList(this.chatID);
             this.allUnaddedFriends = allFriends.Where(friend => !currentChatParticipants.Any(participant => participant.GetUserId() == friend.GetUserId())).ToList();
         }
 
@@ -123,7 +123,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.LoadAllUnaddedFriendsList();
 
             this.CurrentChatMembers.Clear();
-            foreach (var participant in this.chatService.GetChatParticipantsList(this.ChatID))
+            foreach (var participant in this.chatService.GetChatParticipantsList(this.chatID))
             {
                 this.CurrentChatMembers.Add(participant);
             }

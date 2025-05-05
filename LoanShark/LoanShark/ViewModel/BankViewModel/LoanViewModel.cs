@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Windows.Input;
 using LoanShark.Data;
 using LoanShark.Domain;
-using LoanShark.Repository.BankRepository;
+using LoanShark.EF.Repository.BankRepository;
 using LoanShark.Service.BankService;
 using Microsoft.UI.Xaml;
 
