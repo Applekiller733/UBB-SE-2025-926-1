@@ -12,11 +12,12 @@
     Publisher="CN=apava"
     Version="1.0.0.0" />
 
+  <mp:PhoneIdentity PhoneProductId="08ff0971-da02-42a8-a60e-7b0996319946" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>LoanShark</DisplayName>
     <PublisherDisplayName>apava</PublisherDisplayName>
-    <Logo>Assets\WideTile.scale-150.png</Logo>
+    <Logo>PackageLogo.png</Logo>
   </Properties>
 
   <Dependencies>
@@ -32,20 +33,20 @@
     <Application Id="App"
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
-		<uap:VisualElements
-		  DisplayName="LoanShark"
-		  Description="LoanShark"
-		  BackgroundColor="transparent"
-		  Square150x150Logo="Assets\Square150x150Logo.png"
-		  Square44x44Logo="Assets\Square44x44Logo.png">
-			<uap:DefaultTile Wide310x150Logo="Assets\WideTile.scale-150.png">
-				<uap:ShowNameOnTiles>
-					<uap:ShowOn Tile="wide310x150Logo"/>
-					<uap:ShowOn Tile="square150x150Logo"/>
-				</uap:ShowNameOnTiles>
-			</uap:DefaultTile>
-			<uap:SplashScreen Image="Assets\SplashScreen.png" />
-		</uap:VisualElements>
+      <uap:VisualElements
+        DisplayName="LoanShark"
+        Description="LoanShark"
+        BackgroundColor="transparent"
+        Square150x150Logo="MediumTile.png"
+        Square44x44Logo="AppIcon.png">
+        <uap:DefaultTile Wide310x150Logo="WideTile.png"  Square71x71Logo="SmallTile.png" Square310x310Logo="LargeTile.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="wide310x150Logo"/>
+            <uap:ShowOn Tile="square150x150Logo"/>
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile >
+        <uap:SplashScreen Image="SplashScreen.png" />
+      </uap:VisualElements>
     </Application>
   </Applications>
 

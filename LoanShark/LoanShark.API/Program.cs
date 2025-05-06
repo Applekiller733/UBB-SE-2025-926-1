@@ -17,7 +17,8 @@ namespace LoanShark.Web
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<LoanSharkDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("LoanShark")));
-
+            builder.Services.AddScoped<ILoanSharkDbContext>(provider =>
+                provider.GetRequiredService<LoanSharkDbContext>());
             builder.Services.AddAllServiceProxies();
 
             var app = builder.Build();
