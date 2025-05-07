@@ -6,12 +6,13 @@ using System.Runtime.CompilerServices;
 using LoanShark.Domain;
 using LoanShark.Service.BankService;
 using Microsoft.UI.Xaml;
+using LoanShark.API.Proxies;
 
 namespace LoanShark.ViewModel.BankViewModel
 {
     public class SendMoneyViewModel : INotifyPropertyChanged
     {
-        private readonly TransactionsService transactionService;
+        private readonly ITransactionsService transactionService;
 
         private string iban;
         private string sumOfMoney;
@@ -93,7 +94,7 @@ namespace LoanShark.ViewModel.BankViewModel
 
         public SendMoneyViewModel()
         {
-            transactionService = new TransactionsService();
+            transactionService = new TransactionsServiceProxy(new System.Net.Http.HttpClient());
             // Initialize properties
             iban = string.Empty;
             sumOfMoney = string.Empty;
