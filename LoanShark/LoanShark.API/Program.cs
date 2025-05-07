@@ -1,3 +1,5 @@
+using LoanShark.EF.Repository.BankRepository;
+using LoanShark.Service.BankService;
 using LoanShark.Web.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +22,10 @@ namespace LoanShark.Web
             builder.Services.AddScoped<ILoanSharkDbContext>(provider =>
                 provider.GetRequiredService<LoanSharkDbContext>());
             builder.Services.AddAllServiceProxies();
+
+            //Florin Transaction
+            builder.Services.AddScoped<ITransactionsService, TransactionsService>();
+            builder.Services.AddScoped<ITransactionsRepository, TransactionsRepositoryEF>();
 
             var app = builder.Build();
 

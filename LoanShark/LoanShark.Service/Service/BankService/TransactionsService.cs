@@ -8,14 +8,14 @@ using LoanShark.EF.Repository.BankRepository;
 
 namespace LoanShark.Service.BankService
 {
-    public class TransactionsService
+    public class TransactionsService : ITransactionsService
     {
         private ITransactionsRepository transactionsRepository;
 
-        public TransactionsService()
-        {
-            transactionsRepository = new TransactionsRepository(DataLink.Instance);
-        }
+        //public TransactionsService()
+        //{
+        //    transactionsRepository = new TransactionsRepositoryEF(DataLink.Instance);
+        //}
 
         public TransactionsService(ITransactionsRepository transactionsRepository)
         {
@@ -234,5 +234,13 @@ namespace LoanShark.Service.BankService
                 throw new Exception($"Error retrieving currency exchange rates: {ex.Message}", ex);
             }
         }
+    }
+   
+    public interface ITransactionsService
+    {
+        public Task<string> AddTransaction(string senderIban, string receiverIban, decimal amount, string transactionDescription = "");
+        public Task<string> TakeLoanTransaction(string iban, decimal loanAmount);
+        public Task<string> PayLoanTransaction(string iban, decimal paymentAmount);
+        public Task<List<CurrencyExchange>> GetAllCurrencyExchangeRates();
     }
 }
