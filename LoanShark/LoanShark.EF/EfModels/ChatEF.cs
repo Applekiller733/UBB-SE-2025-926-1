@@ -33,5 +33,8 @@ namespace LoanShark.EF.EFModels
 
         [ForeignKey("ChatId")]
         public ChatEF Chat { get; set; }
+
+        [ForeignKey("UserId")]
+        public UserEF User { get; set; }
     }
 }
