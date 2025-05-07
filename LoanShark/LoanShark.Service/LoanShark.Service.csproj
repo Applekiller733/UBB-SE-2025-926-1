@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<CodeAnalysisRuleSet>SE.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LoanShark.Domain\LoanShark.Domain.csproj" />
     <ProjectReference Include="..\LoanShark.EF\LoanShark.EF.csproj" />

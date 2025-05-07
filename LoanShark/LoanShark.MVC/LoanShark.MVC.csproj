@@ -7,6 +7,10 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<CodeAnalysisRuleSet>SE.ruleset</CodeAnalysisRuleSet>
+	</PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LoanShark.API\LoanShark.API.csproj" />
     <ProjectReference Include="..\LoanShark.Domain\LoanShark.Domain.csproj" />
