@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanShark.EF.Migrations
 {
     [DbContext(typeof(LoanSharkDbContext))]
-    partial class LoanSharkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250507151511_FinalDB2")]
+    partial class FinalDB2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,13 +86,21 @@ namespace LoanShark.EF.Migrations
 
             modelBuilder.Entity("LoanShark.EF.EFModels.ChatUserEF", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("ChatId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("ChatId", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
 
                     b.HasIndex("UserId");
 

@@ -3,6 +3,7 @@ using LoanShark.Domain.MessageClasses;
 using LoanShark.EF.EFModels;
 using LoanShark.EF.Mappers;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -34,7 +35,15 @@ namespace LoanShark.EF.Repository.SocialRepository
 
         public int AddChat(string chatName)
         {
-            throw new NotImplementedException();
+            var chatEF = new ChatEF
+            {
+                ChatName = chatName,
+            };
+
+            this.loanSharkDbContext.Chat.Add(chatEF);
+            this.loanSharkDbContext.SaveChangesAsync();
+
+            return chatEF.Id;
         }
 
         public void AddFriend(int userId, int friendId)
@@ -49,7 +58,15 @@ namespace LoanShark.EF.Repository.SocialRepository
 
         public void AddNotification(string content, int userId)
         {
-            throw new NotImplementedException();
+            var notificationEF = new NotificationEF
+            {
+                Content = content,
+                Timestamp = DateTime.UtcNow,
+                UserReceiverID = userId,
+            };
+
+            this.loanSharkDbContext.Notification.Add(notificationEF);
+            this.loanSharkDbContext.SaveChangesAsync();
         }
 
         public void AddReport(int messageId, string reason, string description, string status)
@@ -79,12 +96,19 @@ namespace LoanShark.EF.Repository.SocialRepository
 
         public void ClearAllNotifications(int userId)
         {
-            throw new NotImplementedException();
+            this.loanSharkDbContext.Notification
+                .Where(notification => notification.UserReceiverID == userId)
+                .ExecuteDelete();
+            this.loanSharkDbContext.SaveChangesAsync();
         }
 
         public void DeleteChat(int chatId)
         {
-            throw new NotImplementedException();
+            var chatEF = this.loanSharkDbContext.Chat
+                .Find(chatId);
+
+            this.loanSharkDbContext.Chat.Remove(chatEF);
+            this.loanSharkDbContext.SaveChangesAsync();
         }
 
         public void DeleteFriend(int userId, int friendId)
@@ -129,7 +153,7 @@ namespace LoanShark.EF.Repository.SocialRepository
 
         public List<Post> GetFeedPostsList()
         {
-            throw new NotImplementedException();
+            return this.loanSharkDbContext.Post.Select(post => PostMapper.ToDomainPost(post)).ToList();
         }
 
         public List<int> GetFriendsIDs(int userId)
@@ -154,7 +178,14 @@ namespace LoanShark.EF.Repository.SocialRepository
 
         public List<Notification> GetNotifications(int userId)
         {
-            throw new NotImplementedException();
+
+            var notifications = this.loanSharkDbContext.Notification
+                .Where(notification => notification.UserReceiverID == userId)
+                .ToList();
+
+            return notifications
+                .Select(notification => NotificationMapper.ToDomainNotification(notification))
+                .ToList();
         }
 
         public List<Report> GetReportsList()
@@ -184,12 +215,18 @@ namespace LoanShark.EF.Repository.SocialRepository
 
         public List<User> GetUsersList()
         {
-            throw new NotImplementedException();
+            //converts every entity to the domain object
+            return this.loanSharkDbContext.User
+                .Select(userEntity => UserMapper.ToDomainUser(userEntity))
+                .ToList();
         }
 
         public void RemoveUserFromChat(int userId, int chatId)
         {
-            throw new NotImplementedException();
+            this.loanSharkDbContext.ChatUser
+                .Where(chatUser => chatUser.UserId == userId && chatUser.ChatId == chatId)
+                .ExecuteDelete();
+            this.loanSharkDbContext.SaveChangesAsync();
         }
     }
 }

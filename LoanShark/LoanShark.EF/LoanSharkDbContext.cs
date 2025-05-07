@@ -1,4 +1,5 @@
 ﻿using LoanShark.Domain;
+//using LoanShark.EF.EfModels;
 using LoanShark.EF.EFModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -18,6 +19,32 @@ public class LoanSharkDbContext : DbContext, ILoanSharkDbContext
     public DbSet<ReportEF> Report { get; set; }
     public DbSet<TransactionEF> Transaction { get; set; }
     public DbSet<UserEF> User { get; set; }
+    //public DbSet<FriendshipEF> Friendship { get; set; }
+    public DbSet<ChatUserEF> ChatUser { get; set; }
+
+    //goes in action at runtime -> creates a composite PK on Friends table
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // composite PK for chat user
+        modelBuilder.Entity<ChatUserEF>()
+                .HasKey(cu => new { cu.ChatId, cu.UserId });
+
+        //modelBuilder.Entity<FriendshipEF>()
+        //    .HasKey(friendship => new { friendship.UserId, friendship.FriendId });
+
+        ////disable cascade
+        //modelBuilder.Entity<FriendshipEF>()
+        //    .HasOne(f => f.User)
+        //    .WithMany()
+        //    .HasForeignKey(f => f.UserId)
+        //    .OnDelete(DeleteBehavior.Restrict);
+
+        //modelBuilder.Entity<FriendshipEF>()
+        //    .HasOne(f => f.Friend)
+        //    .WithMany()
+        //    .HasForeignKey(f => f.FriendId)
+        //    .OnDelete(DeleteBehavior.Restrict);
+    }
 
 }
 
@@ -32,6 +59,8 @@ public interface ILoanSharkDbContext
     DbSet<ReportEF> Report { get; set; }
     DbSet<TransactionEF> Transaction { get; set; }
     DbSet<UserEF> User { get; set; }
+    //DbSet<FriendshipEF> Friendship { get; set; }
+    DbSet<ChatUserEF> ChatUser { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
