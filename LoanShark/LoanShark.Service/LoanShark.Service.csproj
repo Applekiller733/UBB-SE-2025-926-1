@@ -10,6 +10,13 @@
 		<CodeAnalysisRuleSet>SE.ruleset</CodeAnalysisRuleSet>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\LoanShark.Domain\LoanShark.Domain.csproj" />
     <ProjectReference Include="..\LoanShark.EF\LoanShark.EF.csproj" />
