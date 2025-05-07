@@ -12,10 +12,10 @@ namespace LoanShark.Service.BankService
     {
         private ITransactionsRepository transactionsRepository;
 
-        //public TransactionsService()
-        //{
-        //    transactionsRepository = new TransactionsRepositoryEF(DataLink.Instance);
-        //}
+        public TransactionsService()
+        {
+            transactionsRepository = new TransactionsRepository(DataLink.Instance);
+        }
 
         public TransactionsService(ITransactionsRepository transactionsRepository)
         {
