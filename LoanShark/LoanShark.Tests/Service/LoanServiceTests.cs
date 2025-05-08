@@ -19,11 +19,13 @@ namespace LoanShark.Tests.Service
 
         private readonly Mock<ILoanRepository> loanRepositoryMock;
         private readonly LoanService loanService;
+        private readonly Mock<ITransactionsService> transactionServiceMock;
 
         public LoanServiceTests()
         {
             loanRepositoryMock = new Mock<ILoanRepository>();
-            loanService = new LoanService(loanRepositoryMock.Object);
+            transactionServiceMock = new Mock<ITransactionsService>();
+            loanService = new LoanService(loanRepositoryMock.Object, transactionServiceMock.Object);
 
         }
 

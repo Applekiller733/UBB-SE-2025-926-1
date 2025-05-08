@@ -2,23 +2,24 @@
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using LoanShark.Service.BankService;
+using LoanShark.Service.Service.BankService;
 
 namespace LoanShark.ViewModel.BankViewModel
 {
     public class LoginViewModel : INotifyPropertyChanged
     {
-        private readonly LoginService loginService;
+        private readonly ILoginService loginService;
         private string email;
         private string errorMessage;
         private bool isErrorVisible;
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public LoginViewModel()
+        public LoginViewModel(ILoginService sv)
         {
             this.email = string.Empty;
             this.errorMessage = string.Empty;
             this.isErrorVisible = false;
-            this.loginService = new LoginService();
+            this.loginService = sv;
         }
 
         public string Email

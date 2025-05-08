@@ -3,8 +3,10 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using LoanShark.Domain;
 using LoanShark.Helper;
+using LoanShark.Service.BankService;
 using LoanShark.View.SocialView;
 using LoanShark.ViewModel.BankViewModel;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -24,7 +26,7 @@ namespace LoanShark.View.BankView
         public MainPageView()
         {
             this.InitializeComponent();
-            this.ViewModel = new MainPageViewModel();
+            this.ViewModel = App.Services.GetRequiredService<MainPageViewModel>();
 
             // Register this window with the WindowManager
             WindowManager.RegisterWindow(this);

@@ -3,32 +3,28 @@ using System.Data;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using LoanShark.Domain;
+using LoanShark.EF.EFModels;
 using LoanShark.EF.Repository.BankRepository;
-namespace LoanShark.Service.BankService
+namespace LoanShark.Service.Service.BankService
 {
-    public class LoginService
+    public class LoginService : ILoginService
     {
-        private readonly ILoginRepository repo;
+        private readonly ILoginRepository loginRepository;
 
-        public LoginService()
+        public LoginService(ILoginRepository loginRepository)
         {
-            this.repo = new LoginRepository();
-        }
-
-        public LoginService(ILoginRepository repository)
-        {
-            this.repo = repository;
+            this.loginRepository = loginRepository;
         }
 
         public async Task<bool> ValidateUserCredentials(string email, string password)
         {
             try
             {
-                DataTable dt = await this.repo.GetUserCredentials(email);
+                UserEF? dt = await this.loginRepository.GetUserCredentials(email);
 
                 // if exception is not thrown, then the user exists and we continue with the validation
-                string hashedPassword = dt.Rows[0]["hashed_password"]?.ToString() ?? string.Empty;
-                string passwordSalt = dt.Rows[0]["password_salt"]?.ToString() ?? string.Empty;
+                string hashedPassword = dt.HashedPassword;
+                string passwordSalt = dt.PasswordSalt;
 
                 HashedPassword userPassword = new HashedPassword(hashedPassword, passwordSalt, false);
                 HashedPassword inputPassword = new HashedPassword(password, passwordSalt, true);
@@ -44,24 +40,43 @@ namespace LoanShark.Service.BankService
 
         public async Task InstantiateUserSessionAfterLogin(string email)
         {
-            DataTable dt_user_info = await this.repo.GetUserInfoAfterLogin(email);
-            DataTable dt_bank_accounts = await this.repo.GetUserBankAccounts(int.Parse(dt_user_info.Rows[0]["id_user"]?.ToString() ?? string.Empty));
+            UserEF dt_user_info = await this.loginRepository.GetUserInfoAfterLogin(email);
+            List<BankAccountEF> dt_bank_accounts = await this.loginRepository.GetUserBankAccounts(int.Parse(dt_user_info.UserID.ToString() ?? string.Empty));
             string iban = string.Empty;
 
-            if (dt_bank_accounts.Rows.Count > 0)
+            if (dt_bank_accounts.Count > 0)
             {
-                iban = dt_bank_accounts.Rows[0]["iban"]?.ToString() ?? string.Empty;
+                iban = dt_bank_accounts[0].Iban.ToString() ?? string.Empty;
             }
 
             UserSession.Instance.Initialize(
-                dt_user_info.Rows[0]["id_user"]?.ToString() ?? string.Empty,
-                dt_user_info.Rows[0]["cnp"]?.ToString() ?? string.Empty,
-                dt_user_info.Rows[0]["first_name"]?.ToString() ?? string.Empty,
-                dt_user_info.Rows[0]["last_name"]?.ToString() ?? string.Empty,
-                dt_user_info.Rows[0]["email"]?.ToString() ?? string.Empty,
-                dt_user_info.Rows[0]["phone_number"]?.ToString() ?? string.Empty,
+                dt_user_info.UserID.ToString() ?? string.Empty,
+                dt_user_info.Cnp?.ToString() ?? string.Empty,
+                dt_user_info.FirstName?.ToString() ?? string.Empty,
+                dt_user_info.LastName?.ToString() ?? string.Empty,
+                dt_user_info.Email?.ToString() ?? string.Empty,
+                dt_user_info.PhoneNumber?.ToString() ?? string.Empty,
                 iban);
         }
+
+        public Task<UserEF> GetUserInfoAfterLogin(string email)
+        {
+            return loginRepository.GetUserInfoAfterLogin(email);
+        }
+
+        public Task<List<BankAccountEF>> GetUserBankAccounts(int userId)
+        {
+            return loginRepository.GetUserBankAccounts(userId);
+        }
+    }
+
+    public interface ILoginService
+    {
+        Task<bool> ValidateUserCredentials(string email, string password);
+        Task InstantiateUserSessionAfterLogin(string email);
+
+        Task<UserEF> GetUserInfoAfterLogin(string email);
+        Task<List<BankAccountEF>> GetUserBankAccounts(int userId);
     }
 }
 

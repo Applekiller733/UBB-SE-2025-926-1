@@ -8,6 +8,7 @@ using System.Windows.Input;
 using LoanShark.Helper;
 using LoanShark.Service.BankService;
 using LoanShark.Domain;
+using LoanShark.API.Proxies;
 
 namespace LoanShark.ViewModel.BankViewModel
 {
@@ -86,15 +87,16 @@ namespace LoanShark.ViewModel.BankViewModel
             }
         }
 
-        private BankAccountService service;
+        private IBankAccountService service;
 
         /// <summary>
         /// Initializes a new instance of the BankAccountCreateViewModel class
         /// </summary>
-        public BankAccountCreateViewModel()
+        public BankAccountCreateViewModel(IBankAccountService s)
         {
+
             this.UserID = int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0");
-            service = new BankAccountService();
+            service = s;
             LoadData();
             ConfirmCommand = new RelayCommand(OnConfirmButtonClicked);
             CancelCommand = new RelayCommand(OnCancelButtonClicked);

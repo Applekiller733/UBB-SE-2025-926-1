@@ -1,8 +1,5 @@
 ﻿using LoanShark.Domain;
 using LoanShark.EF.EfModels;
-
-//using LoanShark.EF.EfModels;
-using LoanShark.EF.EFModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 
@@ -75,6 +72,8 @@ public class LoanSharkDbContext : DbContext, ILoanSharkDbContext
             .OnDelete(DeleteBehavior.Restrict);
     }
 
+    public DbSet<CurrencyEF> Currency { get; set; }
+
 }
 
 public interface ILoanSharkDbContext
@@ -93,5 +92,7 @@ public interface ILoanSharkDbContext
     DbSet<MessageTypeEF> MessageType { get; set; }
     DbSet<MessageEF> Message { get; set; }
     DbSet<FriendshipEF> Friendship { get; set; }
+    DbSet<CurrencyEF> Currency { get; set; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -9,14 +9,28 @@ using LoanShark.EF.Repository.BankRepository;
 
 namespace LoanShark.Service.BankService
 {
-    public class LoanService
+    public interface ILoanService
+    {
+        public Task<List<Loan>> GetUserLoans(int userId);
+        public Task<List<Loan>> GetUnpaidUserLoans(int userId);
+        public Task<Loan?> TakeLoanAsync(int userId, decimal amount, string currency, string accountIBAN, int months);
+        public Task<string> PayLoanAsync(int userID, int loanId, string accountIBAN);
+        public string ValidateLoanRequest(decimal amount, int months);
+        public Task<List<string>> GetFormattedBankAccounts(int userId);
+        public Task<decimal> ConvertCurrency(decimal amount, string fromCurrency, string toCurrency);
+        public decimal CalculateAmountToPay(decimal amount, decimal taxPercentage);
+        public decimal CalculateTaxPercentage(int months);
+    }
+    public class LoanService : ILoanService
     {
         // Simulated database for demonstration purposes
         private readonly ILoanRepository loanRepository;
+        private readonly ITransactionsService transactionsService;
 
-        public LoanService(ILoanRepository repository)
+        public LoanService(ILoanRepository repository, ITransactionsService transactionService)
         {
             this.loanRepository = repository;
+            this.transactionsService = transactionService;
         }
 
         // Get all loans for a specific user
@@ -46,7 +60,6 @@ namespace LoanShark.Service.BankService
 
             try
             {
-                TransactionsService transactionsService = new TransactionsService();
                 await transactionsService.TakeLoanTransaction(accountIBAN, amount);
             }
             catch (Exception ex)
@@ -117,7 +130,6 @@ namespace LoanShark.Service.BankService
 
             try
             {
-                TransactionsService transactionsService = new TransactionsService();
                 await transactionsService.PayLoanTransaction(accountIBAN, deductAmount);
             }
             catch (Exception ex)

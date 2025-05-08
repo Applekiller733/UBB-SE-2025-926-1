@@ -4,11 +4,12 @@ using System.Data;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using LoanShark.Domain;
+using LoanShark.EF.EFModels;
 using LoanShark.EF.Repository.BankRepository;
 
-namespace LoanShark.Service.BankService
+namespace LoanShark.Service.Service.BankService
 {
-    public class MainPageService
+    public class MainPageService : IMainPageService
     {
         private readonly IMainPageRepository repo;
 
@@ -17,29 +18,29 @@ namespace LoanShark.Service.BankService
             this.repo = repository;
         }
 
-        public MainPageService()
-        {
-            this.repo = new MainPageRepository();
-        }
-
         public async Task<ObservableCollection<BankAccount>> GetUserBankAccounts(int userId)
         {
             try
             {
                 ObservableCollection<BankAccount> bankAccounts = new ObservableCollection<BankAccount>();
-                DataTable bankAccountsData = await this.repo.GetUserBankAccounts(userId);
+                List<BankAccountEF> bankAccountsData = await this.repo.GetUserBankAccounts(userId);
 
-                foreach (DataRow row in bankAccountsData.Rows)
+                foreach (BankAccountEF account in bankAccountsData)
                 {
-                    string iban = row["iban"]?.ToString() ?? string.Empty;
-                    string currency = row["currency"]?.ToString() ?? string.Empty;
-                    decimal amount = row["amount"] != DBNull.Value ? Convert.ToDecimal(row["amount"]) : 0;
-                    string customName = row["custom_name"]?.ToString() ?? $"Account {bankAccounts.Count + 1}";
-                    decimal dailyLimit = row["daily_limit"] != DBNull.Value ? Convert.ToDecimal(row["daily_limit"]) : 0;
-                    decimal maxPerTransaction = row["max_per_transaction"] != DBNull.Value ? Convert.ToDecimal(row["max_per_transaction"]) : 0;
-                    int maxNrTransactionsDaily = row["max_nr_transactions_daily"] != DBNull.Value ? Convert.ToInt32(row["max_nr_transactions_daily"]) : 0;
-                    bool blocked = row["blocked"] != DBNull.Value ? Convert.ToBoolean(row["blocked"]) : false;
-                    bankAccounts.Add(new BankAccount(iban, currency, amount, blocked, userId, customName, dailyLimit, maxPerTransaction, maxNrTransactionsDaily));
+                    string iban = account.Iban?.ToString() ?? string.Empty;
+                    string currency = account.Currency?.ToString() ?? string.Empty;
+                    decimal amount = account.Balance != 0 ? account.Balance : 0;
+                    string customName = account.Name?.ToString() ?? $"Account {bankAccounts.Count + 1}";
+                    decimal dailyLimit = account.DailyLimit != 0 ? account.DailyLimit : 0;
+                    decimal maxPerTransaction = account.MaximumPerTransaction != 0
+                        ? account.MaximumPerTransaction
+                        : 0;
+                    int maxNrTransactionsDaily = account.MaximumNrTransactions != 0
+                        ? account.MaximumNrTransactions
+                        : 0;
+                    bool blocked = account.Blocked != false ? account.Blocked : false;
+                    bankAccounts.Add(new BankAccount(iban, currency, amount, blocked, userId, customName, dailyLimit,
+                        maxPerTransaction, maxNrTransactionsDaily));
                 }
 
                 return bankAccounts;
@@ -55,5 +56,11 @@ namespace LoanShark.Service.BankService
         {
             return await this.repo.GetBankAccountBalanceByUserIban(iban);
         }
+    }
+
+    public interface IMainPageService
+    {
+        Task<ObservableCollection<BankAccount>> GetUserBankAccounts(int userId);
+        Task<Tuple<decimal, string>> GetBankAccountBalanceByUserIban(string iban);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Input;
+using LoanShark.API.Proxies;
 using LoanShark.Data;
 using LoanShark.Domain;
 using LoanShark.EF.Repository.BankRepository;
@@ -29,7 +30,7 @@ namespace LoanShark.ViewModel.BankViewModel
         private string convertedLoanAmount = "Converted Amount: N/A";
 
         // Service for data operations and business logic
-        private readonly LoanService loanService;
+        private readonly ILoanService loanService;
 
         public ObservableCollection<Loan> Loans { get; set; }
         public ObservableCollection<string> BankAccounts { get; set; }
@@ -287,8 +288,7 @@ namespace LoanShark.ViewModel.BankViewModel
 
         public LoanViewModel()
         {
-            // Initialize the loan service
-            loanService = new LoanService(new LoanRepository(DataLink.Instance));
+            loanService = new LoanServiceProxy(new System.Net.Http.HttpClient());
 
             // Initialize collections
             Loans = new ObservableCollection<Loan>();

@@ -9,9 +9,11 @@ namespace LoanShark.Web.Extensions
     {
         public static void AddAllServiceProxies(this IServiceCollection services)
         {
-            var proxyTypes = Assembly.GetExecutingAssembly()
-                .GetTypes()
-                .Where(t => t.IsClass && !t.IsAbstract && t.Name.EndsWith("ServiceProxy"));
+            var proxyAssembly = typeof(LoanShark.API.Proxies.UserServiceProxy).Assembly;
+
+            var proxyTypes = proxyAssembly
+                    .GetTypes()
+                    .Where(t => t.IsClass && !t.IsAbstract && t.Name.EndsWith("ServiceProxy"));
 
             var method = typeof(HttpClientFactoryServiceCollectionExtensions)
                 .GetMethods()
