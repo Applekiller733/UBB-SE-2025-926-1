@@ -30,8 +30,7 @@ namespace LoanShark.EF.Mappers
                     PhoneNumber = new PhoneNumber(userEF.PhoneNumber),
                     Username = userEF.Username,
                     ReportedCount = userEF.ReportedCount,
-                    //?
-                    HashedPassword = new HashedPassword(userEF.HashedPassword),
+                    HashedPassword = new HashedPassword(userEF.HashedPassword, userEF.PasswordSalt, false),
                     Friends = new List<int>(),
                     Chats = new List<int>(),
                 };
