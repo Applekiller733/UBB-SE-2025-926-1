@@ -1,3 +1,4 @@
+using LoanShark.API.Proxies;
 using LoanShark.EF.Repository.BankRepository;
 using LoanShark.Service.BankService;
 using LoanShark.Web.Extensions;
@@ -26,6 +27,10 @@ namespace LoanShark.Web
             //Florin Transaction
             builder.Services.AddScoped<ITransactionsService, TransactionsService>();
             builder.Services.AddScoped<ITransactionsRepository, TransactionsRepositoryEF>();
+
+            //Teo Bank Account
+            builder.Services.AddScoped<IBankAccountService, BankAccountService>();
+            builder.Services.AddScoped<IBankAccountRepository, BankAccountRepositoryEF>();
 
             var app = builder.Build();
 

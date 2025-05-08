@@ -5,6 +5,7 @@ using LoanShark.Helper;
 using LoanShark.Service.BankService;
 using LoanShark.View;
 using LoanShark.Domain;
+using LoanShark.API.Proxies;
 
 namespace LoanShark.ViewModel.BankViewModel
 {
@@ -28,15 +29,15 @@ namespace LoanShark.ViewModel.BankViewModel
         /// </summary>
         public Action? OnClose { get; set; }
 
-        private BankAccountService service;
+        private IBankAccountService service;
         private string iban;
 
         /// <summary>
         /// Initializes a new instance of the BankAccountDeleteViewModel class
         /// </summary>
-        public BankAccountDeleteViewModel()
+        public BankAccountDeleteViewModel(IBankAccountService s)
         {
-            service = new BankAccountService();
+            service = s;
             iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
             NoCommand = new RelayCommand(OnNoButtonClicked);
             YesCommand = new RelayCommand(OnYesButtonClicked);

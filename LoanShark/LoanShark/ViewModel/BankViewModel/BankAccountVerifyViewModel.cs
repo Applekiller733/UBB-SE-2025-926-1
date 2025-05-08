@@ -31,7 +31,7 @@ namespace LoanShark.ViewModel.BankViewModel
         /// </summary>
         public Action? OnClose { get; set; }
 
-        private BankAccountService service;
+        private IBankAccountService service;
         private string iban;
         private string? passwordInput;
         private string email;
@@ -55,9 +55,9 @@ namespace LoanShark.ViewModel.BankViewModel
         /// <summary>
         /// Initializes a new instance of the BankAccountVerifyViewModel class
         /// </summary>
-        public BankAccountVerifyViewModel()
+        public BankAccountVerifyViewModel(IBankAccountService s)
         {
-            service = new BankAccountService();
+            this.service = s;
             email = UserSession.Instance.GetUserData("email") ?? string.Empty;
             iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
             BackCommand = new RelayCommand(OnBackButtonClicked);

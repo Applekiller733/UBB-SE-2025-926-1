@@ -1,4 +1,5 @@
 ﻿using LoanShark.Domain;
+using LoanShark.EF.EfModels;
 using LoanShark.EF.EFModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -19,6 +20,8 @@ public class LoanSharkDbContext : DbContext, ILoanSharkDbContext
     public DbSet<TransactionEF> Transaction { get; set; }
     public DbSet<UserEF> User { get; set; }
 
+    public DbSet<CurrencyEF> Currency { get; set; };
+
 }
 
 public interface ILoanSharkDbContext
@@ -32,6 +35,8 @@ public interface ILoanSharkDbContext
     DbSet<ReportEF> Report { get; set; }
     DbSet<TransactionEF> Transaction { get; set; }
     DbSet<UserEF> User { get; set; }
+
+    DbSet<CurrencyEF> Currency { get; set; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

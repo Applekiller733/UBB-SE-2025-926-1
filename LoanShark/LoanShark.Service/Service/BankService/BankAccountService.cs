@@ -13,17 +13,16 @@ namespace LoanShark.Service.BankService
     /// <summary>
     /// Service class for handling bank account operations
     /// </summary>
-    public class BankAccountService
+    public class BankAccountService : IBankAccountService
     {
         private IBankAccountRepository bankAccountRepository;
 
         /// <summary>
         /// Initializes a new instance of the BankAccountService class
-        public BankAccountService()
-        {
-            bankAccountRepository = new BankAccountRepository(LoanShark.Data.DataLink.Instance);
-        }
-
+        // public BankAccountService()
+        // {
+        //    bankAccountRepository = new BankAccountRepository(LoanShark.Data.DataLink.Instance);
+        // }
         public BankAccountService(IBankAccountRepository repository)
         {
             bankAccountRepository = repository;
@@ -164,5 +163,18 @@ namespace LoanShark.Service.BankService
             var nba = new BankAccount(iban, "RON", 0, blocked, 123, name, daily_limit, max_per_trans, max_nr_trans);
             return await bankAccountRepository.UpdateBankAccount(iban, nba);
         }
+    }
+
+    public interface IBankAccountService
+    {
+        Task<List<BankAccount>?> GetUserBankAccounts(int userID);
+        Task<BankAccount?> FindBankAccount(string iban);
+        Task<bool> CreateBankAccount(int userID, string customName, string currency);
+        Task<bool> RemoveBankAccount(string iban);
+        Task<bool> CheckIBANExists(string iban);
+        Task<string> GenerateIBAN();
+        Task<List<string>> GetCurrencies();
+        Task<bool> VerifyUserCredentials(string email, string password);
+        Task<bool> UpdateBankAccount(string iban, string name, decimal dailyLimit, decimal maxPerTransaction, int maxNrTransactions, bool blocked);
     }
 }

@@ -1,6 +1,7 @@
 using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI.Xaml;
 using LoanShark.Helper;
+using LoanShark.Service.BankService;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -12,11 +13,11 @@ namespace LoanShark.View.BankView
     public partial class BankAccountDetailsView : Window
     {
         private BankAccountDetailsViewModel viewModel;
-        public BankAccountDetailsView()
+        public BankAccountDetailsView(IBankAccountService s)
         {
             this.InitializeComponent();
             this.Activate();
-            viewModel = new BankAccountDetailsViewModel();
+            viewModel = new BankAccountDetailsViewModel(s);
             MainGrid.DataContext = viewModel;
 
             viewModel.OnClose = () => this.Close();
