@@ -1,5 +1,11 @@
 ﻿namespace LoanShark.API.Models
 {
+    public class ChatViewModel
+    {
+        public int ChatID { get; set; }
+
+        public List<int> UserIDs { get; set; }
+    }
     public class RequestMoneyDto
     {
         public float Amount { get; set; }
