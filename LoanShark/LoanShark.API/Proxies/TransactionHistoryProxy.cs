@@ -6,10 +6,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using LoanShark.Domain;
+using LoanShark.Service.BankService;
 
 namespace LoanShark.API.Proxies
 {
-    public class TransactionHistoryProxy
+    public class TransactionHistoryProxy : ITransactionHistoryService   
     {
         private readonly HttpClient _httpClient;
 

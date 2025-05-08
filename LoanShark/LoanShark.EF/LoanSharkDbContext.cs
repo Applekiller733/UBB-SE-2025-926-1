@@ -1,5 +1,6 @@
 ﻿using LoanShark.Domain;
 using LoanShark.EF.EfModels;
+using LoanShark.EF.EFModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 
