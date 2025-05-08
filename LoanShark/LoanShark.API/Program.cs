@@ -1,6 +1,7 @@
 using LoanShark.API.Proxies;
 using LoanShark.EF.Repository.BankRepository;
 using LoanShark.Service.BankService;
+using LoanShark.Service.Service.BankService;
 using LoanShark.Web.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +36,11 @@ namespace LoanShark.Web
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepositoryEF>();
 
-
+            //Maly Injections
+            builder.Services.AddScoped<IMainPageService, MainPageService>();
+            builder.Services.AddScoped<IMainPageRepository, MainPageRepositoryEF>();
+            builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<ILoginRepository, LoginRepositoryEF>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

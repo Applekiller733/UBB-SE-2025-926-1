@@ -11,13 +11,7 @@ namespace LoanShark.Service.BankService
     public class TransactionsService : ITransactionsService
     {
         private ITransactionsRepository transactionsRepository;
-
-
-        public TransactionsService()
-        {
-            transactionsRepository = new TransactionsRepository(DataLink.Instance);
-        }
-
+        
         public TransactionsService(ITransactionsRepository transactionsRepository)
         {
             this.transactionsRepository = transactionsRepository;
@@ -236,7 +230,6 @@ namespace LoanShark.Service.BankService
             }
         }
     }
-
     public interface ITransactionsService
     {
         public Task<string> AddTransaction(string senderIban, string receiverIban, decimal amount, string transactionDescription = "");

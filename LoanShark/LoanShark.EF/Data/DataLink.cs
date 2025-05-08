@@ -39,7 +39,7 @@ namespace LoanShark.Data
 
         private DataLink()
         {
-             connectionString = AppConfig.GetConnectionString("MyLocalDb");
+             connectionString = AppConfig.GetConnectionString("loan_shark2");
             // connectionString = @"Data Source=DESKTOP-FEAUT17;Initial Catalog=loan_shark;Integrated Security=True;TrustServerCertificate=True";
             try
             {
