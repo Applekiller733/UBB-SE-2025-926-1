@@ -45,6 +45,9 @@ namespace LoanShark.Web
             builder.Services.AddScoped<IMainPageRepository, MainPageRepositoryEF>();
             builder.Services.AddScoped<ILoginService, LoginService>();
             builder.Services.AddScoped<ILoginRepository, LoginRepositoryEF>();
+
+            builder.Services.AddScoped<ITransactionHistoryService, TransactionHistoryService>();
+            builder.Services.AddScoped<ITransactionHistoryRepository, TransactionHistoryRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

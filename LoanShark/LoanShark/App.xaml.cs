@@ -41,6 +41,10 @@ namespace LoanShark
             {
                 client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
             });
+            services.AddHttpClient<ITransactionHistoryService, TransactionHistoryProxy>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
+            });
 
             services.AddTransient<DeleteAccountViewModel>();
             services.AddTransient<UserInformationViewModel>();
@@ -53,6 +57,8 @@ namespace LoanShark
             services.AddTransient<BankAccountVerifyViewModel>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<MainPageViewModel>();
+            services.AddTransient<TransactionsHistoryViewModel>();
+
 
 
 

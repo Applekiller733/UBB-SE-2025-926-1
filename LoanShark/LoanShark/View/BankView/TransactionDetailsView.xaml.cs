@@ -1,5 +1,6 @@
 using System;
 using LoanShark.Domain;
+using LoanShark.Service.BankService;
 using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
@@ -13,12 +14,14 @@ namespace LoanShark.View.BankView
     {
         private Transaction transaction;
         private AppWindow appWindow;
+        private ITransactionHistoryService service;
 
-        public TransactionDetailsView(string transactionDetails, Transaction transaction)
+        public TransactionDetailsView(string transactionDetails, Transaction transaction, ITransactionHistoryService s)
         {
             this.InitializeComponent();
             TransactionDetailsTextBlock.Text = transactionDetails;
             this.transaction = transaction;
+            this.service = s;
 
             // Get the AppWindow associated with this Window
             IntPtr hWnd = WindowNative.GetWindowHandle(this);
@@ -38,7 +41,7 @@ namespace LoanShark.View.BankView
             if (!string.IsNullOrEmpty(newDescription))
             {
                 transaction.TransactionDescription = newDescription;
-                TransactionsHistoryViewModel.UpdateTransactionDescription(transaction.TransactionId, newDescription);
+                service.UpdateTransactionDescription(transaction.TransactionId, newDescription);
                 TransactionDetailsTextBlock.Text = transaction.TostringDetailed();
             }
 

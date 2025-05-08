@@ -11,17 +11,33 @@ using LoanShark.EF.Repository.BankRepository;
 
 namespace LoanShark.Service.BankService
 {
-    public class TransactionHistoryService
+    public interface ITransactionHistoryService
+    {
+        Task<ObservableCollection<string>> RetrieveForMenu();
+        Task<ObservableCollection<string>> FilterByTypeForMenu(string type);
+        Task<ObservableCollection<string>> FilterByTypeDetailed(string type);
+        Task<ObservableCollection<string>?> SortByDate(string order);
+        Task CreateCSV();
+        Task<Transaction> GetTransactionByMenuString(string menuString);
+        Task<Dictionary<string, int>> GetTransactionTypeCounts();
+        Task UpdateTransactionDescription(int transactionId, string newDescription);
+    }   
+    public class TransactionHistoryService : ITransactionHistoryService
     {
         // transactions history service class needs an iban to be passed in the constructor
         // this iban is used to filter the transactions by the sender iban or receiver iban
         private string iban;
         public ITransactionHistoryRepository Repo;
-        public TransactionHistoryService(ITransactionHistoryRepository repo, string iban)
+        public TransactionHistoryService(ITransactionHistoryRepository repo)
         {
             this.Repo = repo;
-            this.iban = iban;
+            this.iban = "";
         }
+        //public TransactionHistoryService(ITransactionHistoryRepository repo, string iban)
+        //{
+        //    this.Repo = repo;
+        //    this.iban = iban;
+        //}
 
         // retrieveForMenu() returns a list of transactions formatted for the menu
         public async Task<ObservableCollection<string>> RetrieveForMenu()

@@ -10,11 +10,11 @@ namespace LoanShark.ViewModel.BankViewModel
     // this iban is used to filter the transactions by the sender iban or receiver iban
     public class TransactionsHistoryViewModel
     {
-        private TransactionHistoryService service;
+        private ITransactionHistoryService service;
 
-        public TransactionsHistoryViewModel()
+        public TransactionsHistoryViewModel(ITransactionHistoryService s)
         {
-            this.service = new TransactionHistoryService();
+            this.service = s;
         }
 
         // retrieveForMenu() returns a list of transactions formatted for the menu
@@ -54,9 +54,9 @@ namespace LoanShark.ViewModel.BankViewModel
         }
 
         // UpdateTransactionDescription() updates the transaction description
-        public static async Task UpdateTransactionDescription(int transactionId, string newDescription)
+        public async Task UpdateTransactionDescription(int transactionId, string newDescription)
         {
-            await TransactionHistoryService.UpdateTransactionDescription(transactionId, newDescription);
+            await service.UpdateTransactionDescription(transactionId, newDescription);
         }
 
         // GetTransactionTypeCounts() returns a dictionary with the transaction type counts

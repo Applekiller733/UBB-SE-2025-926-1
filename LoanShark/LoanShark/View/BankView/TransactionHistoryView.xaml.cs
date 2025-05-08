@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using LoanShark.Service.BankService;
 using LoanShark.ViewModel.BankViewModel;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -15,10 +17,11 @@ namespace LoanShark.View.BankView
         public TransactionsHistoryViewModel TransactionsViewModel;
         public ObservableCollection<string> CurrentList;
         private bool isSortedAscending = true;
-
+        private ITransactionHistoryService transactionHistoryService;   
         public TransactionHistoryView()
         {
-            this.TransactionsViewModel = new TransactionsHistoryViewModel();
+            this.TransactionsViewModel = App.Services.GetRequiredService<TransactionsHistoryViewModel>();
+            this.transactionHistoryService = App.Services.GetRequiredService<ITransactionHistoryService>(); 
             this.InitializeComponent();
             SortAscendingButton.IsChecked = true;
             InitializeDataAsync();
@@ -98,7 +101,7 @@ namespace LoanShark.View.BankView
                 // Retrieve the detailed information of the selected transaction
                 var selectedTransaction = await TransactionsViewModel.GetTransactionByMenuString(selectedTransactionForMenu);
                 string detailedTransaction = selectedTransaction.TostringDetailed();
-                TransactionDetailsView transactionDetailsWindow = new TransactionDetailsView(detailedTransaction, selectedTransaction);
+                TransactionDetailsView transactionDetailsWindow = new TransactionDetailsView(detailedTransaction, selectedTransaction, transactionHistoryService);
                 transactionDetailsWindow.Activate();
             }
         }
