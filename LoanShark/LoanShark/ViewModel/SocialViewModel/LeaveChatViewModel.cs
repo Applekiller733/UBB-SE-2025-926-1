@@ -34,7 +34,7 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public void LeaveChat()
         {
-            this.userService.LeaveChat(this.userService.GetCurrentUser(), this.chatID);
+            this.userService.LeaveChat(this.userService.GetCurrentUser().Result, this.chatID);
 
             this.lastViewModel.LoadChats();
         }

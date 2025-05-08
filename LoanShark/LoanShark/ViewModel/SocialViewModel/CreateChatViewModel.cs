@@ -19,7 +19,7 @@ namespace LoanShark.ViewModel.SocialViewModel
     {
         private string groupName;
         private string searchQuery;
-        private IUserServiceProxy userService;
+        private ISocialUserServiceProxy userService;
         private IChatServiceProxy chatService;
         private ChatListViewModel chatListViewModel;
 
@@ -67,7 +67,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public CreateChatViewModel(ChatListViewModel chatListViewModel, IChatServiceProxy chatService, IUserServiceProxy userService)
+        public CreateChatViewModel(ChatListViewModel chatListViewModel, IChatServiceProxy chatService, ISocialUserServiceProxy userService)
         {
             this.chatListViewModel = chatListViewModel;
             this.AddToSelectedList = new RelayCommand<object>(this.AddFriendToSelectedList);
@@ -76,7 +76,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.SelectedFriends = new ObservableCollection<User>();
             this.chatService = chatService;
             this.userService = userService;
-            this.allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser());
+            this.allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser().Result).Result;
 
             this.LoadFriends();
         }
@@ -84,7 +84,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         private void AddNewGroupChat()
         {
             List<int> selectedFriendsIDs = new List<int>();
-            selectedFriendsIDs.Add(this.userService.GetCurrentUser());
+            selectedFriendsIDs.Add(this.userService.GetCurrentUser().Result);
             foreach (User friend in this.SelectedFriends)
             {
                 selectedFriendsIDs.Add(friend.GetUserId());

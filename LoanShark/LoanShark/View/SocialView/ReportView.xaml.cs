@@ -11,12 +11,13 @@ namespace LoanShark.View.SocialView
     using LoanShark.Service.SocialService.Implementations;
     using LoanShark.Service.SocialService.Interfaces;
     using LoanShark.ViewModel.SocialViewModel;
+    using LoanShark.API.Proxies;
 
     public sealed partial class ReportView : Window
     {
         public ReportViewModel ViewModel { get; }
 
-        public ReportView(IUserService userService, IReportService reportService, int reportedUserId, int messageId)
+        public ReportView(ISocialUserServiceProxy userService, IReportServiceProxy reportService, int reportedUserId, int messageId)
         {
             this.InitializeComponent();
 

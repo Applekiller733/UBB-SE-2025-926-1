@@ -54,7 +54,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.ChatList = new ObservableCollection<Chat>();
             this.ChatService = chatS;
             this.UserService = userS;
-            this.CurrentUserChats = this.UserService.GetCurrentUserChats();
+            this.CurrentUserChats = this.UserService.GetCurrentUserChats().Result;
             this.CountToVisibilityConverter = new CountToVisibilityConverter();
 
             this.LoadChats();
@@ -68,7 +68,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         public void FilterChats()
         {
             this.ChatList.Clear();
-            this.CurrentUserChats = this.UserService.GetCurrentUserChats();
+            this.CurrentUserChats = this.UserService.GetCurrentUserChats().Result;
             foreach (var chat in this.CurrentUserChats)
             {
                 if (string.IsNullOrEmpty(this.SearchQuery) ||

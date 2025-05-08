@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using LoanShark.API.Proxies;
 using LoanShark.Domain;
+using LoanShark.EF.Repository.SocialRepository;
 using LoanShark.Helper;
 using LoanShark.Service.BankService;
 using LoanShark.View.SocialView;
@@ -23,11 +25,31 @@ namespace LoanShark.View.BankView
 
         public MainPageViewModel ViewModel { get; private set; }
 
-        public MainPageView()
+        private ISocialUserServiceProxy socialUserService;
+        private IChatServiceProxy socialChatService;
+        private IMessageServiceProxy socialMessageService;
+        private IFeedServiceProxy socialFeedService;
+        private IReportServiceProxy socialReportService;
+        private INotificationServiceProxy socialNotificationService;
+        private IRepository socialRepo;
+
+        public MainPageView(ISocialUserServiceProxy socialUserService,
+        IChatServiceProxy socialChatService,
+        IMessageServiceProxy socialMessageService, IFeedServiceProxy socialFeedService,
+        IReportServiceProxy socialReportService,
+        INotificationServiceProxy socialNotificationService,
+        IRepository socialRepo)
         {
             this.InitializeComponent();
             this.ViewModel = App.Services.GetRequiredService<MainPageViewModel>();
 
+            this.socialUserService = socialUserService;
+            this.socialChatService = socialChatService;
+            this.socialMessageService = socialMessageService;
+            this.socialFeedService = socialFeedService;
+            this.socialReportService = socialReportService;
+            this.socialNotificationService = socialNotificationService;
+            this.socialRepo = socialRepo;
             // Register this window with the WindowManager
             WindowManager.RegisterWindow(this);
 
@@ -151,7 +173,9 @@ namespace LoanShark.View.BankView
         private void GoToSocialButton_OnClick(object sender, RoutedEventArgs e)
         {
             // throw new NotImplementedException();
-            MainWindow socialWindow = new MainWindow();
+            MainWindow socialWindow = new MainWindow(socialRepo, socialUserService,
+                socialChatService, socialMessageService, socialFeedService,
+                socialReportService, socialNotificationService);
             socialWindow.Activate();
             this.Close();
         }

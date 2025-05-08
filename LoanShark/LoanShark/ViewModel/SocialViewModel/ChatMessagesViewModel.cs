@@ -197,7 +197,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.UserService = usrService;
             this.ReportService = reportService;
             this.CurrentChatID = currentChatID;
-            this.CurrentUserID = this.UserService.GetCurrentUser();
+            this.CurrentUserID = this.UserService.GetCurrentUser().Result;
             this.SendMessageCommand = new RelayCommand(this.SendMessage);
             this.SendImageCommand = new RelayCommand(this.SendImage);
             this.CurrentChatName = this.ChatService.GetChatNameByID(this.CurrentChatID).Result;
@@ -308,7 +308,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                     textMessage.GetTimestamp(),
                     textMessage.GetContent(),
                     textMessage.GetUsersReport());
-                newTextMessage.SenderUsername = this.UserService.GetUserById(textMessage.GetSenderID()).GetUsername();
+                newTextMessage.SenderUsername = this.UserService.GetUserById(textMessage.GetSenderID()).Result.GetUsername();
                 this.ChatMessages.Add(newTextMessage);
             }
             else if (message is ImageMessage imageMessage)
@@ -320,7 +320,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                     imageMessage.GetTimestamp(),
                     imageMessage.GetImageURL(),
                     imageMessage.GetUsersReport());
-                newImageMessage.SenderUsername = this.UserService.GetUserById(imageMessage.GetSenderID()).GetUsername();
+                newImageMessage.SenderUsername = this.UserService.GetUserById(imageMessage.GetSenderID()).Result.GetUsername();
                 this.ChatMessages.Add(newImageMessage);
             }
             else if (message is TransferMessage transferMessage)
@@ -333,7 +333,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                     transferMessage.GetAmount(),
                     transferMessage.GetDescription(),
                     transferMessage.GetCurrency());
-                newTransferMessage.SenderUsername = this.UserService.GetUserById(transferMessage.GetSenderID()).GetUsername();
+                newTransferMessage.SenderUsername = this.UserService.GetUserById(transferMessage.GetSenderID()).Result.GetUsername();
                 this.ChatMessages.Add(newTransferMessage);
             }
             else if (message is RequestMessage requestMessage)
@@ -346,7 +346,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                     requestMessage.GetAmount(),
                     requestMessage.GetDescription(),
                     requestMessage.GetCurrency());
-                newRequestMessage.SenderUsername = this.UserService.GetUserById(requestMessage.GetSenderID()).GetUsername();
+                newRequestMessage.SenderUsername = this.UserService.GetUserById(requestMessage.GetSenderID()).Result.GetUsername();
                 this.ChatMessages.Add(newRequestMessage);
             }
         }

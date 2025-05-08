@@ -28,13 +28,14 @@ namespace LoanShark.View.SocialView
         private IFeedServiceProxy feedService;
         private IReportServiceProxy reportService;
         private INotificationServiceProxy notificationService;
+        private IRepository repo;
 
-        public MainWindow(ISocialUserServiceProxy us, IChatServiceProxy cs, IMessageServiceProxy ms, IFeedServiceProxy fs, IReportServiceProxy rs, INotificationServiceProxy ns)
+        public MainWindow( IRepository r, ISocialUserServiceProxy us, IChatServiceProxy cs, IMessageServiceProxy ms, IFeedServiceProxy fs, IReportServiceProxy rs, INotificationServiceProxy ns)
         {
             this.InitializeComponent();
 
             this.mainWindow = this;
-            IRepository repo = new Repository();
+            this.repo = r;
             this.notificationService = ns;
             this.userService = us;
             this.chatService = cs;
@@ -92,7 +93,7 @@ namespace LoanShark.View.SocialView
         {
             if (this.RightFrame.Content == null || !(this.RightFrame.Content is NotificationView))
             {
-                var notificationView = new NotificationView();
+                var notificationView = new NotificationView(repo, notificationService, userService);
                 this.RightFrame.Content = notificationView;
             }
         }

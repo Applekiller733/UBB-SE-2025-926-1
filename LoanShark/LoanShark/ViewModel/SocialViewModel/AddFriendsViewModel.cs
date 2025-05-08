@@ -51,7 +51,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             this.UserService = userService;
             this.friendsListViewModel = friendsListViewModel;
-            this.AllUsers = UserService.GetNonFriendsUsers(UserService.GetCurrentUser());
+            this.AllUsers = UserService.GetNonFriendsUsers(UserService.GetCurrentUser().Result).Result;
             this.UsersList = new ObservableCollection<User>();
             this.AddFriendCommand = new RelayCommand<object>(AddFriend);
 
@@ -67,14 +67,14 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             var friend = user as User;
 
-            this.UserService.AddFriend(this.UserService.GetCurrentUser(), friend!.GetUserId());
+            this.UserService.AddFriend(this.UserService.GetCurrentUser().Result, friend!.GetUserId());
             this.friendsListViewModel.LoadFriends();
             this.LoadUsers();
         }
 
         private void LoadUsers()
         {
-            this.AllUsers = this.UserService.GetNonFriendsUsers(this.UserService.GetCurrentUser());
+            this.AllUsers = this.UserService.GetNonFriendsUsers(this.UserService.GetCurrentUser().Result).Result;
             this.FilterUsers();
         }
 

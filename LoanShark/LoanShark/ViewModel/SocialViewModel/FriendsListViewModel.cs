@@ -22,7 +22,7 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public ObservableCollection<User> FriendsList { get; set; }
 
-        public IUserServiceProxy UserService { get; set; }
+        public ISocialUserServiceProxy UserService { get; set; }
 
         public IChatServiceProxy ChatService { get; set; }
 
@@ -69,12 +69,12 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public FriendsListViewModel(IChatServiceProxy chat, IUserServiceProxy user, IMessageServiceProxy message)
+        public FriendsListViewModel(IChatServiceProxy chat, ISocialUserServiceProxy user, IMessageServiceProxy message)
         {
             this.UserService = user;
             this.ChatService = chat;
             this.MessageService = message;
-            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser());
+            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser().Result).Result;
             this.FriendsList = new ObservableCollection<User>();
             this.RemoveFriend = new RelayCommand<object>(this.RemoveFriendFromList);
 
@@ -86,17 +86,17 @@ namespace LoanShark.ViewModel.SocialViewModel
             var friend = user as User;
             if (friend != null)
             {
-                this.UserService.RemoveFriend(this.UserService.GetCurrentUser(), friend.GetUserId());
+                this.UserService.RemoveFriend(this.UserService.GetCurrentUser().Result, friend.GetUserId());
             }
 
-            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser());
+            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser().Result).Result;
 
             this.LoadFriends();
         }
 
         public void LoadFriends()
         {
-            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser());
+            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser().Result).Result;
             this.FilterFriends();
         }
 

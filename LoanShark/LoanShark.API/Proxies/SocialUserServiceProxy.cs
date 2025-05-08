@@ -11,37 +11,37 @@ namespace LoanShark.API.Proxies
 {
     public interface ISocialUserServiceProxy
     {
-        Task<IRepository> GetRepoAsync();
+        Task<IRepository> GetRepo();
 
-        Task AddFriendAsync(int userID, int newFriendID);
+        Task AddFriend(int userID, int newFriendID);
 
-        Task RemoveFriendAsync(int userID, int oldFriendID);
+        Task RemoveFriend(int userID, int oldFriendID);
 
-        Task JoinChatAsync(int userID, int chatID);
+        Task JoinChat(int userID, int chatID);
 
-        Task LeaveChatAsync(int userID, int chatID);
+        Task LeaveChat(int userID, int chatID);
 
-        Task<List<int>> FilterUsersAsync(string keyword, int userID);
+        Task<List<int>> FilterUsers(string keyword, int userID);
 
-        Task<List<int>> FilterFriendsAsync(string keyword, int userID);
+        Task<List<int>> FilterFriends(string keyword, int userID);
 
-        Task<List<int>> GetFriendsIDsByUserAsync(int userID);
+        Task<List<int>> GetFriendsIDsByUser(int userID);
 
-        Task<List<User>> GetFriendsByUserAsync(int userID);
+        Task<List<User>> GetFriendsByUser(int userID);
 
-        Task<List<int>> GetChatsByUserAsync(int userID);
+        Task<List<int>> GetChatsByUser(int userID);
 
-        Task<List<Chat>> GetCurrentUserChatsAsync();
+        Task<List<Chat>> GetCurrentUserChats();
 
-        Task<User?> GetUserByIdAsync(int userID);
+        Task<User?> GetUserById(int userID);
 
-        Task<List<User>> GetNonFriendsUsersAsync(int userID);
+        Task<List<User>> GetNonFriendsUsers(int userID);
 
-        Task<int> GetCurrentUserAsync();
+        Task<int> GetCurrentUser();
 
-        Task MarkUserAsDangerousAndGiveTimeoutAsync(User user);
+        Task MarkUserAsDangerousAndGiveTimeout(User user);
 
-        Task<bool> IsUserInTimeoutAsync(User user);
+        Task<bool> IsUserInTimeout(User user);
     }
 
 
@@ -54,7 +54,7 @@ namespace LoanShark.API.Proxies
             _httpClient = httpClient;
         }
 
-        public async Task<User?> GetUserInformationAsync()
+        public async Task<User?> GetUserInformation()
         {
             var response = await _httpClient.GetAsync("https://localhost:7097/api/User/Info"); // Adjust port
             response.EnsureSuccessStatusCode();
@@ -67,7 +67,7 @@ namespace LoanShark.API.Proxies
 
         }
 
-        public async Task<IRepository> GetRepoAsync()
+        public async Task<IRepository> GetRepo()
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Repo");
             response.EnsureSuccessStatusCode();
@@ -78,31 +78,31 @@ namespace LoanShark.API.Proxies
             });
         }
 
-        public async Task AddFriendAsync(int userID, int newFriendID)
+        public async Task AddFriend(int userID, int newFriendID)
         {
             var response = await _httpClient.PostAsync($"https://localhost:7097/api/User/{userID}/Friends/{newFriendID}", null);
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task RemoveFriendAsync(int userID, int oldFriendID)
+        public async Task RemoveFriend(int userID, int oldFriendID)
         {
             var response = await _httpClient.DeleteAsync($"https://localhost:7097/api/User/{userID}/Friends/{oldFriendID}");
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task JoinChatAsync(int userID, int chatID)
+        public async Task JoinChat(int userID, int chatID)
         {
             var response = await _httpClient.PostAsync($"https://localhost:7097/api/User/{userID}/Chats/{chatID}", null);
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task LeaveChatAsync(int userID, int chatID)
+        public async Task LeaveChat(int userID, int chatID)
         {
             var response = await _httpClient.DeleteAsync($"https://localhost:7097/api/User/{userID}/Chats/{chatID}");
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<List<int>> FilterUsersAsync(string keyword, int userID)
+        public async Task<List<int>> FilterUsers(string keyword, int userID)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Filter?keyword={Uri.EscapeDataString(keyword)}&userID={userID}");
             response.EnsureSuccessStatusCode();
@@ -113,7 +113,7 @@ namespace LoanShark.API.Proxies
             });
         }
 
-        public async Task<List<int>> FilterFriendsAsync(string keyword, int userID)
+        public async Task<List<int>> FilterFriends(string keyword, int userID)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Friends/Filter?keyword={Uri.EscapeDataString(keyword)}");
             response.EnsureSuccessStatusCode();
@@ -124,7 +124,7 @@ namespace LoanShark.API.Proxies
             });
         }
 
-        public async Task<List<int>> GetFriendsIDsByUserAsync(int userID)
+        public async Task<List<int>> GetFriendsIDsByUser(int userID)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Friends/IDs");
             response.EnsureSuccessStatusCode();
@@ -135,7 +135,7 @@ namespace LoanShark.API.Proxies
             });
         }
 
-        public async Task<List<User>> GetFriendsByUserAsync(int userID)
+        public async Task<List<User>> GetFriendsByUser(int userID)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Friends");
             response.EnsureSuccessStatusCode();
@@ -146,7 +146,7 @@ namespace LoanShark.API.Proxies
             });
         }
 
-        public async Task<List<int>> GetChatsByUserAsync(int userID)
+        public async Task<List<int>> GetChatsByUser(int userID)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Chats");
             response.EnsureSuccessStatusCode();
@@ -157,7 +157,7 @@ namespace LoanShark.API.Proxies
             });
         }
 
-        public async Task<List<Chat>> GetCurrentUserChatsAsync()
+        public async Task<List<Chat>> GetCurrentUserChats()
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Chats/Current");
             response.EnsureSuccessStatusCode();
@@ -168,7 +168,7 @@ namespace LoanShark.API.Proxies
             });
         }
 
-        public async Task<User> GetUserByIdAsync(int userID)
+        public async Task<User> GetUserById(int userID)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Info");
             response.EnsureSuccessStatusCode();
@@ -181,7 +181,7 @@ namespace LoanShark.API.Proxies
                 new Email(dto.Email), new PhoneNumber(dto.PhoneNumber), new HashedPassword(dto.Password));
         }
 
-        public async Task<List<User>> GetNonFriendsUsersAsync(int userID)
+        public async Task<List<User>> GetNonFriendsUsers(int userID)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/NonFriends");
             response.EnsureSuccessStatusCode();
@@ -192,7 +192,7 @@ namespace LoanShark.API.Proxies
             });
         }
 
-        public async Task<int> GetCurrentUserAsync()
+        public async Task<int> GetCurrentUser()
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Current");
             response.EnsureSuccessStatusCode();
@@ -204,7 +204,7 @@ namespace LoanShark.API.Proxies
             return dto.UserID;
         }
 
-        public async Task MarkUserAsDangerousAndGiveTimeoutAsync(User user)
+        public async Task MarkUserAsDangerousAndGiveTimeout(User user)
         {
             var content = new StringContent(JsonSerializer.Serialize(new { UserID = user.GetUserId() }),
                 System.Text.Encoding.UTF8, "application/json");
@@ -212,7 +212,7 @@ namespace LoanShark.API.Proxies
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<bool> IsUserInTimeoutAsync(User user)
+        public async Task<bool> IsUserInTimeout(User user)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{user.GetUserId()}/Timeout");
             response.EnsureSuccessStatusCode();

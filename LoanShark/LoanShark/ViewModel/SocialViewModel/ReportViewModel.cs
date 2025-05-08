@@ -130,7 +130,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.reportService.LogReportedMessages(new List<Report> { report });
 
             // Increase the reported count for the user
-            User reportedUser = this.userService.GetUserById(reportedUserId);
+            User reportedUser = this.userService.GetUserById(reportedUserId).Result;
             string reportMessage = reportedUser!.IncreaseReportCount();
 
             this.userService.MarkUserAsDangerousAndGiveTimeout(reportedUser);

@@ -115,9 +115,9 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public void LoadAllUnaddedFriendsList()
         {
-            var allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser());
+            var allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser().Result);
             var currentChatParticipants = this.chatService.GetChatParticipantsList(this.chatID);
-            this.allUnaddedFriends = allFriends.Where(friend => !currentChatParticipants.Result.Any(participant => participant.GetUserId() == friend.GetUserId())).ToList();
+            this.allUnaddedFriends = allFriends.Result.Where(friend => !currentChatParticipants.Result.Any(participant => participant.GetUserId() == friend.GetUserId())).ToList();
         }
 
         public void UpdateObservableLists()
