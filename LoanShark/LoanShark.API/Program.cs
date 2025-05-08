@@ -1,9 +1,16 @@
 using LoanShark.API.Proxies;
 using LoanShark.EF.Repository.BankRepository;
+using LoanShark.EF.Repository.SocialRepository;
 using LoanShark.Service.BankService;
 using LoanShark.Service.Service.BankService;
+using LoanShark.Service.SocialService.Implementations;
+using LoanShark.Service.SocialService.Interfaces;
 using LoanShark.Web.Extensions;
 using Microsoft.EntityFrameworkCore;
+using IUserService = LoanShark.Service.BankService.IUserService;
+using UserService = LoanShark.Service.BankService.UserService;
+using ISocialUserService = LoanShark.Service.SocialService.Interfaces.IUserService;
+using SocialUserService = LoanShark.Service.SocialService.Implementations.UserService;
 
 namespace LoanShark.Web
 {
@@ -48,6 +55,16 @@ namespace LoanShark.Web
 
             builder.Services.AddScoped<ITransactionHistoryService, TransactionHistoryService>();
             builder.Services.AddScoped<ITransactionHistoryRepository, TransactionHistoryRepository>();
+            builder.Services.AddScoped<IRepository, RepositoryEF>();
+
+            builder.Services.AddScoped<IChatService, ChatService>();
+            builder.Services.AddScoped<IFeedService, FeedService>();
+
+            builder.Services.AddScoped<IMessageService, MessageService>();
+            builder.Services.AddScoped<IReportService, ReportService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<ISocialUserService, SocialUserService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

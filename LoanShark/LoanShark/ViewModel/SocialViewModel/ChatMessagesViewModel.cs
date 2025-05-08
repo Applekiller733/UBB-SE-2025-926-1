@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.ViewModel.SocialViewModel
 {
     using System;
@@ -31,10 +33,10 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public ListView ChatListView { get; set; } = null!;
 
-        public IMessageService MessageService;
-        public IChatService ChatService;
-        public IUserService UserService;
-        public IReportService ReportService;
+        public IMessageServiceProxy MessageService;
+        public IChatServiceProxy ChatService;
+        public ISocialUserServiceProxy UserService;
+        public IReportServiceProxy ReportService;
         private MessageTemplateSelector templateSelector;
 
         public int CurrentChatID { get; set; }
@@ -186,7 +188,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         /// <param name="chtService">The chat service instance.</param>
         /// <param name="usrService">The user service instance.</param>
         /// <param name="ReportService">The report service instance.</param>
-        public ChatMessagesViewModel(Window window, Frame rightFrame, int currentChatID, IMessageService msgService, IChatService chtService, IUserService usrService, IReportService reportService)
+        public ChatMessagesViewModel(Window window, Frame rightFrame, int currentChatID, IMessageServiceProxy msgService, IChatServiceProxy chtService, ISocialUserServiceProxy usrService, IReportServiceProxy reportService)
         {
             this.window = window;
             this.ChatMessages = new ObservableCollection<Message>();
@@ -198,8 +200,8 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.CurrentUserID = this.UserService.GetCurrentUser();
             this.SendMessageCommand = new RelayCommand(this.SendMessage);
             this.SendImageCommand = new RelayCommand(this.SendImage);
-            this.CurrentChatName = this.ChatService.GetChatNameByID(this.CurrentChatID);
-            this.CurrentChatParticipants = this.ChatService.GetChatParticipantsStringList(this.CurrentChatID);
+            this.CurrentChatName = this.ChatService.GetChatNameByID(this.CurrentChatID).Result;
+            this.CurrentChatParticipants = this.ChatService.GetChatParticipantsStringList(this.CurrentChatID).Result;
             this.DeleteMessageCommand = new RelayCommand<Message>(this.DeleteMessage);
             this.ReportMessageCommand = new RelayCommand<Message>(this.ReportMessage);
 
@@ -229,7 +231,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.ChatMessages.Clear();
             var messages = this.ChatService.GetChatHistory(this.CurrentChatID);
 
-            foreach (var message in messages)
+            foreach (var message in messages.Result)
             {
                 this.AddMessageToChat(message);
             }
@@ -270,7 +272,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             var messages = this.ChatService.GetChatHistory(this.CurrentChatID);
             bool hasNewMessages = false;
 
-            foreach (var message in messages)
+            foreach (var message in messages.Result)
             {
                 // If the message timestamp is newer than the last message we processed
                 if (message.GetTimestamp() > this.lastMessageTimestamp)

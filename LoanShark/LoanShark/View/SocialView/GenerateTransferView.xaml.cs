@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
@@ -19,11 +21,11 @@ namespace LoanShark.View.SocialView
         /// </summary>
         public GenerateTransferViewModel ViewModel { get; }
 
-        private IChatService chatService;
+        private IChatServiceProxy chatService;
         private Page lastChat;
         private Frame rightFrame;
 
-        public GenerateTransferView(GenerateTransferViewModel generateTransferViewModel, Page lastChat, Frame rightFrame, int chatID, IChatService chatService)
+        public GenerateTransferView(GenerateTransferViewModel generateTransferViewModel, Page lastChat, Frame rightFrame, int chatID, IChatServiceProxy chatService)
         {
             // Create repository and services (this would typically be injected)
             this.chatService = chatService;

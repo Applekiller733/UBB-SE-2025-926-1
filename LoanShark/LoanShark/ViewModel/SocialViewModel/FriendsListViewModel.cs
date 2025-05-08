@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.ViewModel.SocialViewModel
 {
     using System;
@@ -20,11 +22,11 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public ObservableCollection<User> FriendsList { get; set; }
 
-        public IUserService UserService { get; set; }
+        public IUserServiceProxy UserService { get; set; }
 
-        public IChatService ChatService { get; set; }
+        public IChatServiceProxy ChatService { get; set; }
 
-        public IMessageService MessageService { get; set; }
+        public IMessageServiceProxy MessageService { get; set; }
 
         public ICommand RemoveFriend { get; }
 
@@ -67,7 +69,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public FriendsListViewModel(IChatService chat, IUserService user, IMessageService message)
+        public FriendsListViewModel(IChatServiceProxy chat, IUserServiceProxy user, IMessageServiceProxy message)
         {
             this.UserService = user;
             this.ChatService = chat;

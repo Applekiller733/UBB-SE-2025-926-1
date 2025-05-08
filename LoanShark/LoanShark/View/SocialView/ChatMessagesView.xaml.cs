@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
@@ -15,9 +17,9 @@ namespace LoanShark.View.SocialView
 
         private ChatMessagesViewModel chatMessagesViewModel;
         private Frame rightFrame;
-        private IUserService userService;
-        private IChatService chatService;
-        private IReportService reportService;
+        private ISocialUserServiceProxy userService;
+        private IChatServiceProxy chatService;
+        private IReportServiceProxy reportService;
         private ChatListViewModel chatListViewModel;
         private GenerateTransferViewModel generateTransferViewModel;
 

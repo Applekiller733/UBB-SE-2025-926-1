@@ -10,12 +10,12 @@ namespace LoanShark.API.Proxies
 {
     public interface IReportServiceProxy
     {
-        Task<Report?> GetReportByIdAsync(int id);
-        Task AddReportAsync(Report report);
-        Task<bool> CheckIfReportExistsAsync(int messageId, int reporterUserId);
-        Task IncreaseReportCountAsync(int reportedId);
-        Task LogReportedMessagesAsync(List<Report> reports);
-        Task SendReportAsync(Report report);
+        Task<Report?> GetReportById(int id);
+        Task AddReport(Report report);
+        Task<bool> CheckIfReportExists(int messageId, int reporterUserId);
+        Task IncreaseReportCount(int reportedId);
+        Task LogReportedMessages(List<Report> reports);
+        Task SendReport(Report report);
     }
 
     public class ReportServiceProxy : IReportServiceProxy
@@ -27,7 +27,7 @@ namespace LoanShark.API.Proxies
             _httpClient = httpClient;
         }
 
-        public async Task<Report?> GetReportByIdAsync(int id)
+        public async Task<Report?> GetReportById(int id)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/Report/{id}");
             response.EnsureSuccessStatusCode();
@@ -46,7 +46,7 @@ namespace LoanShark.API.Proxies
             );
         }
 
-        public async Task AddReportAsync(Report report)
+        public async Task AddReport(Report report)
         {
             var dto = new ReportViewModel
             {
@@ -67,7 +67,7 @@ namespace LoanShark.API.Proxies
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task<bool> CheckIfReportExistsAsync(int messageId, int reporterUserId)
+        public async Task<bool> CheckIfReportExists(int messageId, int reporterUserId)
         {
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/Report/exists/{messageId}/{reporterUserId}");
             response.EnsureSuccessStatusCode();
@@ -78,13 +78,13 @@ namespace LoanShark.API.Proxies
             });
         }
 
-        public async Task IncreaseReportCountAsync(int reportedId)
+        public async Task IncreaseReportCount(int reportedId)
         {
             var response = await _httpClient.PostAsync($"https://localhost:7097/api/Report/increase-report-count/{reportedId}", null);
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task LogReportedMessagesAsync(List<Report> reports)
+        public async Task LogReportedMessages(List<Report> reports)
         {
             var dtos = reports.Select(report => new ReportViewModel
             {
@@ -105,7 +105,7 @@ namespace LoanShark.API.Proxies
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task SendReportAsync(Report report)
+        public async Task SendReport(Report report)
         {
             var dto = new ReportViewModel
             {

@@ -9,7 +9,7 @@ namespace LoanShark.API.Proxies
 {
     public interface IFeedServiceProxy
     {
-        Task<List<Post>?> GetFeedContentAsync();
+        Task<List<Post>?> GetFeedContent();
     }
 
     public class FeedServiceProxy : IFeedServiceProxy
@@ -21,7 +21,7 @@ namespace LoanShark.API.Proxies
             _httpClient = httpClient;
         }
 
-        public async Task<List<Post>?> GetFeedContentAsync()
+        public async Task<List<Post>?> GetFeedContent()
         {
             var response = await _httpClient.GetAsync("https://localhost:7097/api/Feed/content");
             response.EnsureSuccessStatusCode();

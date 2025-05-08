@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.ViewModel.SocialViewModel
 {
     using System.Collections.ObjectModel;
@@ -11,7 +13,7 @@ namespace LoanShark.ViewModel.SocialViewModel
 
     public class FeedViewModel : INotifyPropertyChanged
     {
-        private readonly IFeedService feedService;
+        private readonly IFeedServiceProxy feedService;
         private ObservableCollection<Post> posts;
 
         public ObservableCollection<Post> Posts
@@ -33,18 +35,18 @@ namespace LoanShark.ViewModel.SocialViewModel
             // Default constructor for XAML
         }
 
-        public FeedViewModel(IFeedService service)
+        public FeedViewModel(IFeedServiceProxy service)
         {
             this.feedService = service;
             this.LoadPosts();
         }
 
-        public void LoadPosts()
+        public async void LoadPosts() // MIGHT NEED TO BE CHECKED
         {
-            var feedContent = this.feedService.GetFeedContent();
+            var feedContent = await this.feedService.GetFeedContent();
             this.Posts = new ObservableCollection<Post>(feedContent);
         }
-
+        
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)

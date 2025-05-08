@@ -4,6 +4,9 @@
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
+using LoanShark.API.Proxies;
+using Microsoft.Identity.Client;
+
 namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
@@ -18,14 +21,14 @@ namespace LoanShark.View.SocialView
     public sealed partial class ChatListView : Page
     {
         private ChatListViewModel chatListViewModel;
-        public IUserService UserService;
-        public IChatService ChatService;
-        public IMessageService MessageService;
-        public IReportService ReportService;
+        public ISocialUserServiceProxy UserService;
+        public IChatServiceProxy ChatService;
+        public IMessageServiceProxy MessageService;
+        public IReportServiceProxy ReportService;
         public Frame RightFrame;
         public Window MainFrame;
 
-        public ChatListView(Window mainFrame, IChatService chatService, IUserService userService, IReportService reportService, IMessageService messageService, Frame rightFrame)
+        public ChatListView(Window mainFrame, IChatServiceProxy chatService, ISocialUserServiceProxy userService, IReportServiceProxy reportService, IMessageServiceProxy messageService, Frame rightFrame)
         {
             this.InitializeComponent();
 

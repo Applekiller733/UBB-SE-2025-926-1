@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
@@ -15,13 +17,13 @@ namespace LoanShark.View.SocialView
     public sealed partial class FriendsListView : Page
     {
         private FriendsListViewModel friendsListViewModel;
-        private IChatService chatService;
-        private IUserService userService;
-        private IMessageService messageService;
+        private IChatServiceProxy chatService;
+        private ISocialUserServiceProxy userService;
+        private IMessageServiceProxy messageService;
         private Frame rightFrame;
         private Page addFriendsPage;
 
-        public FriendsListView(IChatService chatService, IUserService userService, IMessageService messageService, Frame rightFrame)
+        public FriendsListView(IChatServiceProxy chatService, ISocialUserServiceProxy userService, IMessageServiceProxy messageService, Frame rightFrame)
         {
             this.InitializeComponent();
             this.chatService = chatService;

@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
@@ -11,14 +13,14 @@ namespace LoanShark.View.SocialView
 
     public sealed partial class AddNewMemberView : Page
     {
-        private IChatService chatService;
-        private IUserService userService;
+        private IChatServiceProxy chatService;
+        private ISocialUserServiceProxy userService;
         private AddNewMemberViewModel addNewMemberViewModel;
         private Page lastChat;
         private Frame rightFrame;
         private ChatMessagesViewModel chatMessagesViewModel;
 
-        public AddNewMemberView(ChatMessagesViewModel chatMessagesViewModel, Page lastChat, Frame rightFrame, int chatID, IChatService chatService, IUserService userService)
+        public AddNewMemberView(ChatMessagesViewModel chatMessagesViewModel, Page lastChat, Frame rightFrame, int chatID, IChatServiceProxy chatService, ISocialUserServiceProxy userService)
         {
             this.InitializeComponent();
             this.chatMessagesViewModel = chatMessagesViewModel;

@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.ViewModel.SocialViewModel
 {
     using System.Collections.ObjectModel;
@@ -36,9 +38,9 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         private readonly int currentUserID;
 
-        private readonly INotificationService notificationService;
+        private readonly INotificationServiceProxy notificationService;
 
-        public NotificationViewModel(INotificationService service, int userID)
+        public NotificationViewModel(INotificationServiceProxy service, int userID)
         {
             this.notificationService = service;
             this.currentUserID = userID;
@@ -51,7 +53,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         public void LoadNotifications()
         {
             var notificationsList = this.notificationService.GetNotifications(this.currentUserID);
-            this.Notifications = new ObservableCollection<Notification>(notificationsList);
+            this.Notifications = new ObservableCollection<Notification>(notificationsList.Result);
         }
 
         public void ClearNotification(int notificationID)

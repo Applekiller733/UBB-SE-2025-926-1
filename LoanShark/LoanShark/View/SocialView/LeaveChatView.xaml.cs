@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
@@ -11,14 +13,14 @@ namespace LoanShark.View.SocialView
 
     public sealed partial class LeaveChatView : Page
     {
-        private IChatService chatService;
-        private IUserService userService;
+        private IChatServiceProxy chatService;
+        private ISocialUserServiceProxy userService;
         private Frame rightFrame;
         private LeaveChatViewModel leaveChatViewModel;
         private Page lastPage;
         private ChatListViewModel chatMessagesViewModel;
 
-        public LeaveChatView(int chatID, ChatListViewModel chVm, Page chatM, Frame right, IChatService chat, IUserService user)
+        public LeaveChatView(int chatID, ChatListViewModel chVm, Page chatM, Frame right, IChatServiceProxy chat, ISocialUserServiceProxy user)
         {
             this.InitializeComponent();
             this.chatMessagesViewModel = chVm;
