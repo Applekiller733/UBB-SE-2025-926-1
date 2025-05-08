@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.ViewModel.SocialViewModel
 {
     using System;
@@ -17,8 +19,8 @@ namespace LoanShark.ViewModel.SocialViewModel
     {
         private string groupName;
         private string searchQuery;
-        private IUserService userService;
-        private IChatService chatService;
+        private IUserServiceProxy userService;
+        private IChatServiceProxy chatService;
         private ChatListViewModel chatListViewModel;
 
         public ICommand AddToSelectedList { get; }
@@ -65,7 +67,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public CreateChatViewModel(ChatListViewModel chatListViewModel, IChatService chatService, IUserService userService)
+        public CreateChatViewModel(ChatListViewModel chatListViewModel, IChatServiceProxy chatService, IUserServiceProxy userService)
         {
             this.chatListViewModel = chatListViewModel;
             this.AddToSelectedList = new RelayCommand<object>(this.AddFriendToSelectedList);

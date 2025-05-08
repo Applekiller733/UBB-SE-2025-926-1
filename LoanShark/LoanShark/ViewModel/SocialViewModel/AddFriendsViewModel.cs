@@ -12,6 +12,7 @@ namespace LoanShark.ViewModel.SocialViewModel
     using System.Windows.Input;
     using LoanShark.Domain;
     using LoanShark.Service.SocialService.Interfaces;
+    using LoanShark.API.Proxies;
 
     public class AddFriendsViewModel : INotifyPropertyChanged
     {
@@ -28,7 +29,7 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public List<User> AllUsers { get; set; }
 
-        public IUserService UserService { get; set; }
+        public ISocialUserServiceProxy UserService { get; set; }
 
         public ICommand AddFriendCommand { get; set; }
 
@@ -46,7 +47,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             }
         }
 
-        public AddFriendsViewModel(FriendsListViewModel friendsListViewModel, IUserService userService)
+        public AddFriendsViewModel(FriendsListViewModel friendsListViewModel, ISocialUserServiceProxy userService)
         {
             this.UserService = userService;
             this.friendsListViewModel = friendsListViewModel;

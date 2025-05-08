@@ -9,14 +9,15 @@ namespace LoanShark.View.SocialView
     using Microsoft.UI.Xaml.Controls;
     using LoanShark.Service.SocialService.Interfaces;
     using LoanShark.ViewModel.SocialViewModel;
+    using LoanShark.API.Proxies;
 
     public sealed partial class AddFriendsView : Page
     {
-        private IUserService userService;
+        private ISocialUserServiceProxy userService;
         private FriendsListViewModel friendsListViewModel;
         private AddFriendsViewModel addFriendsViewModel;
 
-        public AddFriendsView(FriendsListViewModel friendsListViewModel, IUserService userService)
+        public AddFriendsView(FriendsListViewModel friendsListViewModel, ISocialUserServiceProxy userService)
         {
             this.InitializeComponent();
 

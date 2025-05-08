@@ -21,14 +21,14 @@ namespace LoanShark.View.SocialView
     public sealed partial class ChatListView : Page
     {
         private ChatListViewModel chatListViewModel;
-        public IUserService UserService;
+        public ISocialUserServiceProxy UserService;
         public IChatServiceProxy ChatService;
         public IMessageServiceProxy MessageService;
         public IReportServiceProxy ReportService;
         public Frame RightFrame;
         public Window MainFrame;
 
-        public ChatListView(Window mainFrame, IChatServiceProxy chatService, IUserService userService, IReportServiceProxy reportService, IMessageServiceProxy messageService, Frame rightFrame)
+        public ChatListView(Window mainFrame, IChatServiceProxy chatService, ISocialUserServiceProxy userService, IReportServiceProxy reportService, IMessageServiceProxy messageService, Frame rightFrame)
         {
             this.InitializeComponent();
 

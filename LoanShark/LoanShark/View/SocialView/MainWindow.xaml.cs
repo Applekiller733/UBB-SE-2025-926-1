@@ -22,21 +22,21 @@ namespace LoanShark.View.SocialView
     public sealed partial class MainWindow : Window
     {
         private Window mainWindow;
-        private IUserService userService;
+        private ISocialUserServiceProxy userService;
         private IChatServiceProxy chatService;
         private IMessageServiceProxy messageService;
         private IFeedServiceProxy feedService;
         private IReportServiceProxy reportService;
         private INotificationServiceProxy notificationService;
 
-        public MainWindow(IChatServiceProxy cs, IMessageServiceProxy ms, IFeedServiceProxy fs, IReportServiceProxy rs, INotificationServiceProxy ns)
+        public MainWindow(ISocialUserServiceProxy us, IChatServiceProxy cs, IMessageServiceProxy ms, IFeedServiceProxy fs, IReportServiceProxy rs, INotificationServiceProxy ns)
         {
             this.InitializeComponent();
 
             this.mainWindow = this;
             IRepository repo = new Repository();
             this.notificationService = ns;
-            this.userService = new UserService(repo, null);
+            this.userService = us;
             this.chatService = cs;
             this.messageService = ms;
             this.feedService = fs;

@@ -31,7 +31,7 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public List<Chat> CurrentUserChats;
         public IChatServiceProxy ChatService;
-        public IUserService UserService;
+        public ISocialUserServiceProxy UserService;
 
         public CountToVisibilityConverter CountToVisibilityConverter { get; set; }
 
@@ -49,7 +49,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             }
         }
 
-        public ChatListViewModel(IChatServiceProxy chatS, IUserService userS)
+        public ChatListViewModel(IChatServiceProxy chatS, ISocialUserServiceProxy userS)
         {
             this.ChatList = new ObservableCollection<Chat>();
             this.ChatService = chatS;

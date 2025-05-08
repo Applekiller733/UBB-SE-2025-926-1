@@ -9,6 +9,8 @@ using LoanShark.Web.Extensions;
 using Microsoft.EntityFrameworkCore;
 using IUserService = LoanShark.Service.BankService.IUserService;
 using UserService = LoanShark.Service.BankService.UserService;
+using ISocialUserService = LoanShark.Service.SocialService.Interfaces.IUserService;
+using SocialUserService = LoanShark.Service.SocialService.Implementations.UserService;
 
 namespace LoanShark.Web
 {
@@ -61,6 +63,7 @@ namespace LoanShark.Web
             builder.Services.AddScoped<IMessageService, MessageService>();
             builder.Services.AddScoped<IReportService, ReportService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<ISocialUserService, SocialUserService>();
 
             var app = builder.Build();
 

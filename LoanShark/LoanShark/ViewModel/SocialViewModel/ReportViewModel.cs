@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.ViewModel.SocialViewModel
 {
     using System;
@@ -20,8 +22,8 @@ namespace LoanShark.ViewModel.SocialViewModel
         public event Action<string> ShowErrorDialog = message => { };
         public event Action CloseView = () => { };
 
-        private readonly IUserService userService;
-        private readonly IReportService reportService;
+        private readonly ISocialUserServiceProxy userService;
+        private readonly IReportServiceProxy reportService;
         private readonly int reportedUserId;
         private readonly int messageId;
 
@@ -97,7 +99,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         /// <param name="reportService">The report service.</param>
         /// <param name="reportedUserId">The ID of the reported user.</param>
         /// <param name="messageId">The ID of the message being reported.</param>
-        public ReportViewModel(IUserService userService, IReportService reportService, int reportedUserId, int messageId)
+        public ReportViewModel(ISocialUserServiceProxy userService, IReportServiceProxy reportService, int reportedUserId, int messageId)
         {
             this.userService = userService;
             this.reportService = reportService;

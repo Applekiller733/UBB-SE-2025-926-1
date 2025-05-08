@@ -1,4 +1,6 @@
-﻿namespace LoanShark.ViewModel.SocialViewModel
+﻿using LoanShark.API.Proxies;
+
+namespace LoanShark.ViewModel.SocialViewModel
 {
     using System.ComponentModel;
     using System.Windows.Input;
@@ -8,8 +10,8 @@
     {
         public ICommand LeaveChatCommand { get; set; }
 
-        private IUserService userService;
-        private IChatService chatService;
+        private ISocialUserServiceProxy userService;
+        private IChatServiceProxy chatService;
         private ChatListViewModel lastViewModel;
         private int chatID;
 
@@ -20,7 +22,7 @@
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public LeaveChatViewModel(IUserService userService, IChatService chatService, ChatListViewModel chatMessagesViewModel, int chatID)
+        public LeaveChatViewModel(ISocialUserServiceProxy userService, IChatServiceProxy chatService, ChatListViewModel chatMessagesViewModel, int chatID)
         {
             this.LeaveChatCommand = new RelayCommand(this.LeaveChat);
 

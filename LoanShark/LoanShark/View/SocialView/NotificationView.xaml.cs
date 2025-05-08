@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
+
 namespace LoanShark.View.SocialView
 {
     using Microsoft.UI.Xaml;
@@ -14,12 +16,12 @@ namespace LoanShark.View.SocialView
     {
         private NotificationViewModel viewModel;
 
-        public NotificationView()
+        public NotificationView(IRepository r, INotificationServiceProxy ns, ISocialUserServiceProxy us)
         {
             this.InitializeComponent();
-            var repo = new Repository();
-            var notificationService = new NotificationService(repo);
-            var userService = new UserService(repo, notificationService);
+            var repo = r;
+            var notificationService = ns;
+            var userService = us;
             int currentUserID = repo.GetLoggedInUserID();
             this.DataContext = new NotificationViewModel(notificationService, currentUserID);
         }
