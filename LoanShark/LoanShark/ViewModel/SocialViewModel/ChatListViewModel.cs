@@ -2,6 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using LoanShark.API.Proxies;
 using LoanShark.View.SocialView;
 
 namespace LoanShark.ViewModel.SocialViewModel
@@ -29,7 +30,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         public ObservableCollection<Chat> ChatList { get; set; }
 
         public List<Chat> CurrentUserChats;
-        public IChatService ChatService;
+        public IChatServiceProxy ChatService;
         public IUserService UserService;
 
         public CountToVisibilityConverter CountToVisibilityConverter { get; set; }
@@ -48,7 +49,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             }
         }
 
-        public ChatListViewModel(IChatService chatS, IUserService userS)
+        public ChatListViewModel(IChatServiceProxy chatS, IUserService userS)
         {
             this.ChatList = new ObservableCollection<Chat>();
             this.ChatService = chatS;

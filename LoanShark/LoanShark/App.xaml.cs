@@ -45,7 +45,26 @@ namespace LoanShark
             {
                 client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
             });
-
+            services.AddHttpClient<IChatServiceProxy, ChatServiceProxy>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
+            });
+            services.AddHttpClient<INotificationServiceProxy, NotificationServiceProxy>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
+            });
+            services.AddHttpClient<IReportServiceProxy, ReportServiceProxy>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
+            });
+            services.AddHttpClient<IFeedServiceProxy, FeedServiceProxy>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
+            });
+            services.AddHttpClient<IMessageServiceProxy, MessageServiceProxy>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
+            });
             services.AddTransient<DeleteAccountViewModel>();
             services.AddTransient<UserInformationViewModel>();
             services.AddTransient<UserRegistrationViewModel>();

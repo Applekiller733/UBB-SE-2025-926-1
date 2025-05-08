@@ -4,6 +4,7 @@
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
+using LoanShark.API.Proxies;
 using LoanShark.View.SocialView;
 
 namespace LoanShark.View.SocialView
@@ -22,24 +23,24 @@ namespace LoanShark.View.SocialView
     {
         private Window mainWindow;
         private IUserService userService;
-        private IChatService chatService;
-        private IMessageService messageService;
-        private IFeedService feedService;
-        private IReportService reportService;
-        private INotificationService notificationService;
+        private IChatServiceProxy chatService;
+        private IMessageServiceProxy messageService;
+        private IFeedServiceProxy feedService;
+        private IReportServiceProxy reportService;
+        private INotificationServiceProxy notificationService;
 
-        public MainWindow()
+        public MainWindow(IChatServiceProxy cs, IMessageServiceProxy ms, IFeedServiceProxy fs, IReportServiceProxy rs, INotificationServiceProxy ns)
         {
             this.InitializeComponent();
 
             this.mainWindow = this;
             IRepository repo = new Repository();
-            this.notificationService = new NotificationService(repo);
-            this.userService = new UserService(repo, this.notificationService);
-            this.chatService = new ChatService(repo);
-            this.messageService = new MessageService(repo, this.userService);
-            this.feedService = new FeedService(repo, this.userService);
-            this.reportService = new ReportService(repo, this.userService);
+            this.notificationService = ns;
+            this.userService = new UserService(repo, null);
+            this.chatService = cs;
+            this.messageService = ms;
+            this.feedService = fs;
+            this.reportService =rs;
 
             if (this.LeftFrame.Content == null || !(this.LeftFrame.Content is ChatListView))
             {
