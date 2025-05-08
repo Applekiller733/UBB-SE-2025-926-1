@@ -53,15 +53,15 @@ namespace LoanShark.Data
         // The open and close connection are intentionally not async to avoid blocking the main thread
         public void OpenConnection()
         {
-            if (sqlConnection.State != System.Data.ConnectionState.Open)
-            {
-                sqlConnection.Open();
-                Debug.Print("Connection to the database is now open");
-            }
-            else
-            {
-                Debug.Print("Connection was already opened beforehand");
-            }
+            //if (sqlConnection.State != System.Data.ConnectionState.Open)
+            //{
+            //    sqlConnection.Open();
+            //    Debug.Print("Connection to the database is now open");
+            //}
+            //else
+            //{
+            //    Debug.Print("Connection was already opened beforehand");
+            //}
         }
 
         public void CloseConnection()

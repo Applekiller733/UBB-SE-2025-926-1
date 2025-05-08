@@ -5,6 +5,7 @@ using LoanShark.Domain;
 using LoanShark.Helper;
 using LoanShark.Service.BankService;
 using LoanShark.ViewModel.BankViewModel;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
 
@@ -21,7 +22,7 @@ namespace LoanShark.View.BankView
         public LoginView()
         {
             this.InitializeComponent();
-            this.ViewModel = new LoginViewModel();
+            this.ViewModel = App.Services.GetRequiredService<LoginViewModel>();
 
             // Register this window with the WindowManager
             WindowManager.RegisterWindow(this);
