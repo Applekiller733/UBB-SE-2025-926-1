@@ -23,7 +23,7 @@ namespace LoanShark.EF.Repository.SocialRepository
         /// <summary>
         /// The ID of the currently logged-in user.
         /// </summary>
-        public const int LOGGEDINUSERID = 2;
+        public const int LOGGEDINUSERID = 4;
         private static int loggedInUserID = LOGGEDINUSERID;
         private readonly ILoanSharkDbContext loanSharkDbContext;
 

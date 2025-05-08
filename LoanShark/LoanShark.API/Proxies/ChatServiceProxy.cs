@@ -2,6 +2,7 @@
 using LoanShark.Domain.MessageClasses;
 using LoanShark.EF.Repository.SocialRepository;
 using LoanShark.Service.SocialService.Interfaces;
+using System.Configuration;
 using System.Text.Json;
 
 namespace LoanShark.API.Proxies
@@ -56,10 +57,17 @@ namespace LoanShark.API.Proxies
 
         public async Task<int> GetCurrentUserID()
         {
-            var response = await _httpClient.GetAsync("api/Chat/current-user-id");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return int.Parse(content);
+            try
+            {
+                var response = await _httpClient.GetAsync("https://localhost:7097/api/Chat/current-user-id");
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadFromJsonAsync<int>();
+                return content;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetCurrentUserId: " + ex.Message.ToString());
+            }
         }
 
         public async Task<int> GetNumberOfParticipants(int chatID)

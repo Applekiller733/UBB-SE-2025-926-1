@@ -6,6 +6,7 @@ using LoanShark.Domain;
 using LoanShark.EF.Repository.SocialRepository;
 using LoanShark.Helper;
 using LoanShark.Service.BankService;
+using LoanShark.Service.SocialService.Implementations;
 using LoanShark.View.SocialView;
 using LoanShark.ViewModel.BankViewModel;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +51,18 @@ namespace LoanShark.View.BankView
             this.socialReportService = socialReportService;
             this.socialNotificationService = socialNotificationService;
             this.socialRepo = socialRepo;
+            // Register this window with the WindowManager
+            WindowManager.RegisterWindow(this);
+
+            // Set the welcome text from ViewModel
+            centeredTextField.Text = this.ViewModel.WelcomeText;
+        }
+
+        public MainPageView()
+        {
+            this.InitializeComponent();
+            this.ViewModel = App.Services.GetRequiredService<MainPageViewModel>();
+
             // Register this window with the WindowManager
             WindowManager.RegisterWindow(this);
 
@@ -173,10 +186,17 @@ namespace LoanShark.View.BankView
         private void GoToSocialButton_OnClick(object sender, RoutedEventArgs e)
         {
             // throw new NotImplementedException();
-            MainWindow socialWindow = new MainWindow(socialRepo, socialUserService,
-                socialChatService, socialMessageService, socialFeedService,
-                socialReportService, socialNotificationService);
+            MainWindow socialWindow = new MainWindow(
+                new SocialUserServiceProxy(new System.Net.Http.HttpClient()),
+                new ChatServiceProxy(new System.Net.Http.HttpClient()), 
+                new MessageServiceProxy(new System.Net.Http.HttpClient()), 
+                new FeedServiceProxy(new System.Net.Http.HttpClient()),
+                new ReportServiceProxy(new System.Net.Http.HttpClient()), 
+                new NotificationServiceProxy(new System.Net.Http.HttpClient())
+            );
+
             socialWindow.Activate();
+
             this.Close();
         }
     }

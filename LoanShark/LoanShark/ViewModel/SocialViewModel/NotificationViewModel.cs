@@ -50,10 +50,10 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.LoadNotifications();
         }
 
-        public void LoadNotifications()
+        public async void LoadNotifications()
         {
-            var notificationsList = this.notificationService.GetNotifications(this.currentUserID);
-            this.Notifications = new ObservableCollection<Notification>(notificationsList.Result);
+            var notificationsList = await this.notificationService.GetNotifications(this.currentUserID);
+            this.Notifications = new ObservableCollection<Notification>(notificationsList);
         }
 
         public void ClearNotification(int notificationID)
