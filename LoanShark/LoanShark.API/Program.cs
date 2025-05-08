@@ -35,6 +35,10 @@ namespace LoanShark.Web
 
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepositoryEF>();
+			
+            //Loans
+            builder.Services.AddScoped<ILoanService, LoanService>();
+            builder.Services.AddScoped<ILoanRepository, LoanRepositoryEF>();
 
             //Maly Injections
             builder.Services.AddScoped<IMainPageService, MainPageService>();
