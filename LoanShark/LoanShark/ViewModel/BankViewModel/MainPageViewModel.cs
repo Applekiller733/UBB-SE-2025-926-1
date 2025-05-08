@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using LoanShark.API.Proxies;
 using LoanShark.Domain;
 using LoanShark.Service.BankService;
 using LoanShark.View.BankView;
@@ -17,9 +18,12 @@ namespace LoanShark.ViewModel.BankViewModel
         private string balanceButtonContent;
         private readonly MainPageService service;
         public event PropertyChangedEventHandler? PropertyChanged;
+        private IBankAccountService bankAccountService;
 
         public MainPageViewModel()
         {
+            var bankAccService = new BankAccountServiceProxy(new System.Net.Http.HttpClient());
+            bankAccountService = bankAccService;
             this.service = new MainPageService();
             userBankAccounts = new ObservableCollection<BankAccount>();
             this.balanceButtonContent = "Check Balance";

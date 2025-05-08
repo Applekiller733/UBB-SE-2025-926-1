@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using LoanShark.Domain;
 using LoanShark.Helper;
+using LoanShark.Service.BankService;
 using LoanShark.View.SocialView;
 using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI.Xaml;

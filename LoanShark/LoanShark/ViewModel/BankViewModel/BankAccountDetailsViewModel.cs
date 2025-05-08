@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LoanShark.Domain;
 using LoanShark.Helper;
 using LoanShark.Service.BankService;
+using LoanShark.API.Proxies;
 
 namespace LoanShark.ViewModel.BankViewModel
 {
@@ -53,15 +54,16 @@ namespace LoanShark.ViewModel.BankViewModel
             }
         }
 
-        private BankAccountService service;
+        private IBankAccountService service;
 
         /// <summary>
         /// Initializes a new instance of the BankAccountDetailsViewModel class
         /// </summary>
         /// <param name="IBAN">The IBAN of the bank account to display</param>
-        public BankAccountDetailsViewModel()
+        public BankAccountDetailsViewModel(IBankAccountService s)
         {
-            service = new BankAccountService();
+            var bankAccService = new BankAccountServiceProxy(new System.Net.Http.HttpClient());
+            service = s;
             ButtonCommand = new RelayCommand(OnBackButtonClicked);
             // Start loading data but don't await it
             _ = LoadBankAccountAsync();
