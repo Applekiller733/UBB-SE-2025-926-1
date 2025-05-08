@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoanShark.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,6 @@ namespace LoanShark.EF.EfModels
         public int TypeId { get; set; }
 
         [Required]
-        public string TypeName { get; set; }
+        public MessageType TypeName { get; set; }
     }
 }

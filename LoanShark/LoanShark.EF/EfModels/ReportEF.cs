@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LoanShark.EF.EfModels;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LoanShark.EF.EFModels
@@ -23,5 +24,8 @@ namespace LoanShark.EF.EFModels
 
         [Required]
         public string Description { get; set; }
+
+        [ForeignKey("MessageID")]
+        public MessageEF MessageEF { get; set; }
     }
 }

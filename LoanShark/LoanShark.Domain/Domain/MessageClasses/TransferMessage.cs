@@ -64,6 +64,21 @@ namespace LoanShark.Domain.MessageClasses
             this.ListOfReceiversID = new List<int>();
         }
 
+        // added a constructor to receive the list of user ids who received the transfer
+        public TransferMessage(int messageID, int senderID, int chatID, DateTime timestamp, string status, float amount, string desc, string currency, List<int> listOfReceiversId)
+                : base(messageID, senderID, chatID, timestamp)
+        {
+            this.MessageID = messageID;
+            this.SenderID = senderID;
+            this.ChatID = chatID;
+            this.Timestamp = timestamp;
+            this.Status = status;
+            this.Amount = amount;
+            this.Description = desc;
+            this.Currency = currency;
+            this.ListOfReceiversID = listOfReceiversId;
+        }
+
         /// <summary>
         /// Gets or sets the amount of the transfer.
         /// </summary>

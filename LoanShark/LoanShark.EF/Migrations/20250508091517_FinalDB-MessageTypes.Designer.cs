@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanShark.EF.Migrations
 {
     [DbContext(typeof(LoanSharkDbContext))]
-    partial class LoanSharkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250508091517_FinalDB-MessageTypes")]
+    partial class FinalDBMessageTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,8 +246,6 @@ namespace LoanShark.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MessageID");
-
                     b.ToTable("Report");
                 });
 
@@ -351,23 +352,6 @@ namespace LoanShark.EF.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("LoanShark.EF.EfModels.FriendshipEF", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("UserID");
-
-                    b.Property<int>("FriendId")
-                        .HasColumnType("int")
-                        .HasColumnName("FriendID");
-
-                    b.HasKey("UserId", "FriendId");
-
-                    b.HasIndex("FriendId");
-
-                    b.ToTable("Friends");
-                });
-
             modelBuilder.Entity("LoanShark.EF.EfModels.MessageEF", b =>
                 {
                     b.Property<int>("MessageID")
@@ -376,8 +360,8 @@ namespace LoanShark.EF.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageID"));
 
-                    b.Property<float?>("Amount")
-                        .HasColumnType("real");
+                    b.Property<decimal?>("Amount")
+                        .HasColumnType("DECIMAL(10,2)");
 
                     b.Property<int>("ChatID")
                         .HasColumnType("int");
@@ -390,12 +374,6 @@ namespace LoanShark.EF.Migrations
                     b.Property<string>("Currency")
                         .HasMaxLength(10)
                         .HasColumnType("VARCHAR(10)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SerializedUserIDs")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .HasMaxLength(255)
@@ -418,7 +396,7 @@ namespace LoanShark.EF.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Message");
+                    b.ToTable("MessageEF");
                 });
 
             modelBuilder.Entity("LoanShark.EF.EfModels.MessageTypeEF", b =>
@@ -435,7 +413,7 @@ namespace LoanShark.EF.Migrations
 
                     b.HasKey("TypeId");
 
-                    b.ToTable("MessageType");
+                    b.ToTable("MessageTypeEF");
                 });
 
             modelBuilder.Entity("LoanShark.EF.EFModels.ChatUserEF", b =>
@@ -464,36 +442,6 @@ namespace LoanShark.EF.Migrations
                         .HasForeignKey("UserReceiverID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("LoanShark.EF.EFModels.ReportEF", b =>
-                {
-                    b.HasOne("LoanShark.EF.EfModels.MessageEF", "MessageEF")
-                        .WithMany()
-                        .HasForeignKey("MessageID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MessageEF");
-                });
-
-            modelBuilder.Entity("LoanShark.EF.EfModels.FriendshipEF", b =>
-                {
-                    b.HasOne("LoanShark.EF.EFModels.UserEF", "Friend")
-                        .WithMany()
-                        .HasForeignKey("FriendId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("LoanShark.EF.EFModels.UserEF", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Friend");
 
                     b.Navigation("User");
                 });
