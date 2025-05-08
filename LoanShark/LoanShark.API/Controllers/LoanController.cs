@@ -20,7 +20,22 @@ namespace LoanShark.API.Controllers
             try
             {
                 var loans = await loanService.GetUserLoans(userId);
-                return Ok(loans);
+                var loanDTOs = loans.Select(loan => new LoanDTO
+                {
+                    LoanID = loan.LoanID,
+                    UserID = loan.UserID,
+                    Amount = loan.Amount,
+                    Currency = loan.Currency,
+                    DateTaken = loan.DateTaken,
+                    DateDeadline = loan.DateDeadline,
+                    DatePaid = loan.DatePaid,
+                    TaxPercentage = loan.TaxPercentage,
+                    NumberMonths = loan.NumberMonths,
+                    State = loan.State,
+                })
+               .ToList();
+
+                return Ok(loanDTOs);
             }
             catch (Exception ex)
             {

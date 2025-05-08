@@ -8,7 +8,6 @@ using LoanShark.Domain;
 using LoanShark.EF.Repository.BankRepository;
 using LoanShark.Service.BankService;
 
-
 //add namespace LoanShark.API.Proxies;
 
 namespace LoanShark.API.Proxies
@@ -32,10 +31,24 @@ namespace LoanShark.API.Proxies
 
                 var content = await response.Content.ReadAsStringAsync();
 
-                // Deserialize the response string into a List<LoanDTO>
-                var loans = JsonSerializer.Deserialize<List<Loan>>(content);
+                var loansDTO = JsonSerializer.Deserialize<List<LoanDTO>>(content, new JsonSerializerOptions
+                {
+                     PropertyNameCaseInsensitive = true
+                });
 
-                return loans ?? new List<Loan>();
+                var loans = loansDTO?.Select(dto => new Loan(
+                     dto.LoanID,
+                     dto.UserID,
+                     dto.Amount,
+                     dto.Currency,
+                     dto.DateTaken,
+                     dto.DatePaid,
+                     dto.TaxPercentage,
+                     dto.NumberMonths,
+                     dto.State
+                 )).ToList() ?? new List<Loan>();
+
+                return loans;
             }
             catch (Exception ex)
             {
@@ -202,35 +215,4 @@ namespace LoanShark.API.Proxies
         }
     }
 
-}
-
-public class TakeLoanDTO
-{
-    public int UserId { get; set; }
-
-    public decimal Amount { get; set; }
-
-    public string Currency { get; set; }
-
-    public string AccountIBAN { get; set; }
-
-    public int Months { get; set; }
-}
-
-public class PayLoanDTO
-{
-    public int UserId { get; set; }
-
-    public int LoanId { get; set; }
-
-    public string AccountIBAN { get; set; }
-}
-
-public class ConvertCurrencyDTO
-{
-    public decimal Amount { get; set; }
-
-    public string FromCurrency { get; set; }
-
-    public string ToCurrency { get; set; }
 }
