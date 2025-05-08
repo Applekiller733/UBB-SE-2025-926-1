@@ -1,17 +1,17 @@
 ﻿using System.Threading.Tasks;
+using LoanShark.API.Proxies;
 using LoanShark.Service.BankService;
 
 namespace LoanShark.ViewModel.BankViewModel
 {
     public class DeleteAccountViewModel
     {
-        private readonly UserService userService;
+        private IUserService? userService = null;
 
-        public DeleteAccountViewModel()
+        public DeleteAccountViewModel(IUserService sv)
         {
-            userService = new UserService();
+            userService = sv;
         }
-
         public async Task<string> DeleteAccount(string password)
         {
             return await userService.DeleteUser(password);
