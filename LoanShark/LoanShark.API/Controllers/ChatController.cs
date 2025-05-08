@@ -4,6 +4,7 @@ using LoanShark.Domain;
 using System.Collections.Generic;
 using LoanShark.Domain.MessageClasses;
 using LoanShark.API.Models;
+using LoanShark.Service.SocialService.Interfaces;
 
 namespace LoanShark.API.Controllers
 {
@@ -11,9 +12,9 @@ namespace LoanShark.API.Controllers
     [Route("api/[controller]")]
     public class ChatController : ControllerBase
     {
-        private readonly ChatService chatService;
+        private readonly IChatService chatService;
 
-        public ChatController(ChatService chatService)
+        public ChatController(IChatService chatService)
         {
             this.chatService = chatService;
         }

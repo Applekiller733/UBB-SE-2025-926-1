@@ -280,6 +280,7 @@ namespace LoanShark.ViewModel.BankViewModel
         // validates all fields and creates a new user
         public async Task CreateUser()
         {
+            UserName = FirstName + LastName;
             if (string.IsNullOrWhiteSpace(FirstName))
             {
                 FirstNameError = "First name is required";
@@ -373,6 +374,7 @@ namespace LoanShark.ViewModel.BankViewModel
             bool hasErrors = errors.Any(x => x != string.Empty);
             if (hasErrors)
             {
+                errors.ForEach(x => PasswordError += x);
                 return;
             }
 

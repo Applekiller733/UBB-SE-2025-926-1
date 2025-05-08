@@ -20,7 +20,7 @@ namespace LoanShark.API.Controllers
             this.mainPageService = mainPageService;
         }
 
-        [HttpGet("GetUserBankAccounts//{userId}")]
+        [HttpGet("GetUserBankAccounts/{userId}")]
         public async Task<ActionResult<List<BankAccountDto>>> GetUserAccounts(int userId)
         {
             var accounts = await this.mainPageService.GetUserBankAccounts(userId);
