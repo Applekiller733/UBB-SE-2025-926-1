@@ -19,7 +19,7 @@ namespace LoanShark.API.Proxies
         {
             try
             {
-                var response = await this.httpClient.GetAsync("https://localhost:7097/api/MainPage/GetUserBankAccounts/{userId}");
+                var response = await this.httpClient.GetAsync($"https://localhost:7097/api/MainPage/GetUserBankAccounts/{userId}");
 
                 response.EnsureSuccessStatusCode();
 

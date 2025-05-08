@@ -28,7 +28,7 @@ namespace LoanShark.API.Proxies
 
         public async Task InstantiateUserSessionAfterLogin(string email)
         {
-            var response = await this.httpClient.PostAsJsonAsync("https://localhost:7097/api/Login/InstantiateUserSessionAfterLogin", new LoginRequestDto { Email = email });
+            var response = await this.httpClient.PostAsJsonAsync("https://localhost:7097/api/Login/InstantiateUserSessionAfterLogin", new LoginRequestDto { Email = email, Password = "parola" });
 
             if (!response.IsSuccessStatusCode)
             {

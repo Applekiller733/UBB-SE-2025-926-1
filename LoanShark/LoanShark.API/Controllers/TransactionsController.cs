@@ -14,7 +14,7 @@ namespace LoanShark.API.Controllers
 
         public TransactionsController(ITransactionsService transactionsService)
         {
-            transactionsService = transactionsService;
+            this.transactionsService = transactionsService;
         }
 
         [HttpPost("AddTransaction")]
