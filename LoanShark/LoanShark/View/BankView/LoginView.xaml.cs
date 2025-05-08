@@ -69,7 +69,7 @@ namespace LoanShark.View.BankView
         {
             WindowManager.ShouldReloadBankAccounts = false; // bank accounts are loaded by the constructor of the main page window
             var bankAccService = new BankAccountServiceProxy(new System.Net.Http.HttpClient());
-            MainPageView mainPageWindow = new MainPageView(bankAccService);
+            MainPageView mainPageWindow = new MainPageView();
             mainPageWindow.Activate();
             this.Close();
         }

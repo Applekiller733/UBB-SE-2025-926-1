@@ -213,7 +213,7 @@ namespace LoanShark.ViewModel.BankViewModel
             {
                 return "Please create a bank account to update settings";
             }
-            BankAccountUpdateView bankAccountUpdateView = new BankAccountUpdateView(bankAccountService);
+            BankAccountUpdateView bankAccountUpdateView = new BankAccountUpdateView();
             bankAccountUpdateView.Activate();
             return null;
         }
@@ -231,7 +231,7 @@ namespace LoanShark.ViewModel.BankViewModel
 
         public void BankAccountCreateButtonHandler()
         {
-            BankAccountCreateView bankAccountCreateView = new BankAccountCreateView(bankAccountService);
+            BankAccountCreateView bankAccountCreateView = new BankAccountCreateView();
             bankAccountCreateView.Activate();
         }
 

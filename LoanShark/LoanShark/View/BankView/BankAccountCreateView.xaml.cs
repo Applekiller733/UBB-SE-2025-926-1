@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using LoanShark.Helper;
 using LoanShark.Service.BankService;
+using Microsoft.Extensions.DependencyInjection;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -20,7 +21,7 @@ namespace LoanShark.View.BankView
         public BankAccountCreateView()
         {
             this.InitializeComponent();
-            viewModel = new BankAccountCreateViewModel();
+            viewModel = App.Services.GetRequiredService<BankAccountCreateViewModel>();
             MainGrid.DataContext = viewModel;
 
             viewModel.OnClose = () => this.Close();

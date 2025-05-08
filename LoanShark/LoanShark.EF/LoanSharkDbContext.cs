@@ -20,7 +20,7 @@ public class LoanSharkDbContext : DbContext, ILoanSharkDbContext
     public DbSet<TransactionEF> Transaction { get; set; }
     public DbSet<UserEF> User { get; set; }
 
-    public DbSet<CurrencyEF> Currency { get; set; };
+    public DbSet<CurrencyEF> Currency { get; set; }
 
 }
 

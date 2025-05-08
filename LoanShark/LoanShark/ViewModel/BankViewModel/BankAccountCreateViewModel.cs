@@ -92,11 +92,11 @@ namespace LoanShark.ViewModel.BankViewModel
         /// <summary>
         /// Initializes a new instance of the BankAccountCreateViewModel class
         /// </summary>
-        public BankAccountCreateViewModel()
+        public BankAccountCreateViewModel(IBankAccountService s)
         {
+
             this.UserID = int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0");
-            var bankAccService = new BankAccountServiceProxy(new System.Net.Http.HttpClient());
-            service = bankAccService;
+            service = s;
             LoadData();
             ConfirmCommand = new RelayCommand(OnConfirmButtonClicked);
             CancelCommand = new RelayCommand(OnCancelButtonClicked);
