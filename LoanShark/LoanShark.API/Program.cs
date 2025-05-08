@@ -27,6 +27,9 @@ namespace LoanShark.Web
             builder.Services.AddScoped<ITransactionsService, TransactionsService>();
             builder.Services.AddScoped<ITransactionsRepository, TransactionsRepositoryEF>();
 
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepositoryEF>();
+			
             //Loans
             builder.Services.AddScoped<ILoanService, LoanService>();
             builder.Services.AddScoped<ILoanRepository, LoanRepositoryEF>();

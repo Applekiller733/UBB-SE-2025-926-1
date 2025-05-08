@@ -13,7 +13,7 @@ namespace LoanShark.ViewModel.BankViewModel
 {
     public class UserInformationViewModel : INotifyPropertyChanged
     {
-        private UserService userService = new UserService();
+        private IUserService userService;
         private string firstName = string.Empty;
         private string lastName = string.Empty;
         private string username = string.Empty;
@@ -273,8 +273,9 @@ namespace LoanShark.ViewModel.BankViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public UserInformationViewModel()
+        public UserInformationViewModel(IUserService sv)
         {
+            userService = sv;
             UpdateCommand = new RelayCommand(async () => await UpdateUser());
             DeleteCommand = new RelayCommand(DeleteUser);
             CloseCommand = new RelayCommand(() => CloseAction?.Invoke());
