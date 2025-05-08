@@ -17,12 +17,6 @@ namespace LoanShark.Service.BankService
         // this iban is used to filter the transactions by the sender iban or receiver iban
         private string iban;
         public ITransactionHistoryRepository Repo;
-        public TransactionHistoryService()
-        {
-            this.iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
-            this.Repo = new TransactionHistoryRepository();
-        }
-
         public TransactionHistoryService(ITransactionHistoryRepository repo, string iban)
         {
             this.Repo = repo;
@@ -169,9 +163,9 @@ namespace LoanShark.Service.BankService
                 .ToDictionary(g => g.Key, g => g.Count());
         }
 
-        public static async Task UpdateTransactionDescription(int transactionId, string newDescription)
+        public async Task UpdateTransactionDescription(int transactionId, string newDescription)
         {
-            await TransactionHistoryRepository.UpdateTransactionDescription(transactionId, newDescription);
+            await Repo.UpdateTransactionDescription(transactionId, newDescription);
         }
     }
 }

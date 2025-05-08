@@ -15,6 +15,7 @@ namespace LoanShark.EF.Repository.BankRepository
         Task<ObservableCollection<Transaction>> GetTransactionsNormal();
         Task<ObservableCollection<string>> GetTransactionsForMenu();
         Task<ObservableCollection<string>> GetTransactionsDetailed();
+        Task UpdateTransactionDescription(int transactionId, string newDescription);
     }
     // repo class is static but it should be fine as long as the methods are static, you dont need to change anything
     // about the functions
@@ -56,25 +57,6 @@ namespace LoanShark.EF.Repository.BankRepository
                 Console.WriteLine($"Error: {ex.Message}");
             }
             return transactionsNormal;
-        }
-
-        // this is ok, no need to change anything
-        public static async Task UpdateTransactionDescription(int transactionId, string newDescription)
-        {
-            try
-            {
-                string storedProcedure = "UpdateTransactionDescription";
-                SqlParameter[] parameters =
-                {
-                    new SqlParameter("@TransactionID", transactionId),
-                    new SqlParameter("@NewDescription", newDescription)
-                };
-                await DataLink.Instance.ExecuteNonQuery(storedProcedure, parameters);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
         }
 
         // gets transactions formatted for the menu
@@ -137,6 +119,11 @@ namespace LoanShark.EF.Repository.BankRepository
             }
 
             return transactionsDetailed;
+        }
+
+        public Task UpdateTransactionDescription(int transactionId, string newDescription)
+        {
+            throw new NotImplementedException();
         }
     }
 }
