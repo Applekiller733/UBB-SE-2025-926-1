@@ -36,7 +36,11 @@ namespace LoanShark.Web
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepositoryEF>();
 
-
+            //Maly Injections
+            builder.Services.AddScoped<IMainPageService, MainPageService>();
+            builder.Services.AddScoped<IMainPageRepository, MainPageRepositoryEF>();
+            builder.Services.AddScoped<ILoginService, LoginService>();
+            builder.Services.AddScoped<ILoginRepository, LoginRepositoryEF>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
