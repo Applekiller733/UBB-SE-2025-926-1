@@ -7,7 +7,19 @@ using LoanShark.EF.Repository.BankRepository;
 
 namespace LoanShark.Service.BankService
 {
-    public class UserService
+    public interface IUserService
+    {
+        Task<string?> CheckCnp(string cnp);
+        Task<string?> CheckEmail(string email);
+        Task<string?> CheckPhoneNumber(string phoneNumber);
+        Task CreateUser(string cnp, string userName, string firstName, string lastName, string email, string phoneNumber, string password);
+
+        Task<User?> GetUserInformation();
+        Task<bool> UpdateUser(User user);
+        Task<string> DeleteUser(string password);
+        Task<string[]> GetUserPasswordHashSalt();
+    }
+    public class UserService : IUserService
     {
         private readonly IUserRepository userRepository;
 
