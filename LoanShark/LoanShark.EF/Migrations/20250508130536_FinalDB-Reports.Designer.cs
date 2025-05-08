@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanShark.EF.Migrations
 {
     [DbContext(typeof(LoanSharkDbContext))]
-    partial class LoanSharkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250508130536_FinalDB-Reports")]
+    partial class FinalDBReports
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,23 +354,6 @@ namespace LoanShark.EF.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("LoanShark.EF.EfModels.FriendshipEF", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("UserID");
-
-                    b.Property<int>("FriendId")
-                        .HasColumnType("int")
-                        .HasColumnName("FriendID");
-
-                    b.HasKey("UserId", "FriendId");
-
-                    b.HasIndex("FriendId");
-
-                    b.ToTable("Friends");
-                });
-
             modelBuilder.Entity("LoanShark.EF.EfModels.MessageEF", b =>
                 {
                     b.Property<int>("MessageID")
@@ -477,25 +463,6 @@ namespace LoanShark.EF.Migrations
                         .IsRequired();
 
                     b.Navigation("MessageEF");
-                });
-
-            modelBuilder.Entity("LoanShark.EF.EfModels.FriendshipEF", b =>
-                {
-                    b.HasOne("LoanShark.EF.EFModels.UserEF", "Friend")
-                        .WithMany()
-                        .HasForeignKey("FriendId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("LoanShark.EF.EFModels.UserEF", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Friend");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LoanShark.EF.EfModels.MessageEF", b =>

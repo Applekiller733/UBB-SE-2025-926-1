@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanShark.EF.Migrations
 {
     [DbContext(typeof(LoanSharkDbContext))]
-    partial class LoanSharkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250507151511_FinalDB2")]
+    partial class FinalDB2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,17 +86,25 @@ namespace LoanShark.EF.Migrations
 
             modelBuilder.Entity("LoanShark.EF.EFModels.ChatUserEF", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("ChatId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("ChatId", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatUser");
+                    b.ToTable("ChatUserEF");
                 });
 
             modelBuilder.Entity("LoanShark.EF.EFModels.CurrencyExchangeEF", b =>
@@ -182,8 +193,6 @@ namespace LoanShark.EF.Migrations
 
                     b.HasKey("NotificationID");
 
-                    b.HasIndex("UserReceiverID");
-
                     b.ToTable("Notification");
                 });
 
@@ -242,8 +251,6 @@ namespace LoanShark.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MessageID");
 
                     b.ToTable("Report");
                 });
@@ -351,93 +358,6 @@ namespace LoanShark.EF.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("LoanShark.EF.EfModels.FriendshipEF", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("UserID");
-
-                    b.Property<int>("FriendId")
-                        .HasColumnType("int")
-                        .HasColumnName("FriendID");
-
-                    b.HasKey("UserId", "FriendId");
-
-                    b.HasIndex("FriendId");
-
-                    b.ToTable("Friends");
-                });
-
-            modelBuilder.Entity("LoanShark.EF.EfModels.MessageEF", b =>
-                {
-                    b.Property<int>("MessageID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageID"));
-
-                    b.Property<float?>("Amount")
-                        .HasColumnType("real");
-
-                    b.Property<int>("ChatID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(260)
-                        .HasColumnType("NVARCHAR(260)");
-
-                    b.Property<string>("Currency")
-                        .HasMaxLength(10)
-                        .HasColumnType("VARCHAR(10)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SerializedUserIDs")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasMaxLength(255)
-                        .HasColumnType("VARCHAR(255)");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("DATETIME");
-
-                    b.Property<int?>("TypeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("MessageID");
-
-                    b.HasIndex("ChatID");
-
-                    b.HasIndex("TypeID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Message");
-                });
-
-            modelBuilder.Entity("LoanShark.EF.EfModels.MessageTypeEF", b =>
-                {
-                    b.Property<int>("TypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TypeId"));
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TypeId");
-
-                    b.ToTable("MessageType");
-                });
-
             modelBuilder.Entity("LoanShark.EF.EFModels.ChatUserEF", b =>
                 {
                     b.HasOne("LoanShark.EF.EFModels.ChatEF", "Chat")
@@ -453,73 +373,6 @@ namespace LoanShark.EF.Migrations
                         .IsRequired();
 
                     b.Navigation("Chat");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("LoanShark.EF.EFModels.NotificationEF", b =>
-                {
-                    b.HasOne("LoanShark.EF.EFModels.UserEF", "User")
-                        .WithMany()
-                        .HasForeignKey("UserReceiverID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("LoanShark.EF.EFModels.ReportEF", b =>
-                {
-                    b.HasOne("LoanShark.EF.EfModels.MessageEF", "MessageEF")
-                        .WithMany()
-                        .HasForeignKey("MessageID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MessageEF");
-                });
-
-            modelBuilder.Entity("LoanShark.EF.EfModels.FriendshipEF", b =>
-                {
-                    b.HasOne("LoanShark.EF.EFModels.UserEF", "Friend")
-                        .WithMany()
-                        .HasForeignKey("FriendId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("LoanShark.EF.EFModels.UserEF", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Friend");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("LoanShark.EF.EfModels.MessageEF", b =>
-                {
-                    b.HasOne("LoanShark.EF.EFModels.ChatEF", "Chat")
-                        .WithMany()
-                        .HasForeignKey("ChatID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LoanShark.EF.EfModels.MessageTypeEF", "MessageType")
-                        .WithMany()
-                        .HasForeignKey("TypeID")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("LoanShark.EF.EFModels.UserEF", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-
-                    b.Navigation("MessageType");
 
                     b.Navigation("User");
                 });

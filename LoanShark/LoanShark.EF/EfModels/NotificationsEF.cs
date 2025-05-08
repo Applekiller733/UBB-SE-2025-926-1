@@ -18,5 +18,8 @@ namespace LoanShark.EF.EFModels
 
         [Required]
         public int UserReceiverID { get; set; }
+
+        [ForeignKey("UserReceiverID")]
+        public UserEF User { get; set; }
     }
 }

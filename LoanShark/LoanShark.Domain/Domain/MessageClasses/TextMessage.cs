@@ -51,7 +51,7 @@ namespace LoanShark.Domain.MessageClasses
             this.ChatID = chatID;
             this.Timestamp = timestamp;
             this.Content = content;
-            this.UsersReport = new List<int>();
+            this.UsersReport = usersReport; // modified this to take the list passed by the constructor
         }
 
         /// <summary>
