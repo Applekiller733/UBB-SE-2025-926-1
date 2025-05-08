@@ -28,6 +28,10 @@ namespace LoanShark
             {
                 client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
             });
+            services.AddHttpClient<IBankAccountService, BankAccountServiceProxy>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7097/");
+            });
 
             services.AddTransient<DeleteAccountViewModel>();
             services.AddTransient<UserInformationViewModel>();
