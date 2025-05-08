@@ -30,7 +30,9 @@ namespace LoanShark.EF.Repository.BankRepository
                     LastName = user.LastName,
                     Email = user.Email.ToString(),
                     PhoneNumber = user.PhoneNumber.ToString(),
-                    HashedPassword = user.HashedPassword.GetHashedPassword()
+                    HashedPassword = user.HashedPassword.GetHashedPassword(),
+                    ReportedCount = user.ReportedCount,
+                    PasswordSalt = user.HashedPassword.GetSalt(),
                 };
                 _context.User.Add(userDTO);
                 await _context.SaveChangesAsync();
