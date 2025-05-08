@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using LoanShark.API.Proxies;
 using LoanShark.Domain;
 using LoanShark.Service.BankService;
 using LoanShark.View.BankView;
@@ -11,7 +12,7 @@ namespace LoanShark.ViewModel.BankViewModel
 {
     public class BankAccountUpdateViewModel : INotifyPropertyChanged
     {
-        private readonly BankAccountService? bankAccountService;
+        private readonly IBankAccountService bankAccountService;
         private BankAccount? bankAccount;
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -105,7 +106,7 @@ namespace LoanShark.ViewModel.BankViewModel
         public Action? OnClose { get; set; }
 
         // initializes the view model and loads the bank account for which the settings are to be updated
-        public BankAccountUpdateViewModel()
+        public BankAccountUpdateViewModel(IBankAccountService s)
         {
             if (string.IsNullOrEmpty(UserSession.Instance.GetUserData("current_bank_account_iban")))
             {
@@ -114,7 +115,8 @@ namespace LoanShark.ViewModel.BankViewModel
 
             try
             {
-                bankAccountService = new BankAccountService();
+                var bankAccService = new BankAccountServiceProxy(new System.Net.Http.HttpClient());
+                bankAccountService = s;
                 // Note: Async initialization will be done by calling InitializeAsync()
                 _ = InitializeAsync();
             }

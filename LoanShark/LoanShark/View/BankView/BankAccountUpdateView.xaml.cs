@@ -6,6 +6,8 @@ using Microsoft.UI.Xaml.Controls;
 using LoanShark.ViewModel.BankViewModel;
 using LoanShark.Helper;
 using Windows.UI.Notifications;
+using LoanShark.Service.BankService;
+using Microsoft.Extensions.DependencyInjection;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,7 +28,7 @@ namespace LoanShark.View.BankView
                 this.InitializeComponent();
 
                 // Initialize the ViewModel after the component is initialized
-                viewModel = new BankAccountUpdateViewModel();
+                viewModel = App.Services.GetRequiredService<BankAccountUpdateViewModel>();
 
                 AppWindow.Resize(new Windows.Graphics.SizeInt32(800, 1400));
                 MainGrid.DataContext = viewModel;

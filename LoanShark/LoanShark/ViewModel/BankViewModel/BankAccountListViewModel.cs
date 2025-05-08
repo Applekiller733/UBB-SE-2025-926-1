@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using LoanShark.API.Proxies;
 using LoanShark.Domain;
 using LoanShark.Service.BankService;
 using LoanShark.View.BankView;
@@ -56,17 +57,18 @@ namespace LoanShark.ViewModel.BankViewModel
         /// </summary>
         public ObservableCollection<BankAccount> BankAccounts { get; set; }
 
-        private BankAccountService service;
+        private IBankAccountService service;
 
         /// <summary>
         /// Initializes a new instance of the BankAccountListViewModel class
         /// </summary>
         /// <param name="userID">The ID of the user whose bank accounts to display</param>
-        public BankAccountListViewModel()
+        public BankAccountListViewModel(IBankAccountService s)
         {
             this.userID = int.Parse(UserSession.Instance.GetUserData("id_user") ?? "0");
             BankAccounts = new ObservableCollection<BankAccount>();
-            service = new BankAccountService();
+            var bankAccService = new BankAccountServiceProxy(new System.Net.Http.HttpClient());
+            service = s;
             _ = LoadData(); // Start loading data but don't await it
             MainPageCommand = new RelayCommand(ToMainPage);
             SelectCommand = new RelayCommand(ViewDetails);

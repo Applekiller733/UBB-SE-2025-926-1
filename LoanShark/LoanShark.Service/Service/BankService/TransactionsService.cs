@@ -11,7 +11,7 @@ namespace LoanShark.Service.BankService
     public class TransactionsService : ITransactionsService
     {
         private ITransactionsRepository transactionsRepository;
-
+        
         public TransactionsService(ITransactionsRepository transactionsRepository)
         {
             this.transactionsRepository = transactionsRepository;

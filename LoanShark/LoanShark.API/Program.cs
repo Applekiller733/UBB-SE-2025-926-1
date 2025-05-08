@@ -1,3 +1,4 @@
+using LoanShark.API.Proxies;
 using LoanShark.EF.Repository.BankRepository;
 using LoanShark.Service.BankService;
 using LoanShark.Service.Service.BankService;
@@ -28,11 +29,13 @@ namespace LoanShark.Web
             builder.Services.AddScoped<ITransactionsService, TransactionsService>();
             builder.Services.AddScoped<ITransactionsRepository, TransactionsRepositoryEF>();
 
-            //Maly Injections
-            builder.Services.AddScoped<IMainPageService, MainPageService>();
-            builder.Services.AddScoped<IMainPageRepository, MainPageRepositoryEF>();
-            builder.Services.AddScoped<ILoginService, LoginService>();
-            builder.Services.AddScoped<ILoginRepository, LoginRepositoryEF>();
+            //Teo Bank Account
+            builder.Services.AddScoped<IBankAccountService, BankAccountService>();
+            builder.Services.AddScoped<IBankAccountRepository, BankAccountRepositoryEF>();
+
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepositoryEF>();
+
 
             var app = builder.Build();
 
