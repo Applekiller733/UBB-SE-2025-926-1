@@ -1,0 +1,127 @@
+# General settings
+root = true
+
+[*.{cs,csx,vb,vbx}]
+dotnet_analyzer_diagnostic.severity = warning
+
+# CommunityToolkit.Mvvm.SourceGenerators
+dotnet_diagnostic.MVVMTK0008.severity = warning
+dotnet_diagnostic.MVVMTK0014.severity = warning
+dotnet_diagnostic.MVVMTK0019.severity = warning
+dotnet_diagnostic.MVVMTK0020.severity = warning
+dotnet_diagnostic.MVVMTK0024.severity = warning
+dotnet_diagnostic.MVVMTK0027.severity = warning
+dotnet_diagnostic.MVVMTK0028.severity = warning
+dotnet_diagnostic.MVVMTK0040.severity = warning
+dotnet_diagnostic.MVVMTK0041.severity = warning
+dotnet_diagnostic.MVVMTK0042.severity = warning
+dotnet_diagnostic.MVVMTK0043.severity = warning
+dotnet_diagnostic.MVVMTK0051.severity = warning
+dotnet_diagnostic.MVVMTK0052.severity = warning
+dotnet_diagnostic.MVVMTK0053.severity = warning
+dotnet_diagnostic.MVVMTK0054.severity = warning
+dotnet_diagnostic.MVVMTK0055.severity = warning
+dotnet_diagnostic.MVVMTK0056.severity = warning
+
+# Microsoft.AspNetCore.App.Analyzers
+dotnet_diagnostic.ASP0008.severity = warning
+dotnet_diagnostic.ASP0009.severity = warning
+dotnet_diagnostic.ASP0010.severity = warning
+dotnet_diagnostic.ASP0015.severity = warning
+dotnet_diagnostic.ASP0018.severity = warning
+dotnet_diagnostic.ASP0020.severity = warning
+dotnet_diagnostic.ASP0021.severity = warning
+dotnet_diagnostic.ASP0024.severity = warning
+dotnet_diagnostic.ASP0025.severity = warning
+
+# Microsoft.AspNetCore.Components.Analyzers
+dotnet_diagnostic.BL0001.severity = warning
+dotnet_diagnostic.BL0004.severity = warning
+
+# Microsoft.CodeAnalysis.CSharp
+dotnet_diagnostic.CS8019.severity = warning
+dotnet_diagnostic.CS8020.severity = warning
+dotnet_diagnostic.CS8040.severity = warning
+dotnet_diagnostic.CS8933.severity = warning
+dotnet_diagnostic.CS9018.severity = warning
+dotnet_diagnostic.CS9019.severity = warning
+dotnet_diagnostic.CS9020.severity = warning
+dotnet_diagnostic.CS9021.severity = warning
+dotnet_diagnostic.CS9022.severity = warning
+dotnet_diagnostic.CS9208.severity = warning
+dotnet_diagnostic.CS9209.severity = warning
+dotnet_diagnostic.CS9236.severity = warning
+
+# Microsoft.CodeAnalysis.CSharp.Features (IDE rules)
+dotnet_diagnostic.IDE0001.severity = warning
+dotnet_diagnostic.IDE0002.severity = warning
+dotnet_diagnostic.IDE0003.severity = warning
+dotnet_diagnostic.IDE0004.severity = warning
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0007.severity = warning
+dotnet_diagnostic.IDE0008.severity = warning
+dotnet_diagnostic.IDE0009.severity = warning
+dotnet_diagnostic.IDE0010.severity = warning
+dotnet_diagnostic.IDE0011.severity = warning
+dotnet_diagnostic.IDE0016.severity = warning
+dotnet_diagnostic.IDE0017.severity = warning
+dotnet_diagnostic.IDE0018.severity = warning
+dotnet_diagnostic.IDE0019.severity = warning
+dotnet_diagnostic.IDE0020.severity = warning
+# ... (include all IDE* rules from the ruleset with warning severity)
+
+# Microsoft.CodeAnalysis.NetAnalyzers
+dotnet_diagnostic.CA1000.severity = warning
+dotnet_diagnostic.CA1001.severity = warning
+dotnet_diagnostic.CA1002.severity = warning
+# ... (include all CA* rules from the ruleset with warning severity)
+
+# StyleCop.Analyzers
+# Documentation Rules
+dotnet_diagnostic.SA1600.severity = none
+dotnet_diagnostic.SA1601.severity = none
+dotnet_diagnostic.SA1602.severity = none
+# ... (other SA1600-series rules with none severity)
+dotnet_diagnostic.SA1609.severity = warning
+dotnet_diagnostic.SA1639.severity = warning
+
+# Layout Rules
+dotnet_diagnostic.SA1500.severity = warning
+dotnet_diagnostic.SA1501.severity = warning
+dotnet_diagnostic.SA1502.severity = warning
+# ... (other SA1500-series rules with error severity)
+
+# Maintainability Rules
+dotnet_diagnostic.SA1400.severity = warning
+dotnet_diagnostic.SA1407.severity = warning
+dotnet_diagnostic.SA1408.severity = warning
+dotnet_diagnostic.SA1412.severity = warning
+
+# Naming Rules
+dotnet_diagnostic.SA1300.severity = none
+dotnet_diagnostic.SA1302.severity = warning
+dotnet_diagnostic.SA1303.severity = warning
+# ... (other SA1300-series rules with appropriate severity)
+
+# Ordering Rules
+dotnet_diagnostic.SA1208.severity = warning
+dotnet_diagnostic.SA1212.severity = warning
+
+# Readability Rules
+dotnet_diagnostic.SA1100.severity = warning
+dotnet_diagnostic.SA1102.severity = warning
+# ... (other SA1100-series rules with appropriate severity)
+
+# Spacing Rules
+dotnet_diagnostic.SA1000.severity = warning
+dotnet_diagnostic.SA1001.severity = warning
+# ... (other SA1000-series rules with warning severity)
+
+# Special Rules
+dotnet_diagnostic.SA0001.severity = warning
+dotnet_diagnostic.SA0002.severity = warning
+
+# Interop Generators
+dotnet_diagnostic.SYSLIB1054.severity = warning
+dotnet_diagnostic.SYSLIB1055.severity = warning
+# ... (other SYSLIB* rules with warning severity)
