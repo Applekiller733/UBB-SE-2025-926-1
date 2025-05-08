@@ -7,6 +7,7 @@ using LoanShark.ViewModel.BankViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using LoanShark.Service.BankService;
 using System;
+using LoanShark.Service.Service.BankService;
 
 namespace LoanShark
 {
@@ -32,6 +33,15 @@ namespace LoanShark
             {
                 client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
             });
+            services.AddHttpClient<ILoginService, LoginServiceProxy>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
+            });
+            services.AddHttpClient<IMainPageService, MainPageServiceProxy>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7097/"); // adjust as needed
+            });
+
             services.AddTransient<DeleteAccountViewModel>();
             services.AddTransient<UserInformationViewModel>();
             services.AddTransient<UserRegistrationViewModel>();
@@ -41,6 +51,10 @@ namespace LoanShark
             services.AddTransient<BankAccountListViewModel>();
             services.AddTransient<BankAccountUpdateViewModel>();
             services.AddTransient<BankAccountVerifyViewModel>();
+            services.AddTransient<LoginViewModel>();
+            services.AddTransient<MainPageViewModel>();
+
+
 
 
 
