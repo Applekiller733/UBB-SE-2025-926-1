@@ -1,5 +1,6 @@
 using LoanShark.Helper;
 using LoanShark.ViewModel.BankViewModel;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 
 // To learn more about WinUI, the WinUI project structure,
@@ -14,7 +15,7 @@ namespace LoanShark.View.BankView
         public UserRegistrationView()
         {
             this.InitializeComponent();
-            var viewModel = new UserRegistrationViewModel();
+            var viewModel = App.Services.GetRequiredService<UserRegistrationViewModel>();
             viewModel.CloseAction = () =>
             {
                 LoginView loginWindow = new LoginView();

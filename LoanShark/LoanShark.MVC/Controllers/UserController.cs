@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LoanShark.Domain;
 using LoanShark.API.Proxies;
+using LoanShark.Service.BankService;
 
 namespace LoanShark.MVC.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserServiceProxy _userService;
+        private readonly IUserService _userService;
 
-        public UserController(IUserServiceProxy userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
@@ -17,11 +18,11 @@ namespace LoanShark.MVC.Controllers
         {
             
             
-            var user = await _userService.GetUserInformationAsync();
-            if (user == null)
-                return NotFound();
+            //var user = await _userService.GetUserInformationAsync();
+            //if (user == null)
+            //    return NotFound();
 
-            return View(user);
+            return View(null);
         }
     }
 }
