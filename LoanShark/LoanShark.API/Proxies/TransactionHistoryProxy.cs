@@ -10,23 +10,25 @@ using LoanShark.Service.BankService;
 
 namespace LoanShark.API.Proxies
 {
-    public class TransactionHistoryProxy : ITransactionHistoryService   
+    public class TransactionHistoryProxy : ITransactionHistoryService
     {
         private readonly HttpClient _httpClient;
+
+        public string iban { get; set; }
 
         public TransactionHistoryProxy(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            iban = UserSession.Instance.GetUserData("current_bank_account_iban");
         }
 
         public async Task<ObservableCollection<string>> RetrieveForMenu()
         {
             try
             {
-                var response = await _httpClient.GetAsync("https://localhost:7097/api/TransactionHistory/RetrieveForMenu");
+                var response = await _httpClient.GetAsync($"https://localhost:7097/api/TransactionHistory/RetrieveForMenu/{iban}");
                 response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<ObservableCollection<string>>(json);
+                var result = await response.Content.ReadFromJsonAsync<ObservableCollection<string>>();
                 return result ?? new ObservableCollection<string>();
             }
             catch (Exception ex)
@@ -41,8 +43,7 @@ namespace LoanShark.API.Proxies
             {
                 var response = await _httpClient.GetAsync($"https://localhost:7097/api/TransactionHistory/FilterByTypeForMenu?type={type}");
                 response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<ObservableCollection<string>>(json);
+                var result = await response.Content.ReadFromJsonAsync<ObservableCollection<string>>();
                 return result ?? new ObservableCollection<string>();
             }
             catch (Exception ex)
@@ -57,8 +58,8 @@ namespace LoanShark.API.Proxies
             {
                 var response = await _httpClient.GetAsync($"https://localhost:7097/api/TransactionHistory/FilterByTypeDetailed?type={type}");
                 response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<ObservableCollection<string>>(json);
+                var result = await response.Content.ReadFromJsonAsync<ObservableCollection<string>>();
+
                 return result ?? new ObservableCollection<string>();
             }
             catch (Exception ex)
@@ -73,8 +74,8 @@ namespace LoanShark.API.Proxies
             {
                 var response = await _httpClient.GetAsync($"https://localhost:7097/api/TransactionHistory/SortByDate?order={order}");
                 response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<ObservableCollection<string>>(json);
+                var result = await response.Content.ReadFromJsonAsync<ObservableCollection<string>>();
+
                 return result;
             }
             catch (Exception ex)
@@ -87,7 +88,7 @@ namespace LoanShark.API.Proxies
         {
             try
             {
-                var response = await _httpClient.PostAsync("https://localhost:7097/api/TransactionHistory/CreateCSV", null);
+                var response = await _httpClient.PostAsync($"https://localhost:7097/api/TransactionHistory/CreateCSV/{iban}", null);
                 response.EnsureSuccessStatusCode();
             }
             catch (Exception ex)

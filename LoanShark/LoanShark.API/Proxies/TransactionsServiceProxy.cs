@@ -20,7 +20,7 @@ namespace LoanShark.API.Proxies
 
         public TransactionsServiceProxy(HttpClient httpClient)
         {
-            _httpClient = httpClient;
+            this._httpClient = httpClient;
         }
 
         public async Task<string> AddTransaction(string senderIban, string receiverIban, decimal amount, string transactionDescription = "")
@@ -45,7 +45,8 @@ namespace LoanShark.API.Proxies
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<string>(json);
+                var result = json;
+                //result = JsonSerializer.Deserialize<string>(json);
                 return result ?? "empty string";
             }
             catch (Exception ex)
@@ -134,9 +135,8 @@ namespace LoanShark.API.Proxies
             {
                 var response = await _httpClient.GetAsync("https://localhost:7097/api/Transactions/GetAllCurrencyExchangeRates"); // Adjust port
                 response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                var dto = JsonSerializer.Deserialize<List<CurrencyExchange>>(json);
-                return dto != null ? dto : new List<CurrencyExchange>();
+                var dto = await response.Content.ReadFromJsonAsync<List<CurrencyExchange>>();
+                return dto ?? [];
             }
             catch (Exception ex)
             {

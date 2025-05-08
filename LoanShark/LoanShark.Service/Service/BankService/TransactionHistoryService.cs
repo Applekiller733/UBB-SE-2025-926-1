@@ -13,6 +13,7 @@ namespace LoanShark.Service.BankService
 {
     public interface ITransactionHistoryService
     {
+        public string iban { get; set; }
         Task<ObservableCollection<string>> RetrieveForMenu();
         Task<ObservableCollection<string>> FilterByTypeForMenu(string type);
         Task<ObservableCollection<string>> FilterByTypeDetailed(string type);
@@ -26,18 +27,23 @@ namespace LoanShark.Service.BankService
     {
         // transactions history service class needs an iban to be passed in the constructor
         // this iban is used to filter the transactions by the sender iban or receiver iban
-        private string iban;
+        public string iban { get; set; }
         public ITransactionHistoryRepository Repo;
         public TransactionHistoryService(ITransactionHistoryRepository repo)
         {
             this.Repo = repo;
-            this.iban = "";
         }
         //public TransactionHistoryService(ITransactionHistoryRepository repo, string iban)
         //{
         //    this.Repo = repo;
         //    this.iban = iban;
         //}
+
+        public void SetIban(string iban)
+        {
+            this.iban = iban;
+            //this.iban = "RO10SEUPBMC6N7XG6GRUWOK3";
+        }
 
         // retrieveForMenu() returns a list of transactions formatted for the menu
         public async Task<ObservableCollection<string>> RetrieveForMenu()
