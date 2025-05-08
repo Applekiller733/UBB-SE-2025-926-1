@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
+using LoanShark.API.Proxies;
 using LoanShark.Domain;
 using LoanShark.Helper;
+using LoanShark.Service.BankService;
 using LoanShark.ViewModel.BankViewModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
@@ -66,7 +68,8 @@ namespace LoanShark.View.BankView
         private void OpenMainPageWindow() // opens the main page window and closes the login window
         {
             WindowManager.ShouldReloadBankAccounts = false; // bank accounts are loaded by the constructor of the main page window
-            MainPageView mainPageWindow = new MainPageView();
+            var bankAccService = new BankAccountServiceProxy(new System.Net.Http.HttpClient());
+            MainPageView mainPageWindow = new MainPageView(bankAccService);
             mainPageWindow.Activate();
             this.Close();
         }

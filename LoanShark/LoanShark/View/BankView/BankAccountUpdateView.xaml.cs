@@ -20,14 +20,14 @@ namespace LoanShark.View.BankView
         private BankAccountUpdateViewModel? viewModel;
 
         // Initializes the view and makes the window size be 800*1400
-        public BankAccountUpdateView(IBankAccountService s)
+        public BankAccountUpdateView()
         {
             try
             {
                 this.InitializeComponent();
 
                 // Initialize the ViewModel after the component is initialized
-                viewModel = new BankAccountUpdateViewModel(s);
+                viewModel = new BankAccountUpdateViewModel();
 
                 AppWindow.Resize(new Windows.Graphics.SizeInt32(800, 1400));
                 MainGrid.DataContext = viewModel;

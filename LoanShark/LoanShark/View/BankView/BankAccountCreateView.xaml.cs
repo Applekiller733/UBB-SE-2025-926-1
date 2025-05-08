@@ -17,10 +17,10 @@ namespace LoanShark.View.BankView
     {
         private BankAccountCreateViewModel viewModel;
 
-        public BankAccountCreateView(IBankAccountService s)
+        public BankAccountCreateView()
         {
             this.InitializeComponent();
-            viewModel = new BankAccountCreateViewModel(s);
+            viewModel = new BankAccountCreateViewModel();
             MainGrid.DataContext = viewModel;
 
             viewModel.OnClose = () => this.Close();

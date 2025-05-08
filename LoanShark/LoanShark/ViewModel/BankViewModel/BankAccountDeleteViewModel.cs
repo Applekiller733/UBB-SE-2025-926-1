@@ -35,9 +35,10 @@ namespace LoanShark.ViewModel.BankViewModel
         /// <summary>
         /// Initializes a new instance of the BankAccountDeleteViewModel class
         /// </summary>
-        public BankAccountDeleteViewModel(IBankAccountService s)
+        public BankAccountDeleteViewModel()
         {
-            service = s;
+            var bankAccService = new BankAccountServiceProxy(new System.Net.Http.HttpClient());
+            service = bankAccService;
             iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
             NoCommand = new RelayCommand(OnNoButtonClicked);
             YesCommand = new RelayCommand(OnYesButtonClicked);

@@ -5,6 +5,7 @@ using System.Windows.Input;
 using LoanShark.Helper;
 using LoanShark.Service.BankService;
 using LoanShark.Domain;
+using LoanShark.API.Proxies;
 
 namespace LoanShark.ViewModel.BankViewModel
 {
@@ -55,9 +56,10 @@ namespace LoanShark.ViewModel.BankViewModel
         /// <summary>
         /// Initializes a new instance of the BankAccountVerifyViewModel class
         /// </summary>
-        public BankAccountVerifyViewModel(IBankAccountService s)
+        public BankAccountVerifyViewModel()
         {
-            this.service = s;
+            var bankAccService = new BankAccountServiceProxy(new System.Net.Http.HttpClient());
+            this.service = bankAccService;
             email = UserSession.Instance.GetUserData("email") ?? string.Empty;
             iban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
             BackCommand = new RelayCommand(OnBackButtonClicked);

@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Controls;
 using LoanShark.Helper;
 using Microsoft.UI.Xaml.Input;
 using LoanShark.Service.BankService;
+using LoanShark.API.Proxies;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -17,10 +18,10 @@ namespace LoanShark.View.BankView
     public sealed partial class BankAccountVerifyView : Window
     {
         private BankAccountVerifyViewModel viewModel;
-        public BankAccountVerifyView(IBankAccountService s)
+        public BankAccountVerifyView()
         {
             this.InitializeComponent();
-            viewModel = new BankAccountVerifyViewModel(s);
+            viewModel = new BankAccountVerifyViewModel();
             MainGrid.DataContext = viewModel;
 
             viewModel.OnSuccess = async () => await ShowSuccessMessage();

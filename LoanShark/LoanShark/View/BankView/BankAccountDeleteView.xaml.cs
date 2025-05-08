@@ -13,10 +13,10 @@ namespace LoanShark.View.BankView
     /// </summary>
     public sealed partial class BankAccountDeleteView : Window
     {
-        public BankAccountDeleteView(IBankAccountService s)
+        public BankAccountDeleteView()
         {
             this.InitializeComponent();
-            var viewModel = new BankAccountDeleteViewModel(s);
+            var viewModel = new BankAccountDeleteViewModel();
             MainGrid.DataContext = viewModel;
 
             viewModel.OnClose = () => this.Close();

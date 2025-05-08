@@ -15,10 +15,10 @@ namespace LoanShark.View.BankView
     {
         private BankAccountListViewModel viewModel;
         private bool isDoubleClicked = false;
-        public BankAccountListView(IBankAccountService s)
+        public BankAccountListView()
         {
             this.InitializeComponent();
-            viewModel = new BankAccountListViewModel(s);
+            viewModel = new BankAccountListViewModel();
             MainGrid.DataContext = viewModel;
 
             viewModel.OnClose = () => this.Close();
