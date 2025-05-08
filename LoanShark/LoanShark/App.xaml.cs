@@ -32,6 +32,15 @@ namespace LoanShark
             services.AddTransient<DeleteAccountViewModel>();
             services.AddTransient<UserInformationViewModel>();
             services.AddTransient<UserRegistrationViewModel>();
+            services.AddTransient<BankAccountCreateViewModel>();
+            services.AddTransient<BankAccountDeleteViewModel>();
+            services.AddTransient<BankAccountDetailsViewModel>();
+            services.AddTransient<BankAccountListViewModel>();
+            services.AddTransient<BankAccountUpdateViewModel>();
+            services.AddTransient<BankAccountVerifyViewModel>();
+
+
+
 
 
             Services = services.BuildServiceProvider();
