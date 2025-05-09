@@ -61,7 +61,8 @@
                 FontSize="18"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Visibility="{Binding ChatList.Count, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter=NoItems}"/>
+                Visibility="Visible" />
+            <!-- Visibility="{Binding ChatList.Count, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter=NoItems}"/> -->
         </Grid>
     </Grid>
 </Page>

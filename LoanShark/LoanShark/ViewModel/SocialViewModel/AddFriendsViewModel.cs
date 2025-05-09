@@ -2,6 +2,8 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using Microsoft.CodeAnalysis.CSharp;
+
 namespace LoanShark.ViewModel.SocialViewModel
 {
     using System;
@@ -51,11 +53,17 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             this.UserService = userService;
             this.friendsListViewModel = friendsListViewModel;
-            this.AllUsers = UserService.GetNonFriendsUsers(UserService.GetCurrentUser());
+            this.LoadAllUsers();
             this.UsersList = new ObservableCollection<User>();
             this.AddFriendCommand = new RelayCommand<object>(AddFriend);
 
             this.LoadUsers();
+        }
+
+        public async void LoadAllUsers()
+        {
+            var currentUser = await (UserService.GetCurrentUser());
+            this.AllUsers = await (UserService.GetNonFriendsUsers(currentUser));
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -63,18 +71,20 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void AddFriend(object user)
+        private async void AddFriend(object user)
         {
             var friend = user as User;
 
-            this.UserService.AddFriend(this.UserService.GetCurrentUser(), friend!.GetUserId());
+            var currentUser = await this.UserService.GetCurrentUser();
+            this.UserService.AddFriend(currentUser, friend!.GetUserId());
             this.friendsListViewModel.LoadFriends();
             this.LoadUsers();
         }
 
-        private void LoadUsers()
+        private async void LoadUsers()
         {
-            this.AllUsers = this.UserService.GetNonFriendsUsers(this.UserService.GetCurrentUser());
+            var currentUser = await(UserService.GetCurrentUser());
+            this.AllUsers = await(UserService.GetNonFriendsUsers(currentUser));
             this.FilterUsers();
         }
 

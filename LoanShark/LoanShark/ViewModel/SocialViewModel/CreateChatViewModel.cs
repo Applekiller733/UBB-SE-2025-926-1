@@ -19,7 +19,7 @@ namespace LoanShark.ViewModel.SocialViewModel
     {
         private string groupName;
         private string searchQuery;
-        private IUserServiceProxy userService;
+        private ISocialUserServiceProxy userService;
         private IChatServiceProxy chatService;
         private ChatListViewModel chatListViewModel;
 
@@ -67,7 +67,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public CreateChatViewModel(ChatListViewModel chatListViewModel, IChatServiceProxy chatService, IUserServiceProxy userService)
+        public CreateChatViewModel(ChatListViewModel chatListViewModel, IChatServiceProxy chatService, ISocialUserServiceProxy userService)
         {
             this.chatListViewModel = chatListViewModel;
             this.AddToSelectedList = new RelayCommand<object>(this.AddFriendToSelectedList);
@@ -76,15 +76,22 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.SelectedFriends = new ObservableCollection<User>();
             this.chatService = chatService;
             this.userService = userService;
-            this.allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser());
+            LoadAllFriends();
 
             this.LoadFriends();
         }
 
-        private void AddNewGroupChat()
+        public async void LoadAllFriends()
+        {
+            var currentUser = await this.userService.GetCurrentUser();
+            this.allFriends = await this.userService.GetFriendsByUser(currentUser);
+        }
+
+        private async void AddNewGroupChat()
         {
             List<int> selectedFriendsIDs = new List<int>();
-            selectedFriendsIDs.Add(this.userService.GetCurrentUser());
+            var currentUser = await this.userService.GetCurrentUser();
+            selectedFriendsIDs.Add(currentUser);
             foreach (User friend in this.SelectedFriends)
             {
                 selectedFriendsIDs.Add(friend.GetUserId());

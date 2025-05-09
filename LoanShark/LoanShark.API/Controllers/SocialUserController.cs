@@ -15,13 +15,13 @@ namespace LoanShark.API.Controllers
     [Route("api/[controller]")]
     public class SocialUserController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public SocialUserController()
+        public SocialUserController(IUserService us)
         {
-            IRepository repository = new Repository();
-            INotificationService notificationService = new NotificationService(repository);
-            _userService = new UserService(repository, notificationService);
+            //IRepository repository = new Repository();
+            //INotificationService notificationService = new NotificationService(repository);
+            _userService = us;
         }
 
         [HttpGet("repo")]

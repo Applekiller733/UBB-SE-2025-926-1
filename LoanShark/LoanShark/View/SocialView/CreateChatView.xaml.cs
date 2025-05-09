@@ -13,9 +13,9 @@ namespace LoanShark.View.SocialView
     public sealed partial class CreateChatView : Page
     {
         public IChatServiceProxy ChatService;
-        public IUserServiceProxy UserService;
+        public ISocialUserServiceProxy UserService;
 
-        public CreateChatView(ChatListViewModel chatListViewModel, IChatServiceProxy chatService, IUserServiceProxy userService)
+        public CreateChatView(ChatListViewModel chatListViewModel, IChatServiceProxy chatService, ISocialUserServiceProxy userService)
         {
             this.InitializeComponent();
             this.ChatService = chatService;

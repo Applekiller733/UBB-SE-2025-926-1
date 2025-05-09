@@ -22,7 +22,7 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public ObservableCollection<User> FriendsList { get; set; }
 
-        public IUserServiceProxy UserService { get; set; }
+        public ISocialUserServiceProxy UserService { get; set; }
 
         public IChatServiceProxy ChatService { get; set; }
 
@@ -69,47 +69,56 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public FriendsListViewModel(IChatServiceProxy chat, IUserServiceProxy user, IMessageServiceProxy message)
+        public FriendsListViewModel(IChatServiceProxy chat, ISocialUserServiceProxy user, IMessageServiceProxy message)
         {
             this.UserService = user;
             this.ChatService = chat;
             this.MessageService = message;
-            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser());
+            LoadAllFriends();
             this.FriendsList = new ObservableCollection<User>();
             this.RemoveFriend = new RelayCommand<object>(this.RemoveFriendFromList);
 
             this.LoadFriends();
         }
 
-        public void RemoveFriendFromList(object user)
+        public async void LoadAllFriends()
+        {
+            var currentUser = await this.UserService.GetCurrentUser();
+            this.AllFriends = await this.UserService.GetFriendsByUser(currentUser);
+        }
+
+        public async void RemoveFriendFromList(object user)
         {
             var friend = user as User;
+            var currentUser = await this.UserService.GetCurrentUser();
             if (friend != null)
             {
-                this.UserService.RemoveFriend(this.UserService.GetCurrentUser(), friend.GetUserId());
+                this.UserService.RemoveFriend(currentUser, friend.GetUserId());
             }
 
-            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser());
+            LoadAllFriends();
 
             this.LoadFriends();
         }
 
         public void LoadFriends()
         {
-            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser());
+            LoadAllFriends();
             this.FilterFriends();
         }
 
         public void FilterFriends()
         {
             this.FriendsList.Clear();
-
-            foreach (var friend in this.AllFriends.Where(f =>
-                         string.IsNullOrEmpty(this.SearchQuery) ||
-                         f.Username.Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                         f.PhoneNumber.ToString().Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase)))
+            if (this.AllFriends != null)
             {
-                this.FriendsList.Add(friend);
+                foreach (var friend in this.AllFriends.Where(f =>
+                             string.IsNullOrEmpty(this.SearchQuery) ||
+                             f.Username.Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                             f.PhoneNumber.ToString().Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase)))
+                {
+                    this.FriendsList.Add(friend);
+                }
             }
 
             this.UpdatenoFriendsVisibility();

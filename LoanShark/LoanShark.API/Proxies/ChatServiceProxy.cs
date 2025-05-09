@@ -2,6 +2,7 @@
 using LoanShark.Domain.MessageClasses;
 using LoanShark.EF.Repository.SocialRepository;
 using LoanShark.Service.SocialService.Interfaces;
+using System.Configuration;
 using System.Text.Json;
 
 namespace LoanShark.API.Proxies
@@ -56,15 +57,22 @@ namespace LoanShark.API.Proxies
 
         public async Task<int> GetCurrentUserID()
         {
-            var response = await _httpClient.GetAsync("api/Chat/current-user-id");
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            return int.Parse(content);
+            try
+            {
+                var response = await _httpClient.GetAsync("https://localhost:7097/api/Chat/current-user-id");
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadFromJsonAsync<int>();
+                return content;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetCurrentUserId: " + ex.Message.ToString());
+            }
         }
 
         public async Task<int> GetNumberOfParticipants(int chatID)
         {
-            var response = await _httpClient.GetAsync($"api/Chat/{chatID}/participants/count");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/participants/count");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return int.Parse(content);
@@ -85,7 +93,7 @@ namespace LoanShark.API.Proxies
                 description
             };
             var content = new StringContent(JsonSerializer.Serialize(request), System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/Chat/request-money", content);
+            var response = await _httpClient.PostAsync("https://localhost:7097/api/Chat/request-money", content);
             response.EnsureSuccessStatusCode();
         }
 
@@ -99,7 +107,7 @@ namespace LoanShark.API.Proxies
                 chatID
             };
             var content = new StringContent(JsonSerializer.Serialize(request), System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/Chat/send-money", content);
+            var response = await _httpClient.PostAsync("https://localhost:7097/api/Chat/send-money", content);
             response.EnsureSuccessStatusCode();
         }
 
@@ -114,13 +122,13 @@ namespace LoanShark.API.Proxies
                 chatID
             };
             var content = new StringContent(JsonSerializer.Serialize(request), System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/Chat/accept-request", content);
+            var response = await _httpClient.PostAsync("https://localhost:7097/api/Chat/accept-request", content);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<bool> EnoughFunds(float amount, string currency, int senderID)
         {
-            var response = await _httpClient.GetAsync($"api/Chat/enough-funds?amount={amount}&currency={currency}&senderID={senderID}");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/enough-funds?amount={amount}&currency={currency}&senderID={senderID}");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return bool.Parse(content);
@@ -136,7 +144,7 @@ namespace LoanShark.API.Proxies
                 currency
             };
             var content = new StringContent(JsonSerializer.Serialize(request), System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/Chat/initiate-transfer", content);
+            var response = await _httpClient.PostAsync("https://localhost:7097/api/Chat/initiate-transfer", content);
             response.EnsureSuccessStatusCode();
         }
 
@@ -148,19 +156,19 @@ namespace LoanShark.API.Proxies
                 chatName
             };
             var content = new StringContent(JsonSerializer.Serialize(request), System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("api/Chat", content);
+            var response = await _httpClient.PostAsync("https://localhost:7097/api/Chat", content);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task DeleteChat(int chatID)
         {
-            var response = await _httpClient.DeleteAsync($"api/Chat/{chatID}");
+            var response = await _httpClient.DeleteAsync($"https://localhost:7097/api/Chat/{chatID}");
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<DateTime> GetLastMessageTimeStamp(int chatID)
         {
-            var response = await _httpClient.GetAsync($"api/Chat/{chatID}/last-message-timestamp");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/last-message-timestamp");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return DateTime.Parse(content);
@@ -168,7 +176,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<Message>> GetChatHistory(int chatID)
         {
-            var response = await _httpClient.GetAsync($"api/Chat/{chatID}/history");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/history");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<Message>>(content, _jsonOptions);
@@ -176,26 +184,26 @@ namespace LoanShark.API.Proxies
 
         public async Task AddUserToChat(int userID, int chatID)
         {
-            var response = await _httpClient.PostAsync($"api/Chat/{chatID}/add-user/{userID}", null);
+            var response = await _httpClient.PostAsync($"https://localhost:7097/api/Chat/{chatID}/add-user/{userID}", null);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task RemoveUserFromChat(int userID, int chatID)
         {
-            var response = await _httpClient.DeleteAsync($"api/Chat/{chatID}/remove-user/{userID}");
+            var response = await _httpClient.DeleteAsync($"https://localhost:7097/api/Chat/{chatID}/remove-user/{userID}");
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<string> GetChatNameByID(int chatID)
         {
-            var response = await _httpClient.GetAsync($"api/Chat/{chatID}/name");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/name");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<List<string>> GetChatParticipantsStringList(int chatID)
         {
-            var response = await _httpClient.GetAsync($"api/Chat/{chatID}/participants/strings");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/participants/strings");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<string>>(content, _jsonOptions);
@@ -203,7 +211,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<User>> GetChatParticipantsList(int chatID)
         {
-            var response = await _httpClient.GetAsync($"api/Chat/{chatID}/participants");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/participants");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<User>>(content, _jsonOptions);

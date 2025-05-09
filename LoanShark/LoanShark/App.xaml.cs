@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using LoanShark.Service.BankService;
 using System;
 using LoanShark.Service.Service.BankService;
+using LoanShark.View.SocialView;
 
 namespace LoanShark
 {
@@ -93,8 +94,19 @@ namespace LoanShark
         }
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            loginWindow = new LoginView();
-            loginWindow.Activate();
+            //loginWindow = new LoginView();
+            //loginWindow.Activate();
+
+            MainWindow socialWindow = new MainWindow(
+                new SocialUserServiceProxy(new System.Net.Http.HttpClient()),
+                new ChatServiceProxy(new System.Net.Http.HttpClient()),
+                new MessageServiceProxy(new System.Net.Http.HttpClient()),
+                new FeedServiceProxy(new System.Net.Http.HttpClient()),
+                new ReportServiceProxy(new System.Net.Http.HttpClient()),
+                new NotificationServiceProxy(new System.Net.Http.HttpClient())
+            );
+
+            socialWindow.Activate();
         }
 
         private LoginView? loginWindow;

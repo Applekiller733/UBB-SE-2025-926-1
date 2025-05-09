@@ -23,7 +23,7 @@ namespace LoanShark.View.SocialView
         private ChatListViewModel chatListViewModel;
         private GenerateTransferViewModel generateTransferViewModel;
 
-        public ChatMessagesView(ChatListViewModel chatListViewModel, Window mainWindow, Frame rightFrame, int chatID, IUserService userService, IChatService chatService, IMessageService messageService, IReportService reportService)
+        public ChatMessagesView(ChatListViewModel chatListViewModel, Window mainWindow, Frame rightFrame, int chatID, ISocialUserServiceProxy userService, IChatServiceProxy chatService, IMessageServiceProxy messageService, IReportServiceProxy reportService)
         {
             this.InitializeComponent();
             this.SelectedChat = chatID;

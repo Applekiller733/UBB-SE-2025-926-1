@@ -18,8 +18,8 @@ namespace LoanShark.API.Controllers
         public FeedController(ILoanSharkDbContext dbContext)
         {
             // Probabil o sa fie nevoie de ceva modificare dupa ce termina George cu repo
-            // ANTO/ZELU 
-            // In rest cred ca merge 
+            // ANTO/ZELU
+            // In rest cred ca merge
             IRepository repository = new RepositoryEF(dbContext);
             INotificationService notification = new NotificationService(repository);
             IUserService userService = new UserService(repository, notification);
