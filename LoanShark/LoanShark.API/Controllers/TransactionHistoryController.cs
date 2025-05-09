@@ -9,18 +9,19 @@ namespace LoanShark.API.Controllers
     [Route("api/[controller]")]
     public class TransactionHistoryController : ControllerBase
     {
-        private readonly TransactionHistoryService _transactionHistoryService;
+        private readonly ITransactionHistoryService _transactionHistoryService;
 
-        public TransactionHistoryController(TransactionHistoryService transactionHistoryService)
+        public TransactionHistoryController(ITransactionHistoryService transactionHistoryService)
         {
             _transactionHistoryService = transactionHistoryService;
         }
 
-        [HttpGet("RetrieveForMenu")]
-        public async Task<ActionResult<ObservableCollection<string>>> RetrieveForMenu()
+        [HttpGet("RetrieveForMenu/{iban}")]
+        public async Task<ActionResult<ObservableCollection<string>>> RetrieveForMenu(string iban)
         {
             try
             {
+                _transactionHistoryService.iban = iban;
                 var result = await _transactionHistoryService.RetrieveForMenu();
                 return Ok(result);
             }
@@ -72,11 +73,12 @@ namespace LoanShark.API.Controllers
             }
         }
 
-        [HttpPost("CreateCSV")]
-        public async Task<IActionResult> CreateCSV()
+        [HttpPost("CreateCSV/{iban}")]
+        public async Task<IActionResult> CreateCSV(string iban)
         {
             try
             {
+                _transactionHistoryService.iban = iban;
                 await _transactionHistoryService.CreateCSV();
                 return Ok("CSV file created successfully");
             }

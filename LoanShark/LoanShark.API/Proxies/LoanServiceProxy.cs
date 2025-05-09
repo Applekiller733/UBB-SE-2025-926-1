@@ -115,7 +115,8 @@ namespace LoanShark.API.Proxies
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<string>(json);
+                string result = json;
+                //var result = JsonSerializer.Deserialize<string>(json);
                 return result;
             }
             catch (Exception ex)

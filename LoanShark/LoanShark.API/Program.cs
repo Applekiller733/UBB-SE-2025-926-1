@@ -54,7 +54,7 @@ namespace LoanShark.Web
             builder.Services.AddScoped<ILoginRepository, LoginRepositoryEF>();
 
             builder.Services.AddScoped<ITransactionHistoryService, TransactionHistoryService>();
-            builder.Services.AddScoped<ITransactionHistoryRepository, TransactionHistoryRepository>();
+            builder.Services.AddScoped<ITransactionHistoryRepository, TransactionHistoryRepositoryEF>();
             builder.Services.AddScoped<IRepository, RepositoryEF>();
 
             builder.Services.AddScoped<IChatService, ChatService>();

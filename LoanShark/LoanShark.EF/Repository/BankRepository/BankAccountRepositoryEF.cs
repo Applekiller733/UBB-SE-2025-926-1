@@ -314,10 +314,10 @@ namespace LoanShark.EF.Repository.BankRepository
                 }
 
                 bankAccount.Iban = iban;
-                bankAccount.Currency = nba.Currency;
-                bankAccount.Balance = nba.Balance;
+                //bankAccount.Currency = nba.Currency;
+                //bankAccount.Balance = nba.Balance;
                 bankAccount.Blocked = nba.Blocked;
-                bankAccount.UserID = nba.UserID;
+                //bankAccount.UserID = nba.UserID;
                 bankAccount.Name = nba.Name;
                 bankAccount.DailyLimit = nba.DailyLimit;
                 bankAccount.MaximumNrTransactions = nba.MaximumNrTransactions;

@@ -61,7 +61,7 @@ namespace LoanShark.API.Proxies
 
             try
             {
-                var response = await this.httpClient.GetAsync("https://localhost:7097/api/MainPage/GetBankAccountBalanceByUserIban/{iban}");
+                var response = await this.httpClient.GetAsync($"https://localhost:7097/api/MainPage/GetBankAccountBalanceByUserIban/{iban}");
                 if (!response.IsSuccessStatusCode)
                     return new Tuple<decimal, string>(0m, string.Empty);
 
