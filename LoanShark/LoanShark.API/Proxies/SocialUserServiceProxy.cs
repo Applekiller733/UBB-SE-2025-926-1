@@ -56,7 +56,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<User?> GetUserInformation()
         {
-            var response = await _httpClient.GetAsync("https://localhost:7097/api/User/Info"); // Adjust port
+            var response = await _httpClient.GetAsync("https://localhost:7097/api/SocialUser/Info"); // Adjust port
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             var dto = JsonSerializer.Deserialize<UserViewModel>(json, new JsonSerializerOptions
@@ -69,7 +69,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<IRepository> GetRepo()
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Repo");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/Repo");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<IRepository>(json, new JsonSerializerOptions
@@ -80,31 +80,31 @@ namespace LoanShark.API.Proxies
 
         public async Task AddFriend(int userID, int newFriendID)
         {
-            var response = await _httpClient.PostAsync($"https://localhost:7097/api/User/{userID}/Friends/{newFriendID}", null);
+            var response = await _httpClient.PostAsync($"https://localhost:7097/api/SocialUser/{userID}/Friends/{newFriendID}", null);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task RemoveFriend(int userID, int oldFriendID)
         {
-            var response = await _httpClient.DeleteAsync($"https://localhost:7097/api/User/{userID}/Friends/{oldFriendID}");
+            var response = await _httpClient.DeleteAsync($"https://localhost:7097/api/SocialUser/{userID}/Friends/{oldFriendID}");
             response.EnsureSuccessStatusCode();
         }
 
         public async Task JoinChat(int userID, int chatID)
         {
-            var response = await _httpClient.PostAsync($"https://localhost:7097/api/User/{userID}/Chats/{chatID}", null);
+            var response = await _httpClient.PostAsync($"https://localhost:7097/api/SocialUser/{userID}/Chats/{chatID}", null);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task LeaveChat(int userID, int chatID)
         {
-            var response = await _httpClient.DeleteAsync($"https://localhost:7097/api/User/{userID}/Chats/{chatID}");
+            var response = await _httpClient.DeleteAsync($"https://localhost:7097/api/SocialUser/{userID}/Chats/{chatID}");
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<List<int>> FilterUsers(string keyword, int userID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Filter?keyword={Uri.EscapeDataString(keyword)}&userID={userID}");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/Filter?keyword={Uri.EscapeDataString(keyword)}&userID={userID}");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<int>>(json, new JsonSerializerOptions
@@ -115,7 +115,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<int>> FilterFriends(string keyword, int userID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Friends/Filter?keyword={Uri.EscapeDataString(keyword)}");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/Friends/Filter?keyword={Uri.EscapeDataString(keyword)}");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<int>>(json, new JsonSerializerOptions
@@ -126,7 +126,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<int>> GetFriendsIDsByUser(int userID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Friends/IDs");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/Friends/IDs");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<int>>(json, new JsonSerializerOptions
@@ -137,7 +137,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<User>> GetFriendsByUser(int userID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Friends");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/Friends");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions
@@ -148,7 +148,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<int>> GetChatsByUser(int userID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Chats");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/Chats");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<int>>(json, new JsonSerializerOptions
@@ -159,7 +159,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<Chat>> GetCurrentUserChats()
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Chats/Current");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/Chats/Current");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<Chat>>(json, new JsonSerializerOptions
@@ -170,7 +170,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<User> GetUserById(int userID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/Info");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/Info");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             var dto = JsonSerializer.Deserialize<UserViewModel>(json, new JsonSerializerOptions
@@ -183,7 +183,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<User>> GetNonFriendsUsers(int userID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{userID}/NonFriends");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/NonFriends");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions
@@ -196,14 +196,14 @@ namespace LoanShark.API.Proxies
         {
             try
             {
-                var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Current");
+                var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/Current");
                 response.EnsureSuccessStatusCode();
                 var json = await response.Content.ReadAsStringAsync();
-                var dto = JsonSerializer.Deserialize<UserViewModel>(json, new JsonSerializerOptions
+                var dto = JsonSerializer.Deserialize<int>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
-                return dto.UserID;
+                return dto;
             }
             catch (Exception ex)
             {
@@ -215,13 +215,13 @@ namespace LoanShark.API.Proxies
         {
             var content = new StringContent(JsonSerializer.Serialize(new { UserID = user.GetUserId() }),
                 System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync($"https://localhost:7097/api/User/Dangerous", content);
+            var response = await _httpClient.PostAsync($"https://localhost:7097/api/SocialUser/Dangerous", content);
             response.EnsureSuccessStatusCode();
         }
 
         public async Task<bool> IsUserInTimeout(User user)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/{user.GetUserId()}/Timeout");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{user.GetUserId()}/Timeout");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<bool>(json, new JsonSerializerOptions

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -117,10 +118,11 @@ namespace LoanShark.API.Proxies
         {
             try
             {
-                var response = await _httpClient.GetAsync("https://localhost:7097/api/TransactionHistory/GetTransactionTypeCounts");
+                var response = await _httpClient.GetAsync($"https://localhost:7097/api/TransactionHistory/GetTransactionTypeCounts/{iban}");
                 response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
+                //var json = await response.Content.ReadAsStringAsync();
+                //var result = JsonSerializer.Deserialize<Dictionary<string, int>>(json);
+                var result = await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
                 return result ?? new Dictionary<string, int>();
             }
             catch (Exception ex)

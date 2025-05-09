@@ -197,7 +197,7 @@ namespace LoanShark.View.BankView
 
             socialWindow.Activate();
 
-            this.Close();
+            //this.Close();
         }
     }
 }
