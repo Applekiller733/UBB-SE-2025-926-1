@@ -32,9 +32,10 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.lastViewModel = chatMessagesViewModel;
         }
 
-        public void LeaveChat()
+        public async void LeaveChat()
         {
-            this.userService.LeaveChat(this.userService.GetCurrentUser().Result, this.chatID);
+            var currentUser = await this.userService.GetCurrentUser();
+            this.userService.LeaveChat(currentUser, this.chatID);
 
             this.lastViewModel.LoadChats();
         }

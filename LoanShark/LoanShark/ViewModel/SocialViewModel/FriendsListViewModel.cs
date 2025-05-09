@@ -74,29 +74,36 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.UserService = user;
             this.ChatService = chat;
             this.MessageService = message;
-            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser().Result).Result;
+            LoadAllFriends();
             this.FriendsList = new ObservableCollection<User>();
             this.RemoveFriend = new RelayCommand<object>(this.RemoveFriendFromList);
 
             this.LoadFriends();
         }
 
-        public void RemoveFriendFromList(object user)
+        public async void LoadAllFriends()
+        {
+            var currentUser = await this.UserService.GetCurrentUser();
+            this.AllFriends = await this.UserService.GetFriendsByUser(currentUser);
+        }
+
+        public async void RemoveFriendFromList(object user)
         {
             var friend = user as User;
+            var currentUser = await this.UserService.GetCurrentUser();
             if (friend != null)
             {
-                this.UserService.RemoveFriend(this.UserService.GetCurrentUser().Result, friend.GetUserId());
+                this.UserService.RemoveFriend(currentUser, friend.GetUserId());
             }
 
-            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser().Result).Result;
+            LoadAllFriends();
 
             this.LoadFriends();
         }
 
         public void LoadFriends()
         {
-            this.AllFriends = this.UserService.GetFriendsByUser(this.UserService.GetCurrentUser().Result).Result;
+            LoadAllFriends();
             this.FilterFriends();
         }
 

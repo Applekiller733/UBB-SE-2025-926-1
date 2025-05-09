@@ -178,7 +178,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                 (this.SelectedTransferType != "Transfer Money" || this.HasSufficientFunds);
         }
 
-        private void ExecuteSendMessage()
+        private async void ExecuteSendMessage()
         {
             try
             {
@@ -191,7 +191,8 @@ namespace LoanShark.ViewModel.SocialViewModel
                         this.chatService.RequestMoneyViaChat(this.Amount, this.Currency, this.chatID, this.Description);
                         break;
                     case "Split Bill":
-                        float splitAmount = this.Amount / (this.chatService.GetNumberOfParticipants(this.chatID).Result);
+                        var numOfParticipants = await this.chatService.GetNumberOfParticipants(this.chatID);
+                        float splitAmount = this.Amount / (numOfParticipants);
                         this.chatService.RequestMoneyViaChat(splitAmount, this.Currency, this.chatID, this.description);
                         break;
                     default:
@@ -258,7 +259,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             }
         }
 
-        private void CheckFunds()
+        private async void CheckFunds()
         {
             // Only check funds for transfer money operations
             if (this.SelectedTransferType != "Transfer Money")
@@ -282,14 +283,14 @@ namespace LoanShark.ViewModel.SocialViewModel
             try
             {
                 int chatID = this.chatID;
-                int currentUserID = this.chatService.GetCurrentUserID().Result;
+                int currentUserID = await this.chatService.GetCurrentUserID();
 
                 // Calculate total amount based on number of participants
-                int participantCount = this.chatService.GetNumberOfParticipants(chatID).Result;
+                int participantCount = await this.chatService.GetNumberOfParticipants(chatID);
                 float totalAmount = amount * (participantCount - 1);
 
                 // Check if user has enough funds for the total amount
-                this.HasSufficientFunds = this.chatService.EnoughFunds(totalAmount, this.Currency, currentUserID).Result;
+                this.HasSufficientFunds = await this.chatService.EnoughFunds(totalAmount, this.Currency, currentUserID);
             }
             catch (Exception ex)
             {

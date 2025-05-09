@@ -76,15 +76,22 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.SelectedFriends = new ObservableCollection<User>();
             this.chatService = chatService;
             this.userService = userService;
-            this.allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser().Result).Result;
+            LoadAllFriends();
 
             this.LoadFriends();
         }
 
-        private void AddNewGroupChat()
+        public async void LoadAllFriends()
+        {
+            var currentUser = await this.userService.GetCurrentUser();
+            this.allFriends = await this.userService.GetFriendsByUser(currentUser);
+        }
+
+        private async void AddNewGroupChat()
         {
             List<int> selectedFriendsIDs = new List<int>();
-            selectedFriendsIDs.Add(this.userService.GetCurrentUser().Result);
+            var currentUser = await this.userService.GetCurrentUser();
+            selectedFriendsIDs.Add(currentUser);
             foreach (User friend in this.SelectedFriends)
             {
                 selectedFriendsIDs.Add(friend.GetUserId());

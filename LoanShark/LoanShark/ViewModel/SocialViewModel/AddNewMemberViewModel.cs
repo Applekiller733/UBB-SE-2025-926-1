@@ -57,7 +57,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.lastChat = lastChat;
             this.userService = user;
             this.chatService = chat;
-            this.ChatName = this.chatService.GetChatNameByID(chatID).Result;
+            this.LoadChatName();
 
             this.UnaddedFriends = new ObservableCollection<User>();
             this.CurrentChatMembers = new ObservableCollection<User>();
@@ -70,7 +70,12 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.UpdateObservableLists();
         }
 
-        public void AddUsersToChat()
+        public async void LoadChatName()
+        {
+            this.ChatName = await this.chatService.GetChatNameByID(chatID);
+        }
+
+        public async void AddUsersToChat()
         {
             foreach (User user in this.NewlyAddedFriends)
             {
@@ -80,7 +85,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.NewlyAddedFriends.Clear();
             this.UpdateObservableLists();
 
-            this.chatMessagesViewModel.CurrentChatParticipants = this.chatService.GetChatParticipantsStringList(chatID).Result;
+            this.chatMessagesViewModel.CurrentChatParticipants = await this.chatService.GetChatParticipantsStringList(chatID);
         }
 
         public void AddToSelected(User user)
@@ -113,19 +118,21 @@ namespace LoanShark.ViewModel.SocialViewModel
             }
         }
 
-        public void LoadAllUnaddedFriendsList()
+        public async void LoadAllUnaddedFriendsList()
         {
-            var allFriends = this.userService.GetFriendsByUser(this.userService.GetCurrentUser().Result);
-            var currentChatParticipants = this.chatService.GetChatParticipantsList(this.chatID);
-            this.allUnaddedFriends = allFriends.Result.Where(friend => !currentChatParticipants.Result.Any(participant => participant.GetUserId() == friend.GetUserId())).ToList();
+            var currentUser = await this.userService.GetCurrentUser();
+            var allFriends = await this.userService.GetFriendsByUser(currentUser);
+            var currentChatParticipants = await this.chatService.GetChatParticipantsList(this.chatID);
+            this.allUnaddedFriends = allFriends.Where(friend => !currentChatParticipants.Any(participant => participant.GetUserId() == friend.GetUserId())).ToList();
         }
 
-        public void UpdateObservableLists()
+        public async void UpdateObservableLists()
         {
             this.LoadAllUnaddedFriendsList();
 
             this.CurrentChatMembers.Clear();
-            foreach (var participant in this.chatService.GetChatParticipantsList(this.chatID).Result)
+            var chatParticipantList = await this.chatService.GetChatParticipantsList(this.chatID);
+            foreach (var participant in chatParticipantList)
             {
                 this.CurrentChatMembers.Add(participant);
             }
