@@ -102,11 +102,12 @@ namespace LoanShark.API.Controllers
             }
         }
 
-        [HttpGet("GetTransactionTypeCounts")]
-        public async Task<ActionResult<Dictionary<string, int>>> GetTransactionTypeCounts()
+        [HttpGet("GetTransactionTypeCounts/{iban}")]
+        public async Task<ActionResult<Dictionary<string, int>>> GetTransactionTypeCounts(string iban)
         {
             try
             {
+                _transactionHistoryService.iban = iban;
                 var result = await _transactionHistoryService.GetTransactionTypeCounts();
                 return Ok(result);
             }

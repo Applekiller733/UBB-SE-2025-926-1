@@ -200,6 +200,7 @@ namespace LoanShark.EF.Repository.BankRepository
                 }
 
                 _dbContext.BankAccount.Remove(entity);
+                _dbContext.SaveChangesAsync();
 
                 return true;
             }

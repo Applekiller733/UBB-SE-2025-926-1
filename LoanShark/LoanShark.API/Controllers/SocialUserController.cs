@@ -141,22 +141,23 @@ namespace LoanShark.API.Controllers
         }
 
         [HttpGet("{userID}/nonfriends")]
-        public ActionResult<List<UserViewModel>> GetNonFriendsUsers(int userID)
+        public ActionResult<List<User>> GetNonFriendsUsers(int userID)
         {
             var nonFriends = _userService.GetNonFriendsUsers(userID);
-            var dtos = nonFriends.Select(u => new UserViewModel
-            {
-                UserID = u.UserID,
-                Username = u.Username,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email?.ToString(),
-                PhoneNumber = u.PhoneNumber?.ToString(),
-                Cnp = u.Cnp?.ToString(),
-                Password = u.HashedPassword.ToString(),
-                ReportedCount = u.ReportedCount
-            }).ToList();
-            return Ok(dtos);
+            //var dtos = nonFriends.Select(u => new UserViewModel
+            //{
+            //    UserID = u.UserID,
+            //    Username = u.Username,
+            //    FirstName = u.FirstName,
+            //    LastName = u.LastName,
+            //    Email = u.Email?.ToString(),
+            //    PhoneNumber = u.PhoneNumber?.ToString(),
+            //    Cnp = u.Cnp?.ToString(),
+            //    Password = u.HashedPassword.ToString(),
+            //    ReportedCount = u.ReportedCount
+            //}).ToList();
+            //return Ok(dtos);
+            return Ok(nonFriends);
         }
 
         [HttpGet("current")]

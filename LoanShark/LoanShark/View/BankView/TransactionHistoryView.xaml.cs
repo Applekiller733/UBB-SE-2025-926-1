@@ -23,7 +23,7 @@ namespace LoanShark.View.BankView
             this.TransactionsViewModel = App.Services.GetRequiredService<TransactionsHistoryViewModel>();
             this.transactionHistoryService = App.Services.GetRequiredService<ITransactionHistoryService>(); 
             this.InitializeComponent();
-            SortAscendingButton.IsChecked = true;
+            //SortAscendingButton.IsChecked = true;
             InitializeDataAsync();
         }
 
@@ -46,37 +46,37 @@ namespace LoanShark.View.BankView
             _ = dialog.ShowAsync();
         }
 
-        private async void SortAscending_Click(object sender, RoutedEventArgs e)
-        {
-            if (isSortedAscending == false)
-            {
-                isSortedAscending = true;
-                SortAscendingButton.IsChecked = true;
-                SortDescendingButton.IsChecked = false;
-                CurrentList = await TransactionsViewModel.SortByDate("Ascending");
-                TransactionList.ItemsSource = CurrentList;
-            }
-            else
-            {
-                SortAscendingButton.IsChecked = true;
-            }
-        }
+        //private async void SortAscending_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (isSortedAscending == false)
+        //    {
+        //        isSortedAscending = true;
+        //        SortAscendingButton.IsChecked = true;
+        //        SortDescendingButton.IsChecked = false;
+        //        CurrentList = await TransactionsViewModel.SortByDate("Ascending");
+        //        TransactionList.ItemsSource = CurrentList;
+        //    }
+        //    else
+        //    {
+        //        SortAscendingButton.IsChecked = true;
+        //    }
+        //}
 
-        private async void SortDescending_Click(object sender, RoutedEventArgs e)
-        {
-            if (isSortedAscending == true)
-            {
-                isSortedAscending = false;
-                SortAscendingButton.IsChecked = false;
-                SortDescendingButton.IsChecked = true;
-                CurrentList = await TransactionsViewModel.SortByDate("Descending");
-                TransactionList.ItemsSource = CurrentList;
-            }
-            else
-            {
-                SortDescendingButton.IsChecked = true;
-            }
-        }
+        //private async void SortDescending_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (isSortedAscending == true)
+        //    {
+        //        isSortedAscending = false;
+        //        SortAscendingButton.IsChecked = false;
+        //        SortDescendingButton.IsChecked = true;
+        //        CurrentList = await TransactionsViewModel.SortByDate("Descending");
+        //        TransactionList.ItemsSource = CurrentList;
+        //    }
+        //    else
+        //    {
+        //        SortDescendingButton.IsChecked = true;
+        //    }
+        //}
 
         private async void TransactionTypeTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
