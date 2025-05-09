@@ -194,14 +194,21 @@ namespace LoanShark.API.Proxies
 
         public async Task<int> GetCurrentUser()
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Current");
-            response.EnsureSuccessStatusCode();
-            var json = await response.Content.ReadAsStringAsync();
-            var dto = JsonSerializer.Deserialize<UserViewModel>(json, new JsonSerializerOptions
+            try
             {
-                PropertyNameCaseInsensitive = true
-            });
-            return dto.UserID;
+                var response = await _httpClient.GetAsync($"https://localhost:7097/api/User/Current");
+                response.EnsureSuccessStatusCode();
+                var json = await response.Content.ReadAsStringAsync();
+                var dto = JsonSerializer.Deserialize<UserViewModel>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+                return dto.UserID;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetCurrentUser Exception " + ex.Message.ToString());
+            }
         }
 
         public async Task MarkUserAsDangerousAndGiveTimeout(User user)

@@ -110,13 +110,15 @@ namespace LoanShark.ViewModel.SocialViewModel
         public void FilterFriends()
         {
             this.FriendsList.Clear();
-
-            foreach (var friend in this.AllFriends.Where(f =>
-                         string.IsNullOrEmpty(this.SearchQuery) ||
-                         f.Username.Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
-                         f.PhoneNumber.ToString().Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase)))
+            if (this.AllFriends != null)
             {
-                this.FriendsList.Add(friend);
+                foreach (var friend in this.AllFriends.Where(f =>
+                             string.IsNullOrEmpty(this.SearchQuery) ||
+                             f.Username.Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                             f.PhoneNumber.ToString().Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase)))
+                {
+                    this.FriendsList.Add(friend);
+                }
             }
 
             this.UpdatenoFriendsVisibility();
