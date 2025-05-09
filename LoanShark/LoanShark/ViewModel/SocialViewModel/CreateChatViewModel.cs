@@ -11,6 +11,7 @@ namespace LoanShark.ViewModel.SocialViewModel
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows.Input;
     using LoanShark.Domain;
     using LoanShark.Service.SocialService.Interfaces;
@@ -78,13 +79,15 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.userService = userService;
             LoadAllFriends();
 
-            this.LoadFriends();
+            //this.LoadFriends();
         }
 
-        public async void LoadAllFriends()
+        public async Task LoadAllFriends()
         {
             var currentUser = await this.userService.GetCurrentUser();
             this.allFriends = await this.userService.GetFriendsByUser(currentUser);
+            this.Friends = new ObservableCollection<User>(this.allFriends);
+
         }
 
         private async void AddNewGroupChat()
@@ -104,6 +107,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         private void AddFriendToSelectedList(object parameter)
         {
             var friend = parameter as User;
+            this.SelectedFriends = this.Friends;
             if (friend != null && !this.SelectedFriends.Contains(friend))
             {
                 this.SelectedFriends.Add(friend);

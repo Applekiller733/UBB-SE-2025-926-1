@@ -28,6 +28,11 @@ namespace LoanShark.API.Proxies
                 var response = await _httpClient.GetAsync("https://localhost:7097/api/Feed/content");
                 response.EnsureSuccessStatusCode();
                 var json = await response.Content.ReadAsStringAsync();
+                if (string.IsNullOrWhiteSpace(json))
+                {
+                    var emptyFeed= new List<Post>();
+                    return emptyFeed;
+                }
                 var dto = JsonSerializer.Deserialize<List<FeedViewModel>>(json, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true

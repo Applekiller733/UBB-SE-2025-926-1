@@ -32,7 +32,7 @@ namespace LoanShark.API.Controllers
             List<Post> posts = _feedService.GetFeedContent();
             if (posts == null || posts.Count == 0)
             {
-                return NotFound();
+                return Ok(null);
             }
 
             List<FeedViewModel> dto = posts.Select(post => new FeedViewModel

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoanShark.EF.Migrations
 {
     [DbContext(typeof(LoanSharkDbContext))]
-    [Migration("20250508132443_FinalDB-Friends")]
-    partial class FinalDBFriends
+    [Migration("20250509110551_FinalDB")]
+    partial class FinalDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -352,6 +352,23 @@ namespace LoanShark.EF.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("LoanShark.EF.EfModels.CurrencyEF", b =>
+                {
+                    b.Property<int>("CurrencyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CurrencyId"));
+
+                    b.Property<string>("CurrencyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CurrencyId");
+
+                    b.ToTable("Currency");
                 });
 
             modelBuilder.Entity("LoanShark.EF.EfModels.FriendshipEF", b =>

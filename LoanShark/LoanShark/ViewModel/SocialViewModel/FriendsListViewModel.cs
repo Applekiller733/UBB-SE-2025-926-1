@@ -15,6 +15,7 @@ namespace LoanShark.ViewModel.SocialViewModel
     using Microsoft.UI.Xaml;
     using LoanShark.Domain;
     using LoanShark.Service.SocialService.Interfaces;
+    using System.Threading.Tasks;
 
     public class FriendsListViewModel : INotifyPropertyChanged
     {
@@ -81,7 +82,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.LoadFriends();
         }
 
-        public async void LoadAllFriends()
+        public async Task LoadAllFriends()
         {
             var currentUser = await this.UserService.GetCurrentUser();
             this.AllFriends = await this.UserService.GetFriendsByUser(currentUser);
@@ -90,21 +91,25 @@ namespace LoanShark.ViewModel.SocialViewModel
         public async void RemoveFriendFromList(object user)
         {
             var friend = user as User;
+
             var currentUser = await this.UserService.GetCurrentUser();
             if (friend != null)
             {
-                this.UserService.RemoveFriend(currentUser, friend.GetUserId());
+                await this.UserService.RemoveFriend(currentUser, friend.GetUserId());
             }
 
             LoadAllFriends();
 
             this.LoadFriends();
+            FriendsList = new ObservableCollection<User>(this.AllFriends);
+
         }
 
-        public void LoadFriends()
+        public async void LoadFriends()
         {
-            LoadAllFriends();
+            await LoadAllFriends();
             this.FilterFriends();
+            FriendsList = new ObservableCollection<User>(this.AllFriends);
         }
 
         public void FilterFriends()

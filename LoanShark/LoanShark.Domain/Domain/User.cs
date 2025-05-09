@@ -60,10 +60,10 @@ namespace LoanShark.Domain
 
         public Cnp(string cnp)
         {
-            if (!IsValid(cnp))
-            {
-                throw new ArgumentException("Invalid CNP");
-            }
+            //if (!IsValid(cnp))
+            //{
+            //    throw new ArgumentException("Invalid CNP");
+            //}
             this.cnp = cnp;
         }
 
@@ -172,13 +172,13 @@ namespace LoanShark.Domain
         public User()
         {
             this.UserID = 0;
-            this.Cnp = new Cnp(string.Empty);
-            this.FirstName = string.Empty;
-            this.LastName = string.Empty;
-            this.Email = new Email(string.Empty);
-            this.HashedPassword = new HashedPassword(string.Empty);
-            this.Username = string.Empty; // Initialize to a default non-null value
-            this.PhoneNumber = new PhoneNumber(string.Empty); // Initialize to a default non-null value
+            this.Cnp = new Cnp("5040529125784");
+            this.FirstName = "Test";
+            this.LastName = "string.Empty";
+            this.Email = new Email("string.Empty@gmail.com");
+            this.HashedPassword = new HashedPassword("!dwhioadhnwjka2321string.Empty");
+            this.Username = "string.Empty"; // Initialize to a default non-null value
+            this.PhoneNumber = new PhoneNumber("0751413202"); // Initialize to a default non-null value
             this.Friends = new List<int>(); // Initialize to an empty list
             this.Chats = new List<int>(); // Initialize to an empty list
         }
