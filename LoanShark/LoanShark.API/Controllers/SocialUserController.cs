@@ -7,6 +7,7 @@ using LoanShark.EF.Repository.SocialRepository;
 using LoanShark.Service.SocialService.Interfaces;
 using Windows.System;
 using User = LoanShark.Domain.User;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 
 namespace LoanShark.API.Controllers
@@ -81,10 +82,10 @@ namespace LoanShark.API.Controllers
         }
 
         [HttpGet("{userID}/friends")]
-        public ActionResult<List<UserViewModel>> GetFriendsByUser(int userID)
+        public ActionResult<List<SocialUserViewModel>> GetFriendsByUser(int userID)
         {
             var friends = _userService.GetFriendsByUser(userID);
-            var dtos = friends.Select(f => new UserViewModel
+            var dtos = friends.Select(f => new SocialUserViewModel
             {
                 UserID = f.UserID,
                 Cnp = f.Cnp?.ToString(),
@@ -92,7 +93,7 @@ namespace LoanShark.API.Controllers
                 LastName = f.LastName,
                 Email = f.Email?.ToString(),
                 PhoneNumber = f.PhoneNumber?.ToString(),
-                Password = f.HashedPassword?.ToString(),
+                HashedPassword = f.HashedPassword?.ToString(),
                 Username = f.Username,
                 ReportedCount = f.ReportedCount
             }).ToList();
@@ -141,7 +142,7 @@ namespace LoanShark.API.Controllers
         }
 
         [HttpGet("{userID}/nonfriends")]
-        public ActionResult<List<User>> GetNonFriendsUsers(int userID)
+        public ActionResult<List<SocialUserViewModel>> GetNonFriendsUsers(int userID)
         {
             var nonFriends = _userService.GetNonFriendsUsers(userID);
             //var dtos = nonFriends.Select(u => new UserViewModel
@@ -157,7 +158,22 @@ namespace LoanShark.API.Controllers
             //    ReportedCount = u.ReportedCount
             //}).ToList();
             //return Ok(dtos);
-            return Ok(nonFriends);
+            if (nonFriends.Count == 0)
+                return new List<SocialUserViewModel>();
+            var result = new SocialUserViewModel
+            {
+                UserID = userID,
+                Cnp = nonFriends.First().Cnp.ToString(),
+                FirstName = nonFriends.First().FirstName,
+                LastName = nonFriends.First().LastName,
+                Email = nonFriends.First().Email.ToString(),
+                PhoneNumber = nonFriends.First().PhoneNumber.ToString(),
+                HashedPassword = nonFriends.First().HashedPassword.ToString(),
+                Username = nonFriends.First().Username
+            };
+            var list = new List<SocialUserViewModel>();
+            list.Add(result);
+            return Ok(list);
         }
 
         [HttpGet("current")]

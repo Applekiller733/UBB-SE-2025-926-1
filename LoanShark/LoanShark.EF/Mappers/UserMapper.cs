@@ -19,21 +19,25 @@ namespace LoanShark.EF.Mappers
 
             try
             {
+                var cnp = new Cnp(userEF.Cnp);
+                var email = new Email(userEF.Email);
+                var phoneNumber = new PhoneNumber(userEF.PhoneNumber);
+                var hashedPassword = new HashedPassword(userEF.HashedPassword, userEF.PasswordSalt, false);
                 // Map basic properties
-                var user = new User
-                {
-                    UserID = userEF.UserID,
-                    Cnp = new Cnp(userEF.Cnp),
-                    FirstName = userEF.FirstName,
-                    LastName = userEF.LastName,
-                    Email = new Email(userEF.Email),
-                    PhoneNumber = new PhoneNumber(userEF.PhoneNumber),
-                    Username = userEF.Username,
-                    ReportedCount = userEF.ReportedCount,
-                    HashedPassword = new HashedPassword(userEF.HashedPassword, userEF.PasswordSalt, false),
-                    Friends = new List<int>(),
-                    Chats = new List<int>(),
-                };
+                var user = new User(userEF.UserID, cnp, userEF.Username, userEF.FirstName, userEF.LastName, email, phoneNumber, hashedPassword);
+                //{
+                //    UserID = userEF.UserID,
+                //    Cnp = new Cnp(userEF.Cnp),
+                //    FirstName = userEF.FirstName,
+                //    LastName = userEF.LastName,
+                //    Email = new Email(userEF.Email),
+                //    PhoneNumber = new PhoneNumber(userEF.PhoneNumber),
+                //    Username = userEF.Username,
+                //    ReportedCount = userEF.ReportedCount,
+                //    HashedPassword = new HashedPassword(userEF.HashedPassword, userEF.PasswordSalt, false),
+                //    Friends = new List<int>(),
+                //    Chats = new List<int>(),
+                //};
 
                 // Handle TimeoutEnd
                 if (!string.IsNullOrEmpty(userEF.TimeoutEnd) && DateTime.TryParse(userEF.TimeoutEnd, out var timeoutEnd))

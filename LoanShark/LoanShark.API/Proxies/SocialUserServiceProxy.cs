@@ -140,10 +140,19 @@ namespace LoanShark.API.Proxies
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/Friends");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions
+            var socialEF = JsonSerializer.Deserialize<List<SocialUserViewModel>>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
+            var result = new List<User>();
+            foreach (var user in socialEF)
+            {
+                var newUser = new User(user.UserID, new Cnp(user.Cnp), user.Username, user.FirstName, user.LastName,
+                    new Email(user.Email), new PhoneNumber(user.PhoneNumber), new HashedPassword(user.HashedPassword.ToString()));
+                result.Add(newUser);
+            }
+            return result;
+
         }
 
         public async Task<List<int>> GetChatsByUser(int userID)
@@ -186,24 +195,46 @@ namespace LoanShark.API.Proxies
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/NonFriends");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<User>>(json, new JsonSerializerOptions
+            if (string.IsNullOrWhiteSpace(json))
             {
-                PropertyNameCaseInsensitive = true
-            });
+                return new List<User>();
+            }
+            var userVM =  await response.Content.ReadFromJsonAsync<List<SocialUserViewModel>>();
+            //var userVM = JsonSerializer.Deserialize<List<SocialUserViewModel>>(json, new JsonSerializerOptions
+            //{
+            //    PropertyNameCaseInsensitive = true
+            //});
+            if (userVM.Count == 0)
+                return new List<User>();
+            var result = new User
+            {
+                UserID = userVM.First().UserID,
+                Username = userVM.First().Username,
+                FirstName = userVM.First().FirstName,
+                LastName = userVM.First().LastName,
+                Email = new Email(userVM.First().Email.ToString()),
+                PhoneNumber = new PhoneNumber(userVM.First().PhoneNumber.ToString()),
+                Cnp = new Cnp(userVM.First().Cnp.ToString()),
+                HashedPassword = new HashedPassword(userVM.First().HashedPassword.ToString())
+            };
+            var list = new List<User>();
+            list.Add(result);
+            return list;
         }
 
         public async Task<int> GetCurrentUser()
         {
             try
             {
-                var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/Current");
-                response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                var dto = JsonSerializer.Deserialize<int>(json, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-                return dto;
+                return UserSession.Instance.GetUserData("id_user") != null ? int.Parse(UserSession.Instance.GetUserData("id_user")) : 0;
+                //var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/Current");
+                //response.EnsureSuccessStatusCode();
+                //var json = await response.Content.ReadAsStringAsync();
+                //var dto = JsonSerializer.Deserialize<int>(json, new JsonSerializerOptions
+                //{
+                //    PropertyNameCaseInsensitive = true
+                //});
+                //return dto;
             }
             catch (Exception ex)
             {

@@ -6,14 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LoanShark.EF.Migrations
 {
     /// <inheritdoc />
-    public partial class FinalDB3 : Migration
+    public partial class FinalDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "BankAccounts");
-
             migrationBuilder.CreateTable(
                 name: "BankAccount",
                 columns: table => new
@@ -46,6 +43,19 @@ namespace LoanShark.EF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Chat", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Currency",
+                columns: table => new
+                {
+                    CurrencyId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CurrencyName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Currency", x => x.CurrencyId);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,18 +95,16 @@ namespace LoanShark.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notification",
+                name: "MessageType",
                 columns: table => new
                 {
-                    NotificationID = table.Column<int>(type: "int", nullable: false)
+                    TypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserReceiverID = table.Column<int>(type: "int", nullable: false)
+                    TypeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Notification", x => x.NotificationID);
+                    table.PrimaryKey("PK_MessageType", x => x.TypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,23 +121,6 @@ namespace LoanShark.EF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Post", x => x.PostID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Report",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MessageID = table.Column<int>(type: "int", nullable: false),
-                    ReporterUserID = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Report", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,29 +169,171 @@ namespace LoanShark.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatUserEF",
+                name: "ChatUser",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     ChatId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatUserEF", x => x.Id);
+                    table.PrimaryKey("PK_ChatUser", x => new { x.ChatId, x.UserId });
                     table.ForeignKey(
-                        name: "FK_ChatUserEF_Chat_ChatId",
+                        name: "FK_ChatUser_Chat_ChatId",
                         column: x => x.ChatId,
                         principalTable: "Chat",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChatUser_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Friends",
+                columns: table => new
+                {
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    FriendID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Friends", x => new { x.UserID, x.FriendID });
+                    table.ForeignKey(
+                        name: "FK_Friends_User_FriendID",
+                        column: x => x.FriendID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Friends_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Message",
+                columns: table => new
+                {
+                    MessageID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TypeID = table.Column<int>(type: "int", nullable: true),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    ChatID = table.Column<int>(type: "int", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "DATETIME", nullable: false),
+                    Content = table.Column<string>(type: "NVARCHAR(260)", maxLength: 260, nullable: false),
+                    Status = table.Column<string>(type: "VARCHAR(255)", maxLength: 255, nullable: true),
+                    Amount = table.Column<float>(type: "real", nullable: true),
+                    Currency = table.Column<string>(type: "VARCHAR(10)", maxLength: 10, nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SerializedUserIDs = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Message", x => x.MessageID);
+                    table.ForeignKey(
+                        name: "FK_Message_Chat_ChatID",
+                        column: x => x.ChatID,
+                        principalTable: "Chat",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Message_MessageType_TypeID",
+                        column: x => x.TypeID,
+                        principalTable: "MessageType",
+                        principalColumn: "TypeId",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Message_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notification",
+                columns: table => new
+                {
+                    NotificationID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserReceiverID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notification", x => x.NotificationID);
+                    table.ForeignKey(
+                        name: "FK_Notification_User_UserReceiverID",
+                        column: x => x.UserReceiverID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Report",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MessageID = table.Column<int>(type: "int", nullable: false),
+                    ReporterUserID = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Report", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Report_Message_MessageID",
+                        column: x => x.MessageID,
+                        principalTable: "Message",
+                        principalColumn: "MessageID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatUserEF_ChatId",
-                table: "ChatUserEF",
-                column: "ChatId");
+                name: "IX_ChatUser_UserId",
+                table: "ChatUser",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Friends_FriendID",
+                table: "Friends",
+                column: "FriendID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_ChatID",
+                table: "Message",
+                column: "ChatID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_TypeID",
+                table: "Message",
+                column: "TypeID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Message_UserID",
+                table: "Message",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notification_UserReceiverID",
+                table: "Notification",
+                column: "UserReceiverID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Report_MessageID",
+                table: "Report",
+                column: "MessageID");
         }
 
         /// <inheritdoc />
@@ -210,10 +343,16 @@ namespace LoanShark.EF.Migrations
                 name: "BankAccount");
 
             migrationBuilder.DropTable(
-                name: "ChatUserEF");
+                name: "ChatUser");
+
+            migrationBuilder.DropTable(
+                name: "Currency");
 
             migrationBuilder.DropTable(
                 name: "CurrencyExchange");
+
+            migrationBuilder.DropTable(
+                name: "Friends");
 
             migrationBuilder.DropTable(
                 name: "Loan");
@@ -231,31 +370,16 @@ namespace LoanShark.EF.Migrations
                 name: "Transaction");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Message");
 
             migrationBuilder.DropTable(
                 name: "Chat");
 
-            migrationBuilder.CreateTable(
-                name: "BankAccounts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Blocked = table.Column<bool>(type: "bit", nullable: false),
-                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DailyLimit = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Iban = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MaximumNrTransactions = table.Column<int>(type: "int", nullable: false),
-                    MaximumPerTransaction = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BankAccounts", x => x.Id);
-                });
+            migrationBuilder.DropTable(
+                name: "MessageType");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

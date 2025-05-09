@@ -14,14 +14,14 @@ namespace LoanShark.Domain
         // in order to populate the db with the correct data
         public HashedPassword(string password)
         {
-            if (password == null)
-            {
-                throw new ArgumentNullException("Password cannot be null");
-            }
-            if (IsPasswordOk(password) == false)
-            {
-                throw new ArgumentException("Password does not meet the criteria");
-            }
+            //if (password == null)
+            //{
+            //    throw new ArgumentNullException("Password cannot be null");
+            //}
+            //if (IsPasswordOk(password) == false)
+            //{
+            //    throw new ArgumentException("Password does not meet the criteria");
+            //}
             this.salt = BCrypt.Net.BCrypt.GenerateSalt(10); // this will generate a 29 character string
             this.hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, this.salt); // this will hash the password with the generated salt
         }
