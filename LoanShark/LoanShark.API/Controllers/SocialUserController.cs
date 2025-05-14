@@ -88,13 +88,13 @@ namespace LoanShark.API.Controllers
             var dtos = friends.Select(f => new SocialUserViewModel
             {
                 UserID = f.UserID,
-                Cnp = f.Cnp?.ToString(),
+                Username = f.Username,
                 FirstName = f.FirstName,
                 LastName = f.LastName,
                 Email = f.Email?.ToString(),
                 PhoneNumber = f.PhoneNumber?.ToString(),
+                Cnp = f.Cnp?.ToString(),
                 HashedPassword = f.HashedPassword?.ToString(),
-                Username = f.Username,
                 ReportedCount = f.ReportedCount
             }).ToList();
             return Ok(dtos);
@@ -160,20 +160,19 @@ namespace LoanShark.API.Controllers
             //return Ok(dtos);
             if (nonFriends.Count == 0)
                 return new List<SocialUserViewModel>();
-            var result = new SocialUserViewModel
+
+            var result = nonFriends.Select(u => new SocialUserViewModel
             {
-                UserID = userID,
-                Cnp = nonFriends.First().Cnp.ToString(),
-                FirstName = nonFriends.First().FirstName,
-                LastName = nonFriends.First().LastName,
-                Email = nonFriends.First().Email.ToString(),
-                PhoneNumber = nonFriends.First().PhoneNumber.ToString(),
-                HashedPassword = nonFriends.First().HashedPassword.ToString(),
-                Username = nonFriends.First().Username
-            };
-            var list = new List<SocialUserViewModel>();
-            list.Add(result);
-            return Ok(list);
+                UserID = u.UserID, // Use the non-friend's UserID
+                Username = u.Username,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Email = u.Email?.ToString(),
+                PhoneNumber = u.PhoneNumber?.ToString(),
+                Cnp = u.Cnp?.ToString(),
+                HashedPassword = u.HashedPassword?.ToString()
+            }).ToList();
+            return Ok(result);
         }
 
         [HttpGet("current")]

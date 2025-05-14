@@ -15,6 +15,7 @@ namespace LoanShark.ViewModel.SocialViewModel
     using System.Windows.Input;
     using LoanShark.Domain;
     using LoanShark.Service.SocialService.Interfaces;
+    using Microsoft.UI.Xaml;
 
     public class CreateChatViewModel : INotifyPropertyChanged
     {
@@ -86,7 +87,12 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             var currentUser = await this.userService.GetCurrentUser();
             this.allFriends = await this.userService.GetFriendsByUser(currentUser);
-            this.Friends = new ObservableCollection<User>(this.allFriends);
+            this.Friends.Clear();
+
+            foreach (var friend in allFriends)
+            {
+                Friends.Add(friend);
+            }
 
         }
 
@@ -122,19 +128,19 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         private void FilterFriends()
         {
-            this.Friends.Clear();
+            Friends.Clear();
 
-            foreach (var friend in this.allFriends.Where(f =>
-                         string.IsNullOrEmpty(this.SearchQuery) ||
-                         f.Username.Contains(this.SearchQuery, StringComparison.OrdinalIgnoreCase)))
-            {
-                this.Friends.Add(friend);
-            }
+            var filteredFriends = this.allFriends
+                ?.Where(f => (string.IsNullOrEmpty(SearchQuery) ||
+                             (f.Username?.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) ?? false)) &&
+                             !SelectedFriends.Contains(f))
+                .ToList() ?? new List<User>();
 
-            foreach (var friend in this.SelectedFriends)
+            foreach (var friend in filteredFriends)
             {
-                this.Friends.Remove(friend);
+                Friends.Add(friend);
             }
         }
+
     }
 }
