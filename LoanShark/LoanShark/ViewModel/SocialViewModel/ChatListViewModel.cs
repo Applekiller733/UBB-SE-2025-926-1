@@ -12,6 +12,7 @@ namespace LoanShark.ViewModel.SocialViewModel
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Linq;
+    using System.Threading.Tasks;
     using LoanShark.Domain;
     using LoanShark.Service.SocialService.Interfaces;
     using LoanShark.View.SocialView;
@@ -54,26 +55,31 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.ChatList = new ObservableCollection<Chat>();
             this.ChatService = chatS;
             this.UserService = userS;
-            LoadCurrentUserChats();
             this.CountToVisibilityConverter = new CountToVisibilityConverter();
 
-            this.LoadChats();
+            _ = InitializeAsync();
         }
 
-        public async void LoadCurrentUserChats()
+        private async Task InitializeAsync()
+        {
+            await LoadCurrentUserChats();
+            await LoadChats();
+        }
+
+        public async Task LoadCurrentUserChats()
         {
             this.CurrentUserChats = await this.UserService.GetCurrentUserChats();
         }
 
-        public void LoadChats()
+        public async Task LoadChats()
         {
-            this.FilterChats();
+            await FilterChats();
         }
 
-        public async void FilterChats()
+        public async Task FilterChats()
         {
             this.ChatList.Clear();
-            LoadCurrentUserChats();
+            await LoadCurrentUserChats();
             foreach (var chat in this.CurrentUserChats)
             {
                 if (string.IsNullOrEmpty(this.SearchQuery) ||

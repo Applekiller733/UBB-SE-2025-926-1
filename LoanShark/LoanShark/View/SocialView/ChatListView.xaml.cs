@@ -38,7 +38,7 @@ namespace LoanShark.View.SocialView
             this.MessageService = messageService;
             this.ReportService = reportService;
             this.RightFrame = rightFrame;
-            //this.chatListViewModel = new ChatListViewModel(ChatService, UserService);
+            this.chatListViewModel = new ChatListViewModel(ChatService, UserService);
             this.MainGrid.DataContext = this.chatListViewModel;
         }
 
