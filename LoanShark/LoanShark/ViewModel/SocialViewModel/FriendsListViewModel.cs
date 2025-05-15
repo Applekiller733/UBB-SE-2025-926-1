@@ -75,17 +75,23 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.UserService = user;
             this.ChatService = chat;
             this.MessageService = message;
-            LoadAllFriends();
+            this.AllFriends = new List<User>();
             this.FriendsList = new ObservableCollection<User>();
+            LoadAllFriends();
             this.RemoveFriend = new RelayCommand<object>(this.RemoveFriendFromList);
-
-            this.LoadFriends();
+           
         }
 
         public async Task LoadAllFriends()
         {
             var currentUser = await this.UserService.GetCurrentUser();
             this.AllFriends = await this.UserService.GetFriendsByUser(currentUser);
+            this.FriendsList.Clear();
+
+            foreach (var friend in this.AllFriends)
+            {
+                this.FriendsList.Add(friend);
+            }
         }
 
         public async void RemoveFriendFromList(object user)
@@ -100,7 +106,6 @@ namespace LoanShark.ViewModel.SocialViewModel
 
             LoadAllFriends();
 
-            this.LoadFriends();
             FriendsList = new ObservableCollection<User>(this.AllFriends);
 
         }

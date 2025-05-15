@@ -171,6 +171,12 @@ namespace LoanShark.API.Proxies
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/Chats/Current");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(json) || json == "[]")
+            {
+                System.Diagnostics.Debug.WriteLine("No chats found in response");
+                return new List<Chat>();
+            }
+
             return JsonSerializer.Deserialize<List<Chat>>(json, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
@@ -206,19 +212,22 @@ namespace LoanShark.API.Proxies
             //});
             if (userVM.Count == 0)
                 return new List<User>();
-            var result = new User
-            {
-                UserID = userVM.First().UserID,
-                Username = userVM.First().Username,
-                FirstName = userVM.First().FirstName,
-                LastName = userVM.First().LastName,
-                Email = new Email(userVM.First().Email.ToString()),
-                PhoneNumber = new PhoneNumber(userVM.First().PhoneNumber.ToString()),
-                Cnp = new Cnp(userVM.First().Cnp.ToString()),
-                HashedPassword = new HashedPassword(userVM.First().HashedPassword.ToString())
-            };
             var list = new List<User>();
-            list.Add(result);
+            foreach (var vm in userVM)
+            {
+                var user = new User
+                {
+                    UserID = vm.UserID,
+                    Username = vm.Username,
+                    FirstName = vm.FirstName,
+                    LastName = vm.LastName,
+                    Email = new Email(vm.Email.ToString()),
+                    PhoneNumber = new PhoneNumber(vm.PhoneNumber.ToString()),
+                    Cnp = new Cnp(vm.Cnp.ToString()),
+                    HashedPassword = new HashedPassword(vm.HashedPassword.ToString())
+                };
+                list.Add(user);
+            }
             return list;
         }
 

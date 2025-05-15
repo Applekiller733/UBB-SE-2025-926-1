@@ -53,6 +53,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             this.UserService = userService;
             this.friendsListViewModel = friendsListViewModel;
+            this.AllUsers = new List<User>();
             this.LoadAllUsers();
             this.UsersList = new ObservableCollection<User>();
             this.AddFriendCommand = new RelayCommand<object>(AddFriend);
@@ -62,8 +63,15 @@ namespace LoanShark.ViewModel.SocialViewModel
 
         public async void LoadAllUsers()
         {
+            this.AllUsers.Clear();
             var currentUser = await (UserService.GetCurrentUser());
             this.AllUsers = await (UserService.GetNonFriendsUsers(currentUser));
+            this.UsersList.Clear();
+
+            foreach (var friend in this.AllUsers)
+            {
+                this.UsersList.Add(friend);
+            }
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

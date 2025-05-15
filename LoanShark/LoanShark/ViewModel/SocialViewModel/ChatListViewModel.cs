@@ -54,6 +54,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.ChatList = new ObservableCollection<Chat>();
             this.ChatService = chatS;
             this.UserService = userS;
+            this.CurrentUserChats = new List<Chat>();
             LoadCurrentUserChats();
             this.CountToVisibilityConverter = new CountToVisibilityConverter();
 
