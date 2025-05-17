@@ -156,7 +156,7 @@ namespace LoanShark.API.Proxies
                 chatName
             };
             var content = new StringContent(JsonSerializer.Serialize(request), System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("https://localhost:7097/api/Chat", content);
+            var response = await _httpClient.PostAsync("https://localhost:7097/api/Chat/create-chat", content);
             response.EnsureSuccessStatusCode();
         }
 

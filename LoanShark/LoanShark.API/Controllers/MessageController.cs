@@ -29,7 +29,7 @@ namespace LoanShark.API.Controllers
         [HttpPost("text")]
         public async Task<ActionResult> SendTextMessage([FromBody] TextMessageViewModel messageDto)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             if (messageDto == null || string.IsNullOrEmpty(messageDto.Content))
                 return BadRequest("Message content is required.");
 
@@ -40,7 +40,7 @@ namespace LoanShark.API.Controllers
         [HttpPost("image")]
         public async Task<ActionResult> SendImageMessage([FromBody] ImageMessageViewModel messageDto)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             if (messageDto == null || string.IsNullOrEmpty(messageDto.ImageURL))
                 return BadRequest("Image URL is required.");
 
@@ -51,7 +51,7 @@ namespace LoanShark.API.Controllers
         [HttpPost("transfer")]
         public async Task<ActionResult> SendTransferMessage([FromBody] TransferMessageViewModel messageDto)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             if (messageDto == null || string.IsNullOrEmpty(messageDto.Description) || string.IsNullOrEmpty(messageDto.Currency))
                 return BadRequest("Transfer details are required.");
 
@@ -68,7 +68,7 @@ namespace LoanShark.API.Controllers
         [HttpPost("request")]
         public async Task<ActionResult> SendRequestMessage([FromBody] RequestMessageViewModel messageDto)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             if (messageDto == null || string.IsNullOrEmpty(messageDto.Description) || string.IsNullOrEmpty(messageDto.Currency))
                 return BadRequest("Request details are required.");
 
@@ -85,7 +85,7 @@ namespace LoanShark.API.Controllers
         [HttpPost("delete")]
         public async Task<ActionResult> DeleteMessage([FromBody] MessageViewModel messageDto)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             if (messageDto == null)
                 return BadRequest("Message data is required.");
 
@@ -133,7 +133,7 @@ namespace LoanShark.API.Controllers
         [HttpPost("report")]
         public async Task<ActionResult> ReportMessage([FromBody] MessageViewModel messageDto)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             if (messageDto == null)
                 return BadRequest("Message data is required.");
 
@@ -181,7 +181,7 @@ namespace LoanShark.API.Controllers
         [HttpGet("repository")]
         public async Task<ActionResult<string>> GetRepositoryInfo()
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             var repo = _messageService.GetRepo();
             return Ok($"Repository Type: {repo.GetType().Name}");
         }

@@ -106,7 +106,7 @@ namespace LoanShark.ViewModel.SocialViewModel
                 selectedFriendsIDs.Add(friend.GetUserId());
             }
 
-            this.chatService.CreateChat(selectedFriendsIDs, this.GroupName);
+            await this.chatService.CreateChat(selectedFriendsIDs, this.GroupName);
             this.chatListViewModel.LoadChats();
         }
 

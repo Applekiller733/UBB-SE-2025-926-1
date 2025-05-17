@@ -111,12 +111,19 @@ namespace LoanShark.API.Controllers
         public async Task<ActionResult<List<ChatViewModel>>> GetCurrentUserChats()
         {
             var chats = await _userService.GetCurrentUserChats();
-            var dtos = chats.Select(c => new ChatViewModel
+
+            var dtos = await Task.WhenAll(chats.Select(async c =>
             {
-                ChatID = c.getChatID(),
-                UserIDs = c.getUserIDsList()
-            });
-            return Ok(dtos);
+                var participantIds = await _userService.GetRepo().GetChatParticipantsIDs(c.getChatID());
+                return new ChatViewModel
+                {
+                    ChatID = c.getChatID(),
+                    UserIDs = participantIds,
+                    ChatName = c.getChatName(),
+                };
+            }));
+
+            return Ok(dtos.ToList());
         }
 
         [HttpGet("{userID}")]

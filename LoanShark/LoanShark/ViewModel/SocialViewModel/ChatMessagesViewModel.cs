@@ -43,6 +43,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         // ?
         private IRepository repository;
 
+        // ?
         public MessageTemplateSelector TemplateSelector => this.templateSelector;
 
         public int CurrentChatID { get; set; }
@@ -213,14 +214,23 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.ReportMessageCommand = new RelayCommand<Message>(this.ReportMessage);
             this.templateSelector = new MessageTemplateSelector(this.repository)
             {
-                TextMessageTemplateLeft = (DataTemplate)App.Current.Resources["TextMessageTemplateLeft"],
-                TextMessageTemplateRight = (DataTemplate)App.Current.Resources["TextMessageTemplateRight"],
-                ImageMessageTemplateLeft = (DataTemplate)App.Current.Resources["ImageMessageTemplateLeft"],
-                ImageMessageTemplateRight = (DataTemplate)App.Current.Resources["ImageMessageTemplateRight"],
-                TransferMessageTemplateLeft = (DataTemplate)App.Current.Resources["TransferMessageTemplateLeft"],
-                TransferMessageTemplateRight = (DataTemplate)App.Current.Resources["TransferMessageTemplateRight"],
-                RequestMessageTemplateLeft = (DataTemplate)App.Current.Resources["RequestMessageTemplateLeft"],
-                RequestMessageTemplateRight = (DataTemplate)App.Current.Resources["RequestMessageTemplateRight"],
+                //TextMessageTemplateLeft = (DataTemplate)App.Current.Resources["TextMessageTemplateLeft"],
+                //TextMessageTemplateRight = (DataTemplate)App.Current.Resources["TextMessageTemplateRight"],
+                //ImageMessageTemplateLeft = (DataTemplate)App.Current.Resources["ImageMessageTemplateLeft"],
+                //ImageMessageTemplateRight = (DataTemplate)App.Current.Resources["ImageMessageTemplateRight"],
+                //TransferMessageTemplateLeft = (DataTemplate)App.Current.Resources["TransferMessageTemplateLeft"],
+                //TransferMessageTemplateRight = (DataTemplate)App.Current.Resources["TransferMessageTemplateRight"],
+                //RequestMessageTemplateLeft = (DataTemplate)App.Current.Resources["RequestMessageTemplateLeft"],
+                //RequestMessageTemplateRight = (DataTemplate)App.Current.Resources["RequestMessageTemplateRight"],
+
+                TextMessageTemplateLeft = App.Current.Resources["TextMessageTemplateLeft"] as DataTemplate ?? throw new InvalidOperationException("TextMessageTemplateLeft not found"),
+                TextMessageTemplateRight = App.Current.Resources["TextMessageTemplateRight"] as DataTemplate ?? throw new InvalidOperationException("TextMessageTemplateRight not found"),
+                ImageMessageTemplateLeft = App.Current.Resources["ImageMessageTemplateLeft"] as DataTemplate ?? throw new InvalidOperationException("ImageMessageTemplateLeft not found"),
+                ImageMessageTemplateRight = App.Current.Resources["ImageMessageTemplateRight"] as DataTemplate ?? throw new InvalidOperationException("ImageMessageTemplateRight not found"),
+                TransferMessageTemplateLeft = App.Current.Resources["TransferMessageTemplateLeft"] as DataTemplate ?? throw new InvalidOperationException("TransferMessageTemplateLeft not found"),
+                TransferMessageTemplateRight = App.Current.Resources["TransferMessageTemplateRight"] as DataTemplate ?? throw new InvalidOperationException("TransferMessageTemplateRight not found"),
+                RequestMessageTemplateLeft = App.Current.Resources["RequestMessageTemplateLeft"] as DataTemplate ?? throw new InvalidOperationException("RequestMessageTemplateLeft not found"),
+                RequestMessageTemplateRight = App.Current.Resources["RequestMessageTemplateRight"] as DataTemplate ?? throw new InvalidOperationException("RequestMessageTemplateRight not found"),
             };
 
             // Initial load of messages

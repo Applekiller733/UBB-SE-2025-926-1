@@ -64,6 +64,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         public async void LoadCurrentUserChats()
         {
             this.CurrentUserChats = await this.UserService.GetCurrentUserChats();
+            //this.ChatList = new ObservableCollection<Chat>(this.CurrentUserChats);
         }
 
         public void LoadChats()

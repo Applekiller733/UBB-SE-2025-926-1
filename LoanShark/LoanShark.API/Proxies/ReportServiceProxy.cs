@@ -5,6 +5,7 @@ using LoanShark.API.Models;
 using LoanShark.Domain;
 using LoanShark.EF.EFModels;
 using System.Collections.Generic;
+using LoanShark.Service.SocialService.Interfaces;
 
 namespace LoanShark.API.Proxies
 {

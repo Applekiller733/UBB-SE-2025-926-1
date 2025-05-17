@@ -168,7 +168,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<Chat>> GetCurrentUserChats()
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/Chats/Current");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/chats/current");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             if (string.IsNullOrWhiteSpace(json) || json == "[]")
@@ -179,8 +179,10 @@ namespace LoanShark.API.Proxies
 
             return JsonSerializer.Deserialize<List<Chat>>(json, new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+                IncludeFields = true,
             });
+
         }
 
         public async Task<User> GetUserById(int userID)
@@ -269,5 +271,25 @@ namespace LoanShark.API.Proxies
                 PropertyNameCaseInsensitive = true
             });
         }
+
+        //IRepository IUserService.GetRepo()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //int IUserService.GetCurrentUser()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //void IUserService.MarkUserAsDangerousAndGiveTimeout(User user)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //bool IUserService.IsUserInTimeout(User user)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

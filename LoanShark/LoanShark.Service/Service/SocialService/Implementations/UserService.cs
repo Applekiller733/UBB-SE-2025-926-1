@@ -202,7 +202,9 @@ namespace LoanShark.Service.SocialService.Implementations
 
             foreach (Chat chat in chats)
             {
-                if (chat.getUserIDsList().Contains(this.userID))
+                var participants = await this.repo.GetChatParticipantsIDs(chat.getChatID());
+
+                if (participants.Contains(this.userID))
                 {
                     currentUserChats.Add(chat);
                 }

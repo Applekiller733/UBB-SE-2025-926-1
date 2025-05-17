@@ -54,8 +54,8 @@
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
                           >
 
-                <ListView.ItemTemplateSelector>
-                    <!--<local:MessageTemplateSelector 
+                <!--<ListView.ItemTemplateSelector>
+                    <local:MessageTemplateSelector 
                         TextMessageTemplateLeft="{StaticResource TextMessageTemplateLeft}"
                         TextMessageTemplateRight="{StaticResource TextMessageTemplateRight}"
                         ImageMessageTemplateLeft="{StaticResource ImageMessageTemplateLeft}"
@@ -63,8 +63,22 @@
                         TransferMessageTemplateLeft="{StaticResource TransferMessageTemplateLeft}"
                         TransferMessageTemplateRight="{StaticResource TransferMessageTemplateRight}"
                         RequestMessageTemplateLeft="{StaticResource RequestMessageTemplateLeft}"
-                        RequestMessageTemplateRight="{StaticResource RequestMessageTemplateRight}"/>-->
-                </ListView.ItemTemplateSelector>
+                        RequestMessageTemplateRight="{StaticResource RequestMessageTemplateRight}"/>
+                </ListView.ItemTemplateSelector>-->
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="FlyoutBase.AttachedFlyout">
+                            <Setter.Value>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Delete" Command="{StaticResource DeleteCommandProxy}" CommandParameter="{Binding}" />
+                                    <MenuFlyoutItem Text="Report" Command="{Binding ReportMessageCommand}" CommandParameter="{Binding}" />
+                                </MenuFlyout>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
             </ListView>
         </Border>
 
@@ -94,7 +108,7 @@
                 <TextBox 
                         x:Name="MessageTextBox"
                         FontFamily="Segoe UI Emoji"
-                        Text="{Binding MessageContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Text="{Binding MessageContent, Converter={StaticResource EmoticonConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         AutomationProperties.Name="multi-line TextBox"
                         TextWrapping="Wrap" 
                         AcceptsReturn="True" 
