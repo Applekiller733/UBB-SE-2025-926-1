@@ -71,8 +71,8 @@
                         <Setter Property="FlyoutBase.AttachedFlyout">
                             <Setter.Value>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem Text="Delete" Command="{StaticResource DeleteCommandProxy}" CommandParameter="{Binding}" />
-                                    <MenuFlyoutItem Text="Report" Command="{Binding ReportMessageCommand}" CommandParameter="{Binding}" />
+                                    <!-- <MenuFlyoutItem Text="Delete" Command="{StaticResource DeleteCommandProxy}" CommandParameter="{Binding}" />
+                                    <MenuFlyoutItem Text="Report" Command="{Binding ReportMessageCommand}" CommandParameter="{Binding}" /> -->
                                 </MenuFlyout>
                             </Setter.Value>
                         </Setter>

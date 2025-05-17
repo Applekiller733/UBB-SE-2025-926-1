@@ -112,16 +112,17 @@ namespace LoanShark.API.Controllers
         {
             var chats = await _userService.GetCurrentUserChats();
 
-            var dtos = await Task.WhenAll(chats.Select(async c =>
+            if (chats == null)
             {
-                var participantIds = await _userService.GetRepo().GetChatParticipantsIDs(c.getChatID());
-                return new ChatViewModel
-                {
-                    ChatID = c.getChatID(),
-                    UserIDs = participantIds,
-                    ChatName = c.getChatName(),
-                };
-            }));
+                return Ok(new List<ChatViewModel>()); // Return empty list if no chats
+            }
+
+            var dtos = chats.Select(c => new ChatViewModel
+            {
+                ChatID = c.getChatID(),
+                UserIDs = c.getUserIDsList(),
+                ChatName = c.getChatName(),
+            });
 
             return Ok(dtos.ToList());
         }

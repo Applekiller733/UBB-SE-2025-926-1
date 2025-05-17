@@ -1,4 +1,5 @@
-﻿using LoanShark.Domain;
+﻿using LoanShark.API.Models;
+using LoanShark.Domain;
 using LoanShark.Domain.MessageClasses;
 using LoanShark.EF.Repository.SocialRepository;
 using LoanShark.Service.SocialService.Interfaces;
@@ -203,7 +204,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<string>> GetChatParticipantsStringList(int chatID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/participants/strings");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/participants/usernames");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<string>>(content, _jsonOptions);
@@ -214,7 +215,18 @@ namespace LoanShark.API.Proxies
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/participants");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<User>>(content, _jsonOptions);
+            var socialEF = JsonSerializer.Deserialize<List<SocialUserViewModel>>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            var result = new List<User>();
+            foreach (var user in socialEF)
+            {
+                var newUser = new User(user.UserID, new Cnp(user.Cnp), user.Username, user.FirstName, user.LastName,
+                    new Email(user.Email), new PhoneNumber(user.PhoneNumber), new HashedPassword(user.HashedPassword.ToString()));
+                result.Add(newUser);
+            }
+            return result;
         }
     }
 

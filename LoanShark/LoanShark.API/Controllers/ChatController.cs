@@ -128,7 +128,20 @@ namespace LoanShark.API.Controllers
         [HttpGet("{chatId}/participants")]
         public async Task<ActionResult<List<User>>> GetParticipants(int chatId)
         {
-            return Ok(await chatService.GetChatParticipantsList(chatId));
+            var friends = await chatService.GetChatParticipantsList(chatId);
+            var dtos = friends.Select(f => new SocialUserViewModel
+            {
+                UserID = f.UserID,
+                Username = f.Username,
+                FirstName = f.FirstName,
+                LastName = f.LastName,
+                Email = f.Email?.ToString(),
+                PhoneNumber = f.PhoneNumber?.ToString(),
+                Cnp = f.Cnp?.ToString(),
+                HashedPassword = f.HashedPassword?.ToString(),
+                ReportedCount = f.ReportedCount
+            }).ToList();
+            return Ok(dtos);
         }
     }
 }

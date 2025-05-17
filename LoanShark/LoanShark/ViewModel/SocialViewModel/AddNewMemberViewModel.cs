@@ -123,12 +123,19 @@ namespace LoanShark.ViewModel.SocialViewModel
             var currentUser = await this.userService.GetCurrentUser();
             var allFriends = await this.userService.GetFriendsByUser(currentUser);
             var currentChatParticipants = await this.chatService.GetChatParticipantsList(this.chatID);
-            this.allUnaddedFriends = allFriends.Where(friend => !currentChatParticipants.Any(participant => participant.GetUserId() == friend.GetUserId())).ToList();
+            this.allUnaddedFriends = allFriends
+                .Where(friend => friend != null && !currentChatParticipants.Any(participant => participant?.GetUserId() == friend.GetUserId()))
+                .ToList() ?? new List<User>();
         }
 
         public async void UpdateObservableLists()
         {
-            this.LoadAllUnaddedFriendsList();
+            var currentUser = await this.userService.GetCurrentUser();
+            var allFriends = await this.userService.GetFriendsByUser(currentUser);
+            var currentChatParticipants = await this.chatService.GetChatParticipantsList(this.chatID);
+            this.allUnaddedFriends = allFriends
+                .Where(friend => friend != null && !currentChatParticipants.Any(participant => participant?.GetUserId() == friend.GetUserId()))
+                .ToList() ?? new List<User>();
 
             this.CurrentChatMembers.Clear();
             var chatParticipantList = await this.chatService.GetChatParticipantsList(this.chatID);
@@ -137,7 +144,11 @@ namespace LoanShark.ViewModel.SocialViewModel
                 this.CurrentChatMembers.Add(participant);
             }
 
-            this.UpdateFilteredFriends();
+            //this.UpdateFilteredFriends();
+            foreach (var friend in this.allUnaddedFriends)
+            {
+                this.UnaddedFriends.Add(friend);
+            }
         }
 
         public void UpdateFilteredFriends()
