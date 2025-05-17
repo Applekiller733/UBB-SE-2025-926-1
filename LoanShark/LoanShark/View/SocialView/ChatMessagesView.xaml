@@ -55,7 +55,7 @@
                           >
 
                 <ListView.ItemTemplateSelector>
-                    <local:MessageTemplateSelector 
+                    <!--<local:MessageTemplateSelector 
                         TextMessageTemplateLeft="{StaticResource TextMessageTemplateLeft}"
                         TextMessageTemplateRight="{StaticResource TextMessageTemplateRight}"
                         ImageMessageTemplateLeft="{StaticResource ImageMessageTemplateLeft}"
@@ -63,7 +63,7 @@
                         TransferMessageTemplateLeft="{StaticResource TransferMessageTemplateLeft}"
                         TransferMessageTemplateRight="{StaticResource TransferMessageTemplateRight}"
                         RequestMessageTemplateLeft="{StaticResource RequestMessageTemplateLeft}"
-                        RequestMessageTemplateRight="{StaticResource RequestMessageTemplateRight}"/>
+                        RequestMessageTemplateRight="{StaticResource RequestMessageTemplateRight}"/>-->
                 </ListView.ItemTemplateSelector>
             </ListView>
         </Border>

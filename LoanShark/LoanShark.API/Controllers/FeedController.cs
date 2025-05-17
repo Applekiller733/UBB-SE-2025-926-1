@@ -13,23 +13,24 @@ namespace LoanShark.API.Controllers
     [Route("api/[controller]")]
     public class FeedController : ControllerBase
     {
-        private readonly FeedService _feedService;
+        private readonly IFeedService _feedService;
+        private readonly IUserService _userService;
+        private readonly INotificationService _notificationService;
 
-        public FeedController(ILoanSharkDbContext dbContext)
+        public FeedController(ILoanSharkDbContext dbContext, INotificationService notificationService, IUserService userService, IFeedService feedService)
         {
             // Probabil o sa fie nevoie de ceva modificare dupa ce termina George cu repo
             // ANTO/ZELU
             // In rest cred ca merge
-            IRepository repository = new RepositoryEF(dbContext);
-            INotificationService notification = new NotificationService(repository);
-            IUserService userService = new UserService(repository, notification);
-            _feedService = new FeedService(repository, userService);
+            this._notificationService = notificationService;
+            this._userService = userService;
+            this._feedService = feedService;
         }
 
         [HttpGet("content")]
-        public ActionResult<List<FeedViewModel>> GetFeedContent()
+        public async Task<ActionResult<List<FeedViewModel>>> GetFeedContent()
         {
-            List<Post> posts = _feedService.GetFeedContent();
+            List<Post> posts = await this._feedService.GetFeedContent();
             if (posts == null || posts.Count == 0)
             {
                 return Ok(null);

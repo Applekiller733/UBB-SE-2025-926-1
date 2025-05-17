@@ -32,9 +32,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user.</param>
         /// <returns>A list of notifications.</returns>
-        public List<NotificationModel> GetNotifications(int userID)
+        public async Task<List<NotificationModel>> GetNotifications(int userID)
         {
-            return this.repo.GetNotifications(userID);
+            return await this.repo.GetNotifications(userID);
         }
 
         /// <summary>
@@ -42,17 +42,17 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user.</param>
         /// <param name="newFriendID">The ID of the new friend.</param>
-        public void SendFriendNotification(int userID, int newFriendID)
+        public async Task SendFriendNotification(int userID, int newFriendID)
         {
-            var user = this.repo.GetUserById(userID);
-            var newFriend = this.repo.GetUserById(newFriendID);
+            var user = await this.repo.GetUserById(userID);
+            var newFriend = await this.repo.GetUserById(newFriendID);
 
             if (user != null && newFriend != null)
             {
                 string userContent = $"You added user {newFriend.GetUsername()} ({newFriend.GetPhoneNumber()}) to your friend list.";
                 string friendContent = $"User {user.GetUsername()} ({user.GetPhoneNumber()}) added you as a friend.";
-                this.repo.AddNotification(userContent, userID);
-                this.repo.AddNotification(friendContent, newFriendID);
+                await this.repo.AddNotification(userContent, userID);
+                await this.repo.AddNotification(friendContent, newFriendID);
             }
         }
 
@@ -61,17 +61,17 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user.</param>
         /// <param name="oldFriendID">The ID of the old friend.</param>
-        public void SendRemoveFriendNotification(int userID, int oldFriendID)
+        public async Task SendRemoveFriendNotification(int userID, int oldFriendID)
         {
-            var user = this.repo.GetUserById(userID);
-            var oldFriend = this.repo.GetUserById(oldFriendID);
+            var user = await this.repo.GetUserById(userID);
+            var oldFriend = await this.repo.GetUserById(oldFriendID);
 
             if (user != null && oldFriend != null)
             {
                 string userContent = $"You removed user {oldFriend.GetUsername()} ({oldFriend.GetPhoneNumber()}) from your friend list.";
                 string friendContent = $"User {user.GetUsername()} ({user.GetPhoneNumber()}) deleted you from their friend list. So selfish!";
-                this.repo.AddNotification(userContent, userID);
-                this.repo.AddNotification(friendContent, oldFriendID);
+                await this.repo.AddNotification(userContent, userID);
+                await this.repo.AddNotification(friendContent, oldFriendID);
             }
         }
 
@@ -80,11 +80,11 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="messageSenderID">The ID of the message sender.</param>
         /// <param name="chatID">The ID of the chat.</param>
-        public void SendMessageNotification(int messageSenderID, int chatID)
+        public async Task SendMessageNotification(int messageSenderID, int chatID)
         {
-            var sender = this.repo.GetUserById(messageSenderID);
-            var chat = this.repo.GetChatById(chatID);
-            var participants = this.repo.GetChatParticipants(chatID);
+            var sender = await this.repo.GetUserById(messageSenderID);
+            var chat = await this.repo.GetChatById(chatID);
+            var participants = await this.repo.GetChatParticipants(chatID);
 
             if (sender != null && chat != null)
             {
@@ -93,7 +93,7 @@ namespace LoanShark.Service.SocialService.Implementations
                 {
                     if (participant.GetUserId() != messageSenderID)
                     {
-                        this.repo.AddNotification(content, participant.GetUserId());
+                        await this.repo.AddNotification(content, participant.GetUserId());
                     }
                 }
             }
@@ -107,23 +107,23 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="type">The type of transaction.</param>
         /// <param name="amount">The amount of the transaction.</param>
         /// <param name="currency">The currency of the transaction.</param>
-        public void SendTransactionNotification(int receiverID, int chatID, string type, float amount, string currency)
+        public async Task SendTransactionNotification(int receiverID, int chatID, string type, float amount, string currency)
         {
-            var moneyReceiver = this.repo.GetUserById(receiverID);
-            var chat = this.repo.GetChatById(chatID);
-            var participants = this.repo.GetChatParticipants(chatID);
+            var moneyReceiver = await this.repo.GetUserById(receiverID);
+            var chat = await this.repo.GetChatById(chatID);
+            var participants = await this.repo.GetChatParticipants(chatID);
 
             if (moneyReceiver != null && chat != null)
             {
                 string senderContent = $"You requested {amount} {currency} in {chat.getChatName()} group.";
-                this.repo.AddNotification(senderContent, receiverID);
+                await this.repo.AddNotification(senderContent, receiverID);
 
                 string participantContent = $"User {moneyReceiver.GetUsername()} requested {amount} {currency} in {chat.getChatName()} group.";
                 foreach (var participant in participants)
                 {
                     if (participant.GetUserId() != receiverID)
                     {
-                        this.repo.AddNotification(participantContent, participant.GetUserId());
+                        await this.repo.AddNotification(participantContent, participant.GetUserId());
                     }
                 }
             }
@@ -133,13 +133,13 @@ namespace LoanShark.Service.SocialService.Implementations
         /// Sends a notification to all participants when a new chat is created.
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
-        public void SendNewChatNotification(int chatID)
+        public async Task SendNewChatNotification(int chatID)
         {
-            var participants = this.repo.GetChatParticipants(chatID);
+            var participants = await this.repo.GetChatParticipants(chatID);
             foreach (var participant in participants)
             {
                 string content = $"You have been added to a new chat {chatID}.";
-                this.repo.AddNotification(content, participant.GetUserId());
+                await this.repo.AddNotification(content, participant.GetUserId());
             }
         }
 
@@ -147,18 +147,18 @@ namespace LoanShark.Service.SocialService.Implementations
         /// Clears a specific notification.
         /// </summary>
         /// <param name="notificationID">The ID of the notification to clear.</param>
-        public void ClearNotification(int notificationID)
+        public async Task ClearNotification(int notificationID)
         {
-            this.repo.DeleteNotification(notificationID);
+            await this.repo.DeleteNotification(notificationID);
         }
 
         /// <summary>
         /// Clears all notifications for a specific user.
         /// </summary>
         /// <param name="userID">The ID of the user.</param>
-        public void ClearAllNotifications(int userID)
+        public async Task ClearAllNotifications(int userID)
         {
-            this.repo.ClearAllNotifications(userID);
+            await this.repo.ClearAllNotifications(userID);
         }
     }
 }

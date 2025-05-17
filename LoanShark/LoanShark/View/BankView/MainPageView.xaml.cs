@@ -192,7 +192,8 @@ namespace LoanShark.View.BankView
                 new MessageServiceProxy(new System.Net.Http.HttpClient()), 
                 new FeedServiceProxy(new System.Net.Http.HttpClient()),
                 new ReportServiceProxy(new System.Net.Http.HttpClient()), 
-                new NotificationServiceProxy(new System.Net.Http.HttpClient())
+                new NotificationServiceProxy(new System.Net.Http.HttpClient()),
+                this.socialRepo
             );
 
             socialWindow.Activate();

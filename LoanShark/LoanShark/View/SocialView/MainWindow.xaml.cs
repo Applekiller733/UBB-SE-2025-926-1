@@ -57,12 +57,12 @@ namespace LoanShark.View.SocialView
         //    }
         //}
 
-        public MainWindow(ISocialUserServiceProxy us, IChatServiceProxy cs, IMessageServiceProxy ms, IFeedServiceProxy fs, IReportServiceProxy rs, INotificationServiceProxy ns)
+        public MainWindow(ISocialUserServiceProxy us, IChatServiceProxy cs, IMessageServiceProxy ms, IFeedServiceProxy fs, IReportServiceProxy rs, INotificationServiceProxy ns, IRepository r)
         {
             this.InitializeComponent();
 
             this.mainWindow = this;
-            //this.repo = r;
+            this.repo = r;
             this.notificationService = ns;
             this.userService = us;
             this.chatService = cs;
@@ -72,7 +72,7 @@ namespace LoanShark.View.SocialView
 
             if (this.LeftFrame.Content == null || !(this.LeftFrame.Content is ChatListView))
             {
-                var chatListView = new ChatListView(this, this.chatService, this.userService, this.reportService, this.messageService, this.RightFrame);
+                var chatListView = new ChatListView(this, this.chatService, this.userService, this.reportService, this.messageService, this.RightFrame, this.repo);
                 this.LeftFrame.Content = chatListView;
             }
 
@@ -88,7 +88,7 @@ namespace LoanShark.View.SocialView
         {
             if (this.LeftFrame.Content == null || !(this.LeftFrame.Content is ChatListView))
             {
-                var chatListView = new ChatListView(this, this.chatService, this.userService, this.reportService, this.messageService, this.RightFrame);
+                var chatListView = new ChatListView(this, this.chatService, this.userService, this.reportService, this.messageService, this.RightFrame, this.repo);
                 this.LeftFrame.Content = chatListView;
             }
         }

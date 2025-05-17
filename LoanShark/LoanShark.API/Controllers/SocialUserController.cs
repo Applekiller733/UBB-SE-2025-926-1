@@ -22,69 +22,69 @@ namespace LoanShark.API.Controllers
         {
             //IRepository repository = new Repository();
             //INotificationService notificationService = new NotificationService(repository);
-            _userService = us;
+            this._userService = us;
         }
 
         [HttpGet("repo")]
-        public ActionResult<IRepository> GetRepo()
+        public async Task<ActionResult<IRepository>> GetRepo()
         {
             var repo = _userService.GetRepo();
             return Ok(repo);
         }
 
         [HttpPost("{userID}/friends/{newFriendID}")]
-        public ActionResult AddFriend(int userID, int newFriendID)
+        public async Task<ActionResult> AddFriend(int userID, int newFriendID)
         {
-            _userService.AddFriend(userID, newFriendID);
+            await _userService.AddFriend(userID, newFriendID);
             return NoContent();
         }
 
         [HttpDelete("{userID}/friends/{oldFriendID}")]
-        public ActionResult RemoveFriend(int userID, int oldFriendID)
+        public async Task<ActionResult> RemoveFriend(int userID, int oldFriendID)
         {
-            _userService.RemoveFriend(userID, oldFriendID);
+            await _userService.RemoveFriend(userID, oldFriendID);
             return NoContent();
         }
 
         [HttpPost("{userID}/chats/{chatID}")]
-        public ActionResult JoinChat(int userID, int chatID)
+        public async Task<ActionResult> JoinChat(int userID, int chatID)
         {
-            _userService.JoinChat(userID, chatID);
+            await _userService.JoinChat(userID, chatID);
             return NoContent();
         }
 
         [HttpDelete("{userID}/chats/{chatID}")]
-        public ActionResult LeaveChat(int userID, int chatID)
+        public async Task<ActionResult> LeaveChat(int userID, int chatID)
         {
-            _userService.LeaveChat(userID, chatID);
+            await _userService.LeaveChat(userID, chatID);
             return NoContent();
         }
 
         [HttpGet("filter")]
-        public ActionResult<List<int>> FilterUsers([FromQuery] string keyword, [FromQuery] int userID)
+        public async Task<ActionResult<List<int>>> FilterUsers([FromQuery] string keyword, [FromQuery] int userID)
         {
-            var userIds = _userService.FilterUsers(keyword, userID);
+            var userIds = await _userService.FilterUsers(keyword, userID);
             return Ok(userIds);
         }
 
         [HttpGet("{userID}/friends/filter")]
-        public ActionResult<List<int>> FilterFriends([FromQuery] string keyword, int userID)
+        public async Task<ActionResult<List<int>>> FilterFriends([FromQuery] string keyword, int userID)
         {
-            var friendIds = _userService.FilterFriends(keyword, userID);
+            var friendIds = await _userService.FilterFriends(keyword, userID);
             return Ok(friendIds);
         }
 
         [HttpGet("{userID}/friends/ids")]
-        public ActionResult<List<int>> GetFriendsIDsByUser(int userID)
+        public async Task<ActionResult<List<int>>> GetFriendsIDsByUser(int userID)
         {
-            var friendIds = _userService.GetFriendsIDsByUser(userID);
+            var friendIds = await _userService.GetFriendsIDsByUser(userID);
             return Ok(friendIds);
         }
 
         [HttpGet("{userID}/friends")]
-        public ActionResult<List<SocialUserViewModel>> GetFriendsByUser(int userID)
+        public async Task<ActionResult<List<SocialUserViewModel>>> GetFriendsByUser(int userID)
         {
-            var friends = _userService.GetFriendsByUser(userID);
+            var friends = await _userService.GetFriendsByUser(userID);
             var dtos = friends.Select(f => new SocialUserViewModel
             {
                 UserID = f.UserID,
@@ -101,16 +101,16 @@ namespace LoanShark.API.Controllers
         }
 
         [HttpGet("{userID}/chats")]
-        public ActionResult<List<int>> GetChatsByUser(int userID)
+        public async Task<ActionResult<List<int>>> GetChatsByUser(int userID)
         {
-            var chatIds = _userService.GetChatsByUser(userID);
+            var chatIds = await _userService.GetChatsByUser(userID);
             return Ok(chatIds);
         }
 
         [HttpGet("chats/current")]
-        public ActionResult<List<ChatViewModel>> GetCurrentUserChats()
+        public async Task<ActionResult<List<ChatViewModel>>> GetCurrentUserChats()
         {
-            var chats = _userService.GetCurrentUserChats();
+            var chats = await _userService.GetCurrentUserChats();
             var dtos = chats.Select(c => new ChatViewModel
             {
                 ChatID = c.getChatID(),
@@ -120,9 +120,9 @@ namespace LoanShark.API.Controllers
         }
 
         [HttpGet("{userID}")]
-        public ActionResult<UserViewModel> GetUserById(int userID)
+        public async Task<ActionResult<UserViewModel>> GetUserById(int userID)
         {
-            var user = _userService.GetUserById(userID);
+            var user = await _userService.GetUserById(userID);
             if (user.GetUserId() == 0) // Assuming GetUserId() returns 0 for a new/empty User
                 return NotFound();
 
@@ -142,9 +142,9 @@ namespace LoanShark.API.Controllers
         }
 
         [HttpGet("{userID}/nonfriends")]
-        public ActionResult<List<SocialUserViewModel>> GetNonFriendsUsers(int userID)
+        public async Task<ActionResult<List<SocialUserViewModel>>> GetNonFriendsUsers(int userID)
         {
-            var nonFriends = _userService.GetNonFriendsUsers(userID);
+            var nonFriends = await _userService.GetNonFriendsUsers(userID);
             //var dtos = nonFriends.Select(u => new UserViewModel
             //{
             //    UserID = u.UserID,

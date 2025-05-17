@@ -48,21 +48,21 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="senderID">The ID of the sender.</param>
         /// <param name="chatID">The ID of the chat.</param>
         /// <param name="content">The content of the message.</param>
-        public void SendMessage(int senderID, int chatID, string content)
+        public async Task SendMessage(int senderID, int chatID, string content)
         {
-            var user = this.userService.GetUserById(senderID);
+            var user = await this.userService.GetUserById(senderID);
             if (user == null)
             {
                 System.Diagnostics.Debug.WriteLine($"User with ID {senderID} not found.");
                 return;
             }
 
-            if (this.IsUserInTimeout(senderID))
+            if (await this.IsUserInTimeout(senderID))
             {
                 return;
             }
 
-            this.repository.AddTextMessage(senderID, chatID, content);
+            await this.repository.AddTextMessage(senderID, chatID, content);
         }
 
         /// <summary>
@@ -71,23 +71,23 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="senderID">The ID of the sender.</param>
         /// <param name="chatID">The ID of the chat.</param>
         /// <param name="imageURL">The URL of the image.</param>
-        public void SendImage(int senderID, int chatID, string imageURL)
+        public async Task SendImage(int senderID, int chatID, string imageURL)
         {
-            if (this.IsUserInTimeout(senderID))
+            if (await this.IsUserInTimeout(senderID))
             {
                 return;
             }
 
-            this.repository.AddImageMessage(senderID, chatID, imageURL);
+            await this.repository.AddImageMessage(senderID, chatID, imageURL);
         }
 
         /// <summary>
         /// Deletes a message from the repository.
         /// </summary>
         /// <param name="message">The message to delete.</param>
-        public void DeleteMessage(Message message)
+        public async Task DeleteMessage(Message message)
         {
-            this.repository.DeleteMessage(message.GetMessageID());
+            await this.repository.DeleteMessage(message.GetMessageID());
         }
 
         /// <summary>
@@ -99,9 +99,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="status">The status of the transfer.</param>
         /// <param name="amount">The amount being transferred.</param>
         /// <param name="currency">The currency of the transfer.</param>
-        public void SendTransferMessage(int userID, int chatID, string content, string status, float amount, string currency)
+        public async Task SendTransferMessage(int userID, int chatID, string content, string status, float amount, string currency)
         {
-            this.repository.AddTransferMessage(userID, chatID, content, status, amount, currency);
+            await this.repository.AddTransferMessage(userID, chatID, content, status, amount, currency);
         }
 
         /// <summary>
@@ -113,16 +113,16 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="status">The status of the request.</param>
         /// <param name="amount">The amount being requested.</param>
         /// <param name="currency">The currency of the request.</param>
-        public void SendRequestMessage(int userID, int chatID, string content, string status, float amount, string currency)
+        public async Task SendRequestMessage(int userID, int chatID, string content, string status, float amount, string currency)
         {
-            this.repository.AddRequestMessage(userID, chatID, content, status, amount, currency);
+            await this.repository.AddRequestMessage(userID, chatID, content, status, amount, currency);
         }
 
         /// <summary>
         /// Reports a message.
         /// </summary>
         /// <param name="message">The message to report.</param>
-        public void ReportMessage(Message message)
+        public async Task ReportMessage(Message message)
         {
             // this.repository.(message.getMessageID());
         }
@@ -132,9 +132,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user to check.</param>
         /// <returns>True if the user is in timeout; otherwise, false.</returns>
-        private bool IsUserInTimeout(int userID)
+        private async Task<bool> IsUserInTimeout(int userID)
         {
-            User user = this.userService.GetUserById(userID);
+            User user = await this.userService.GetUserById(userID);
             bool isInTimeout = user != null && this.userService.IsUserInTimeout(user);
             System.Diagnostics.Debug.WriteLine($"MessageService checking if user {user?.GetUsername()} is in timeout: {isInTimeout}");
             return isInTimeout;
