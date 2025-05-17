@@ -29,7 +29,7 @@ namespace LoanShark.Service.SocialService.Interfaces
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>The number of participants in the chat.</returns>
-        int GetNumberOfParticipants(int chatID);
+        Task<int> GetNumberOfParticipants(int chatID);
 
         /// <summary>
         /// Gets the repository instance.
@@ -44,7 +44,7 @@ namespace LoanShark.Service.SocialService.Interfaces
         /// <param name="currency">The currency of the amount.</param>
         /// <param name="chatID">The ID of the chat.</param>
         /// <param name="description">The description of the request.</param>
-        void RequestMoneyViaChat(float amount, string currency, int chatID, string description);
+        Task RequestMoneyViaChat(float amount, string currency, int chatID, string description);
 
         /// <summary>
         /// Sends money via chat.
@@ -53,7 +53,7 @@ namespace LoanShark.Service.SocialService.Interfaces
         /// <param name="currency">The currency of the amount.</param>
         /// <param name="description">The description of the transaction.</param>
         /// <param name="chatID">The ID of the chat.</param>
-        void SendMoneyViaChat(float amount, string currency, string description, int chatID);
+        Task SendMoneyViaChat(float amount, string currency, string description, int chatID);
 
         /// <summary>
         /// Accepts a money request via chat.
@@ -63,7 +63,7 @@ namespace LoanShark.Service.SocialService.Interfaces
         /// <param name="accepterID">The ID of the accepter.</param>
         /// <param name="requesterID">The ID of the requester.</param>
         /// <param name="chatID">The ID of the chat.</param>
-        void AcceptRequestViaChat(float amount, string currency, int accepterID, int requesterID, int chatID);
+        Task AcceptRequestViaChat(float amount, string currency, int accepterID, int requesterID, int chatID);
 
         /// <summary>
         /// Checks if the sender has enough funds.
@@ -81,68 +81,68 @@ namespace LoanShark.Service.SocialService.Interfaces
         /// <param name="reciverID">The ID of the receiver.</param>
         /// <param name="amount">The amount to transfer.</param>
         /// <param name="currency">The currency of the amount.</param>
-        void InitiateTransfer(int senderID, int reciverID, float amount, string currency);
+        void InitiateTransfer(int senderID, int reciverID, float amount, string currency);  // aync in future?
 
         /// <summary>
         /// Creates a new chat.
         /// </summary>
         /// <param name="participantsID">The list of participant IDs.</param>
         /// <param name="chatName">The name of the chat.</param>
-        void CreateChat(List<int> participantsID, string chatName);
+        Task CreateChat(List<int> participantsID, string chatName);
 
         /// <summary>
         /// Deletes a chat.
         /// </summary>
         /// <param name="chatID">The ID of the chat to delete.</param>
-        void DeleteChat(int chatID);
+        Task DeleteChat(int chatID);
 
         /// <summary>
         /// Gets the timestamp of the last message in a chat.
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>The timestamp of the last message.</returns>
-        DateTime GetLastMessageTimeStamp(int chatID);
+        Task<DateTime> GetLastMessageTimeStamp(int chatID);
 
         /// <summary>
         /// Gets the chat history.
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>A list of messages in the chat.</returns>
-        List<Message> GetChatHistory(int chatID);
+        Task<List<Message>> GetChatHistory(int chatID);
 
         /// <summary>
         /// Adds a user to a chat.
         /// </summary>
         /// <param name="userID">The ID of the user to add.</param>
         /// <param name="chatID">The ID of the chat.</param>
-        void AddUserToChat(int userID, int chatID);
+        Task AddUserToChat(int userID, int chatID);
 
         /// <summary>
         /// Removes a user from a chat.
         /// </summary>
         /// <param name="userID">The ID of the user to remove.</param>
         /// <param name="chatID">The ID of the chat.</param>
-        void RemoveUserFromChat(int userID, int chatID);
+        Task RemoveUserFromChat(int userID, int chatID);
 
         /// <summary>
         /// Gets the name of a chat by its ID.
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>The name of the chat.</returns>
-        string GetChatNameByID(int chatID);
+        Task<string> GetChatNameByID(int chatID);
 
         /// <summary>
         /// Gets a list of participant names in a chat.
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>A list of participant names.</returns>
-        List<string> GetChatParticipantsStringList(int chatID);
+        Task<List<string>> GetChatParticipantsStringList(int chatID);
 
         /// <summary>
         /// Gets a list of participant users in a chat.
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>A list of participant users.</returns>
-        List<User> GetChatParticipantsList(int chatID);
+        Task<List<User>> GetChatParticipantsList(int chatID);
     }
 }

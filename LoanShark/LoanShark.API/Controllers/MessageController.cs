@@ -15,14 +15,15 @@ namespace LoanShark.API.Controllers
     [Route("api/[controller]")]
     public class MessageController : ControllerBase
     {
-        private readonly MessageService _messageService;
+        private readonly IMessageService _messageService;
+        private readonly INotificationService _notificationService;
+        private readonly IUserService _userService;
 
-        public MessageController()
+        public MessageController(INotificationService notificationService, IUserService userService, IMessageService messageService)
         {
-            IRepository repository = new Repository();
-            INotificationService notificationService = new NotificationService(repository);
-            IUserService userService = new UserService(repository, notificationService);
-            _messageService = new MessageService(repository, userService);
+            this._messageService = messageService;
+            this._notificationService = notificationService;
+            this._userService = userService;
         }
 
         [HttpPost("text")]
@@ -32,7 +33,7 @@ namespace LoanShark.API.Controllers
             if (messageDto == null || string.IsNullOrEmpty(messageDto.Content))
                 return BadRequest("Message content is required.");
 
-            _messageService.SendMessage(messageDto.SenderID, messageDto.ChatID, messageDto.Content);
+            await _messageService.SendMessage(messageDto.SenderID, messageDto.ChatID, messageDto.Content);
             return NoContent();
         }
 
@@ -43,7 +44,7 @@ namespace LoanShark.API.Controllers
             if (messageDto == null || string.IsNullOrEmpty(messageDto.ImageURL))
                 return BadRequest("Image URL is required.");
 
-            _messageService.SendImage(messageDto.SenderID, messageDto.ChatID, messageDto.ImageURL);
+            await _messageService.SendImage(messageDto.SenderID, messageDto.ChatID, messageDto.ImageURL);
             return NoContent();
         }
 
@@ -54,7 +55,7 @@ namespace LoanShark.API.Controllers
             if (messageDto == null || string.IsNullOrEmpty(messageDto.Description) || string.IsNullOrEmpty(messageDto.Currency))
                 return BadRequest("Transfer details are required.");
 
-            _messageService.SendTransferMessage(
+            await _messageService.SendTransferMessage(
                 messageDto.SenderID,
                 messageDto.ChatID,
                 messageDto.Description,
@@ -71,7 +72,7 @@ namespace LoanShark.API.Controllers
             if (messageDto == null || string.IsNullOrEmpty(messageDto.Description) || string.IsNullOrEmpty(messageDto.Currency))
                 return BadRequest("Request details are required.");
 
-            _messageService.SendRequestMessage(
+            await _messageService.SendRequestMessage(
                 messageDto.SenderID,
                 messageDto.ChatID,
                 messageDto.Description,
@@ -125,7 +126,7 @@ namespace LoanShark.API.Controllers
                 _ => throw new ArgumentException("Invalid message type.")
             };
 
-            _messageService.DeleteMessage(message);
+            await _messageService.DeleteMessage(message);
             return NoContent();
         }
 
@@ -173,7 +174,7 @@ namespace LoanShark.API.Controllers
                 _ => throw new ArgumentException("Invalid message type.")
             };
 
-            _messageService.ReportMessage(message);
+            await _messageService.ReportMessage(message);
             return NoContent();
         }
 

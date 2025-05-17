@@ -10,6 +10,7 @@ namespace LoanShark.View.SocialView
     using Microsoft.UI.Xaml.Controls;
     using LoanShark.Service.SocialService.Interfaces;
     using LoanShark.ViewModel.SocialViewModel;
+    using LoanShark.EF.Repository.SocialRepository;
 
     public sealed partial class ChatMessagesView : Page
     {
@@ -23,8 +24,14 @@ namespace LoanShark.View.SocialView
         private ChatListViewModel chatListViewModel;
         private GenerateTransferViewModel generateTransferViewModel;
 
-        public ChatMessagesView(ChatListViewModel chatListViewModel, Window mainWindow, Frame rightFrame, int chatID, ISocialUserServiceProxy userService, IChatServiceProxy chatService, IMessageServiceProxy messageService, IReportServiceProxy reportService)
+        // ?
+        private IRepository repository;
+
+        public ChatMessagesView(ChatListViewModel chatListViewModel, Window mainWindow, Frame rightFrame, int chatID, ISocialUserServiceProxy userService, IChatServiceProxy chatService, IMessageServiceProxy messageService, IReportServiceProxy reportService, IRepository repository)
         {
+            // ?
+            this.repository = repository;
+
             this.InitializeComponent();
             this.SelectedChat = chatID;
             this.chatListViewModel = chatListViewModel;
@@ -32,7 +39,11 @@ namespace LoanShark.View.SocialView
             this.chatService = chatService;
             this.reportService = reportService;
             this.rightFrame = rightFrame;
-            this.chatMessagesViewModel = new ChatMessagesViewModel(mainWindow, rightFrame, chatID, messageService, chatService, userService, reportService);
+            this.chatMessagesViewModel = new ChatMessagesViewModel(mainWindow, rightFrame, chatID, messageService, chatService, userService, reportService, this.repository);
+
+            // ?
+            this.ChatListView.ItemTemplateSelector = this.chatMessagesViewModel.TemplateSelector;
+
             this.generateTransferViewModel = new GenerateTransferViewModel(chatService, chatID);
             this.chatMessagesViewModel.ChatListView = this.ChatListView;
             this.chatMessagesViewModel.SetupMessageTracking();

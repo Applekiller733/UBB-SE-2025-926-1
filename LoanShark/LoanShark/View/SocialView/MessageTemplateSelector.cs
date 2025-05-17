@@ -11,6 +11,8 @@ namespace LoanShark.View.SocialView
 
     public class MessageTemplateSelector : DataTemplateSelector
     {
+        IRepository repo;
+
         public DataTemplate TextMessageTemplateLeft { get; set; }
 
         public DataTemplate TextMessageTemplateRight { get; set; }
@@ -29,10 +31,11 @@ namespace LoanShark.View.SocialView
 
         public int CurrentUserID { get; set; }
 
-        public MessageTemplateSelector()
+        public MessageTemplateSelector(IRepository repository)
         {
-            Repository repo = new Repository();      // THIS MIGHT EXPLODE IF REPOSITORY USERID IS NOT STATIC, ILL FIGURE IT OUT
+            this.repo = repository;      // THIS MIGHT EXPLODE IF REPOSITORY USERID IS NOT STATIC, ILL FIGURE IT OUT
             this.CurrentUserID = repo.GetLoggedInUserID();
+            //this.repository = repository;
         }
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)

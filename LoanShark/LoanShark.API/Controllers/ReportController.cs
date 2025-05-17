@@ -13,22 +13,22 @@ namespace LoanShark.API.Controllers
     [Route("api/[controller]")]
     public class ReportController : ControllerBase
     {
-        private readonly ReportService _reportService;
+        private readonly INotificationService _notificationService;
+        private readonly IUserService _userService;
+        private readonly IReportService _reportService;
 
-        public ReportController()
+        public ReportController(INotificationService notificationService, IUserService userService, IReportService reportService)
         {
-            // !! guys look here !!
-            IRepository repository = new Repository();
-            INotificationService notificationService = new NotificationService(repository);
-            IUserService userService = new UserService(repository, notificationService);
-            _reportService = new ReportService(repository, userService);
+            this._reportService = reportService;
+            this._notificationService = notificationService;
+            this._userService = userService;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ReportViewModel>> GetReportById(int id)
         {
             UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now, matching UserController
-            var report = _reportService.GetReportById(id);
+            var report = await _reportService.GetReportById(id);
             if (report == null)
                 return NotFound();
 
@@ -58,7 +58,7 @@ namespace LoanShark.API.Controllers
                 reportDto.Description
             );
 
-            _reportService.AddReport(report);
+            await _reportService.AddReport(report);
             return CreatedAtAction(nameof(GetReportById), new { id = report.MessageID }, reportDto);
         }
 
@@ -66,7 +66,7 @@ namespace LoanShark.API.Controllers
         public async Task<ActionResult<bool>> CheckIfReportExists(int messageId, int reporterUserId)
         {
             UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
-            var exists = _reportService.CheckIfReportExists(messageId, reporterUserId);
+            var exists = await _reportService.CheckIfReportExists(messageId, reporterUserId);
             return Ok(exists);
         }
 
@@ -74,7 +74,7 @@ namespace LoanShark.API.Controllers
         public async Task<ActionResult> IncreaseReportCount(int reportedId)
         {
             UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
-            _reportService.IncreaseReportCount(reportedId);
+            await _reportService.IncreaseReportCount(reportedId);
             return NoContent();
         }
 
@@ -93,7 +93,7 @@ namespace LoanShark.API.Controllers
                 dto.Description
             )).ToList();
 
-            _reportService.LogReportedMessages(reports);
+            await _reportService.LogReportedMessages(reports);
             return NoContent();
         }
 
@@ -112,7 +112,7 @@ namespace LoanShark.API.Controllers
                 reportDto.Description
             );
 
-            _reportService.SendReport(report);
+            await _reportService.SendReport(report);
             return NoContent();
         }
     }

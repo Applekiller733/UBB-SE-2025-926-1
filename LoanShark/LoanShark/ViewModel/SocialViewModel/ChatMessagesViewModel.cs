@@ -24,6 +24,7 @@ namespace LoanShark.ViewModel.SocialViewModel
     using Windows.Storage;
     using Windows.Storage.Pickers;
     using WinRT.Interop;
+    using LoanShark.EF.Repository.SocialRepository;
 
     public class ChatMessagesViewModel : INotifyPropertyChanged
     {
@@ -38,6 +39,11 @@ namespace LoanShark.ViewModel.SocialViewModel
         public ISocialUserServiceProxy UserService;
         public IReportServiceProxy ReportService;
         private MessageTemplateSelector templateSelector;
+
+        // ?
+        private IRepository repository;
+
+        public MessageTemplateSelector TemplateSelector => this.templateSelector;
 
         public int CurrentChatID { get; set; }
 
@@ -188,8 +194,11 @@ namespace LoanShark.ViewModel.SocialViewModel
         /// <param name="chtService">The chat service instance.</param>
         /// <param name="usrService">The user service instance.</param>
         /// <param name="ReportService">The report service instance.</param>
-        public ChatMessagesViewModel(Window window, Frame rightFrame, int currentChatID, IMessageServiceProxy msgService, IChatServiceProxy chtService, ISocialUserServiceProxy usrService, IReportServiceProxy reportService)
+        public ChatMessagesViewModel(Window window, Frame rightFrame, int currentChatID, IMessageServiceProxy msgService, IChatServiceProxy chtService, ISocialUserServiceProxy usrService, IReportServiceProxy reportService, IRepository repository)
         {
+            // ?
+            this.repository = repository;
+
             this.window = window;
             this.ChatMessages = new ObservableCollection<Message>();
             this.MessageService = msgService;
@@ -202,7 +211,7 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.SendImageCommand = new RelayCommand(this.SendImage);
             this.DeleteMessageCommand = new RelayCommand<Message>(this.DeleteMessage);
             this.ReportMessageCommand = new RelayCommand<Message>(this.ReportMessage);
-            this.templateSelector = new MessageTemplateSelector()
+            this.templateSelector = new MessageTemplateSelector(this.repository)
             {
                 TextMessageTemplateLeft = (DataTemplate)App.Current.Resources["TextMessageTemplateLeft"],
                 TextMessageTemplateRight = (DataTemplate)App.Current.Resources["TextMessageTemplateRight"],

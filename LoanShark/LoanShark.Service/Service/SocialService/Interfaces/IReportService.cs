@@ -22,13 +22,13 @@ namespace LoanShark.Service.SocialService.Interfaces
         /// </summary>
         /// <param name="id">The unique identifier of the report.</param>
         /// <returns>The report if found; otherwise, null.</returns>
-        Report? GetReportById(int id);
+        Task<Report?> GetReportById(int id);
 
         /// <summary>
         /// Adds a new report to the system.
         /// </summary>
         /// <param name="report">The report to add.</param>
-        void AddReport(Report report);
+        Task AddReport(Report report);
 
         /// <summary>
         /// Checks if a report exists for a specific message and reporter.
@@ -36,24 +36,24 @@ namespace LoanShark.Service.SocialService.Interfaces
         /// <param name="messageID">The ID of the message being reported.</param>
         /// <param name="reporterUserID">The ID of the user reporting the message.</param>
         /// <returns>True if the report exists; otherwise, false.</returns>
-        bool CheckIfReportExists(int messageID, int reporterUserID);
+        Task<bool> CheckIfReportExists(int messageID, int reporterUserID);
 
         /// <summary>
         /// Increases the report count for a specific reported entity.
         /// </summary>
         /// <param name="reportedID">The ID of the reported entity.</param>
-        void IncreaseReportCount(int reportedID);
+        Task IncreaseReportCount(int reportedID);
 
         /// <summary>
         /// Logs a list of reported messages.
         /// </summary>
         /// <param name="reports">The list of reports to log.</param>
-        void LogReportedMessages(List<Report> reports);
+        Task LogReportedMessages(List<Report> reports);
 
         /// <summary>
         /// Sends a report for further processing.
         /// </summary>
         /// <param name="report">The report to send.</param>
-        void SendReport(Report report);
+        Task SendReport(Report report);
     }
 }

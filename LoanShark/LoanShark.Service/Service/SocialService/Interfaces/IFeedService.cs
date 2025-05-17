@@ -21,6 +21,6 @@ namespace LoanShark.Service.SocialService.Interfaces
         /// Retrieves the content of the feed.
         /// </summary>
         /// <returns>A list of posts representing the feed content.</returns>
-        List<Post> GetFeedContent();
+        Task<List<Post>> GetFeedContent();
     }
 }

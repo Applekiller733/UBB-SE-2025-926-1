@@ -32,9 +32,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// Retrieves the list of posts for the feed.
         /// </summary>
         /// <returns>A list of <see cref="Post"/> objects representing the feed content.</returns>
-        public List<Post> GetFeedContent()
+        public async Task<List<Post>> GetFeedContent()
         {
-            return this.repository.GetFeedPostsList();
+            return await this.repository.GetFeedPostsList();
         }
     }
 }

@@ -50,17 +50,17 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user.</param>
         /// <param name="newFriendID">The ID of the new friend to add.</param>
-        public void AddFriend(int userID, int newFriendID)
+        public async Task AddFriend(int userID, int newFriendID)
         {
-            var user = this.repo.GetUserById(userID);
-            var friend = this.repo.GetUserById(newFriendID);
-            var friends = this.repo.GetFriendsIDs(userID);
+            var user = await this.repo.GetUserById(userID);
+            var friend = await this.repo.GetUserById(newFriendID);
+            var friends = await this.repo.GetFriendsIDs(userID);
 
             if (user != null && friend != null && !friends.Contains(newFriendID))
             {
-                this.repo.AddFriend(userID, newFriendID);
+                await this.repo.AddFriend(userID, newFriendID);
                 user.AddFriend(newFriendID); // assuming this is just updating an in-memory list
-                this.notificationService.SendFriendNotification(userID, newFriendID);
+                await this.notificationService.SendFriendNotification(userID, newFriendID);
             }
         }
 
@@ -69,17 +69,17 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user.</param>
         /// <param name="oldFriendID">The ID of the friend to remove.</param>
-        public void RemoveFriend(int userID, int oldFriendID)
+        public async Task RemoveFriend(int userID, int oldFriendID)
         {
-            var user = this.GetUserById(userID);
-            var friend = this.GetUserById(oldFriendID);
-            var friends = this.repo.GetFriendsIDs(userID);
+            var user = await this.GetUserById(userID);
+            var friend = await this.GetUserById(oldFriendID);
+            var friends = await this.repo.GetFriendsIDs(userID);
 
             if (user != null && friend != null && friends.Contains(oldFriendID))
             {
-                this.repo.DeleteFriend(userID, oldFriendID);
+                await this.repo.DeleteFriend(userID, oldFriendID);
                 user.RemoveFriend(oldFriendID);
-                this.notificationService.SendRemoveFriendNotification(userID, oldFriendID);
+                await this.notificationService.SendRemoveFriendNotification(userID, oldFriendID);
             }
         }
 
@@ -88,14 +88,14 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user attempting to join the chat.</param>
         /// <param name="chatID">The ID of the chat the user wants to join.</param>
-        public void JoinChat(int userID, int chatID)
+        public async Task JoinChat(int userID, int chatID)
         {
-            var user = this.GetUserById(userID);
-            var chats = this.repo.GetChatsIDs(userID);
+            var user = await this.GetUserById(userID);
+            var chats = await this.repo.GetChatsIDs(userID);
 
             if (user != null && !chats.Contains(chatID))
             {
-                this.repo.AddUserToChat(chatID, userID);
+                await this.repo.AddUserToChat(chatID, userID);
                 user.JoinChat(chatID);
             }
         }
@@ -105,14 +105,14 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user attempting to leave the chat.</param>
         /// <param name="chatID">The ID of the chat the user wants to leave.</param>
-        public void LeaveChat(int userID, int chatID)
+        public async Task LeaveChat(int userID, int chatID)
         {
-            var user = this.GetUserById(userID);
-            var chats = this.repo.GetChatsIDs(userID);
+            var user = await this.GetUserById(userID);
+            var chats = await this.repo.GetChatsIDs(userID);
 
             if (user != null && chats.Contains(chatID))
             {
-                this.repo.RemoveUserFromChat(userID, chatID);
+                await this.repo.RemoveUserFromChat(userID, chatID);
                 user.LeaveChat(chatID);
             }
         }
@@ -123,9 +123,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="keyword">The keyword to filter users by.</param>
         /// <param name="userID">The ID of the user to exclude from the results.</param>
         /// <returns>A list of user IDs that match the keyword and are not the specified user.</returns>
-        public List<int> FilterUsers(string keyword, int userID)
+        public async Task<List<int>> FilterUsers(string keyword, int userID)
         {
-            var users = this.repo.GetUsersList();
+            var users = await this.repo.GetUsersList();
             return users.Where(u => (u.GetUsername().Contains(keyword, StringComparison.OrdinalIgnoreCase)
                                     || u.GetPhoneNumber().Contains(keyword)) && u.GetUserId() != userID)
                         .Select(u => u.GetUserId())
@@ -138,15 +138,15 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="keyword">The keyword to filter friends by.</param>
         /// <param name="userID">The ID of the user whose friends are being filtered.</param>
         /// <returns>A list of friend IDs that match the keyword.</returns>
-        public List<int> FilterFriends(string keyword, int userID)
+        public async Task<List<int>> FilterFriends(string keyword, int userID)
         {
-            var user = this.GetUserById(userID);
+            var user = await this.GetUserById(userID);
             if (user == null)
             {
                 return new List<int>();
             }
 
-            var friends = this.repo.GetUserFriendsList(userID);
+            var friends = await this.repo.GetUserFriendsList(userID);
 
             return friends
                        .Select(friendID => friendID)
@@ -162,9 +162,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user whose friends' IDs are being retrieved.</param>
         /// <returns>A list of friend IDs for the specified user.</returns>
-        public List<int> GetFriendsIDsByUser(int userID)
+        public async Task<List<int>> GetFriendsIDsByUser(int userID)
         {
-            var friends = this.repo.GetFriendsIDs(userID);
+            var friends = await this.repo.GetFriendsIDs(userID);
 
             return friends;
         }
@@ -174,9 +174,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user whose friends are being retrieved.</param>
         /// <returns>A list of <see cref="User"/> objects representing the user's friends.</returns>
-        public List<User> GetFriendsByUser(int userID)
+        public async Task<List<User>> GetFriendsByUser(int userID)
         {
-            return this.repo.GetUserFriendsList(userID);
+            return await this.repo.GetUserFriendsList(userID);
         }
 
         /// <summary>
@@ -184,9 +184,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user whose chat IDs are being retrieved.</param>
         /// <returns>A list of chat IDs for the specified user.</returns>
-        public List<int> GetChatsByUser(int userID)
+        public async Task<List<int>> GetChatsByUser(int userID)
         {
-            var chats = this.repo.GetChatsIDs(userID);
+            var chats = await this.repo.GetChatsIDs(userID);
             return chats;
         }
 
@@ -194,11 +194,11 @@ namespace LoanShark.Service.SocialService.Implementations
         /// Retrieves the list of chats for the currently logged-in user.
         /// </summary>
         /// <returns>A list of <see cref="Chat"/> objects representing the chats the current user is part of.</returns>
-        public List<Chat> GetCurrentUserChats()
+        public async Task<List<Chat>> GetCurrentUserChats()
         {
             List<Chat> chats = new List<Chat>();
             List<Chat> currentUserChats = new List<Chat>();
-            chats = this.repo.GetChatsList();
+            chats = await this.repo.GetChatsList();
 
             foreach (Chat chat in chats)
             {
@@ -216,9 +216,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user to retrieve.</param>
         /// <returns>The <see cref="User"/> object if found; otherwise, a new <see cref="User"/> object.</returns>
-        public User GetUserById(int userID)
+        public async Task<User> GetUserById(int userID)
         {
-            List<User> users = this.repo.GetUsersList();
+            List<User> users = await this.repo.GetUsersList();
             foreach (User user in users)
             {
                 if (user.GetUserId() == userID)
@@ -235,10 +235,12 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user whose non-friends are being retrieved.</param>
         /// <returns>A list of <see cref="User"/> objects representing users who are not friends with the specified user.</returns>
-        public List<User> GetNonFriendsUsers(int userID)
+        public async Task<List<User>> GetNonFriendsUsers(int userID)
         {
-            List<User> users = new List<User>(this.repo.GetUsersList().Where(user => user.GetUserId() != userID));
-            List<int> friends = this.repo.GetFriendsIDs(userID);
+            var usersList = await this.repo.GetUsersList();
+
+            List<User> users = new List<User>(usersList.Where(user => user.GetUserId() != userID));
+            List<int> friends = await this.repo.GetFriendsIDs(userID);
             List<User> nonFriends = new List<User>();
             foreach (User user in users)
             {

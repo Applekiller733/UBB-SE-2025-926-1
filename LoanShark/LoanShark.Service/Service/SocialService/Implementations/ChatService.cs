@@ -46,9 +46,11 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>The number of participants in the chat excluding the current user.</returns>
-        public int GetNumberOfParticipants(int chatID)
+        public async Task<int> GetNumberOfParticipants(int chatID)
         {
-            return this.repository.GetChatParticipantsIDs(chatID).Count;
+            var participants = await this.repository.GetChatParticipantsIDs(chatID);
+
+            return participants.Count;
         }
 
         /// <summary>
@@ -70,7 +72,7 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="chatID">The ID of the chat where the request is initiated.</param>
         /// <param name="description">A description of the request.</param>
         /// <exception cref="ArgumentException">Thrown when the amount is less than or equal to zero, or the currency is null or empty.</exception>
-        public void RequestMoneyViaChat(float amount, string currency, int chatID, string description)
+        public async Task RequestMoneyViaChat(float amount, string currency, int chatID, string description)
         {
             if (amount <= 0)
             {
@@ -84,7 +86,7 @@ namespace LoanShark.Service.SocialService.Implementations
 
             try
             {
-                this.repository.AddRequestMessage(this.GetCurrentUserID(), chatID, description, "Pending", amount, currency);
+                await this.repository.AddRequestMessage(this.GetCurrentUserID(), chatID, description, "Pending", amount, currency);
             }
             catch (Exception ex)
             {
@@ -101,7 +103,7 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="description">A description of the transfer.</param>
         /// <param name="chatID">The ID of the chat where the transfer is initiated.</param>
         /// <exception cref="ArgumentException">Thrown when the amount is less than or equal to zero, or the currency is null or empty.</exception>
-        public void SendMoneyViaChat(float amount, string currency, string description, int chatID)
+        public async Task SendMoneyViaChat(float amount, string currency, string description, int chatID)
         {
             if (amount <= 0)
             {
@@ -113,7 +115,7 @@ namespace LoanShark.Service.SocialService.Implementations
                 throw new ArgumentException("Currency cannot be null or empty.");
             }
 
-            List<int> participantIDs = this.repository.GetChatParticipantsIDs(chatID);
+            List<int> participantIDs = await this.repository.GetChatParticipantsIDs(chatID);
 
             try
             {
@@ -124,15 +126,16 @@ namespace LoanShark.Service.SocialService.Implementations
                     {
                         if (currentUserId != reciverid)
                         {
+                            //await in future?
                             this.InitiateTransfer(currentUserId, reciverid, amount, currency);
                         }
                     }
 
-                    this.repository.AddTransferMessage(this.GetCurrentUserID(), chatID, description, "Accepted", amount * (participantIDs.Count - 1), currency);
+                    await this.repository.AddTransferMessage(this.GetCurrentUserID(), chatID, description, "Accepted", amount * (participantIDs.Count - 1), currency);
                 }
                 else
                 {
-                    this.repository.AddTransferMessage(this.GetCurrentUserID(), chatID, description, "Rejected", amount * (participantIDs.Count - 1), currency);
+                    await this.repository.AddTransferMessage(this.GetCurrentUserID(), chatID, description, "Rejected", amount * (participantIDs.Count - 1), currency);
                 }
             }
             catch (Exception ex)
@@ -153,17 +156,17 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="accepterID">The ID of the user accepting the request.</param>
         /// <param name="requesterID">The ID of the user who made the request.</param>
         /// <param name="chatID">The ID of the chat where the request was made.</param>
-        public void AcceptRequestViaChat(float amount, string currency, int accepterID, int requesterID, int chatID)
+        public async Task AcceptRequestViaChat(float amount, string currency, int accepterID, int requesterID, int chatID)
         {
             // from Adrada
             if (this.EnoughFunds(amount, currency, accepterID))
             {
                 this.InitiateTransfer(accepterID, requesterID, amount, currency);
-                this.repository.AddTransferMessage(accepterID, chatID, "YOU JUST SENT " + amount.ToString() + currency + "TO here function that retrives username by ID", "Accepted", amount, currency);
+                await this.repository.AddTransferMessage(accepterID, chatID, "YOU JUST SENT " + amount.ToString() + currency + "TO here function that retrives username by ID", "Accepted", amount, currency);
             }
             else
             {
-                this.repository.AddTransferMessage(accepterID, chatID, "YOU FAILED TO SEND " + amount.ToString() + currency + "TO here function that retrives username by ID", "Rejected", amount, currency);
+                await this.repository.AddTransferMessage(accepterID, chatID, "YOU FAILED TO SEND " + amount.ToString() + currency + "TO here function that retrives username by ID", "Rejected", amount, currency);
             }
         }
 
@@ -202,25 +205,25 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="participantsID">A list of user IDs representing the participants of the chat.</param>
         /// <param name="chatName">The name of the chat to be created.</param>
-        public void CreateChat(List<int> participantsID, string chatName)
+        public async Task CreateChat(List<int> participantsID, string chatName)
         {
-            int chatID = this.repository.AddChat(chatName);
+            int chatID = await this.repository.AddChat(chatName);
 
             foreach (var userID in participantsID)
             {
-                this.repository.AddUserToChat(userID, chatID);
+               await this.repository.AddUserToChat(userID, chatID);
             }
 
-            var addedUsers = this.repository.GetChatParticipants(chatID);
+            var addedUsers = await this.repository.GetChatParticipants(chatID);
         }
 
         /// <summary>
         /// Deletes a chat by its ID.
         /// </summary>
         /// <param name="chatID">The ID of the chat to delete.</param>
-        public void DeleteChat(int chatID)
+        public async Task DeleteChat(int chatID)
         {
-            this.repository.DeleteChat(chatID);
+            await this.repository.DeleteChat(chatID);
         }
 
         /// <summary>
@@ -228,9 +231,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="chatID">The ID of the chat whose last message timestamp is to be retrieved.</param>
         /// <returns>The timestamp of the last message in the chat, or <see cref="DateTime.MinValue"/> if no messages are found.</returns>
-        public DateTime GetLastMessageTimeStamp(int chatID)
+        public async Task<DateTime> GetLastMessageTimeStamp(int chatID)
         {
-            List<Message> allMessages = this.repository.GetMessagesList();
+            List<Message> allMessages = await this.repository.GetMessagesList();
 
             var chatMessages = allMessages.Where(m => m.GetChatID() == chatID).ToList();
 
@@ -250,9 +253,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="chatID">The ID of the chat whose history is to be retrieved.</param>
         /// <returns>A list of messages representing the chat history.</returns>
-        public List<Message> GetChatHistory(int chatID)
+        public async Task<List<Message>> GetChatHistory(int chatID)
         {
-            List<Message> allMessages = this.repository.GetMessagesList();
+            List<Message> allMessages = await this.repository.GetMessagesList();
 
             List<Message> chatHistory = allMessages.Where(m => m.GetChatID() == chatID).ToList();
 
@@ -264,9 +267,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user to add.</param>
         /// <param name="chatID">The ID of the chat to which the user will be added.</param>
-        public void AddUserToChat(int userID, int chatID)
+        public async Task AddUserToChat(int userID, int chatID)
         {
-            this.repository.AddUserToChat(userID, chatID);
+            await this.repository.AddUserToChat(userID, chatID);
         }
 
         /// <summary>
@@ -274,9 +277,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="userID">The ID of the user to remove.</param>
         /// <param name="chatID">The ID of the chat from which the user will be removed.</param>
-        public void RemoveUserFromChat(int userID, int chatID)
+        public async Task RemoveUserFromChat(int userID, int chatID)
         {
-            this.repository.RemoveUserFromChat(userID, chatID);
+            await this.repository.RemoveUserFromChat(userID, chatID);
         }
 
         /// <summary>
@@ -285,9 +288,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>The name of the chat.</returns>
         /// <exception cref="InvalidOperationException">Thrown when the chat with the specified ID is not found.</exception>
-        public string GetChatNameByID(int chatID)
+        public async Task<string> GetChatNameByID(int chatID)
         {
-            List<Chat> chatList = this.repository.GetChatsList();
+            List<Chat> chatList = await this.repository.GetChatsList();
             Chat? chat = chatList.FirstOrDefault(c => c.getChatID() == chatID);
             if (chat == null)
             {
@@ -303,9 +306,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>A list of usernames representing the participants of the chat.</returns>
-        public List<string> GetChatParticipantsStringList(int chatID)
+        public async Task<List<string>> GetChatParticipantsStringList(int chatID)
         {
-            List<User> participants = this.repository.GetChatParticipants(chatID);
+            List<User> participants = await this.repository.GetChatParticipants(chatID);
             List<string> participantsList = participants.Select(p => p.GetUsername()).ToList();
             return participantsList;
         }
@@ -315,9 +318,9 @@ namespace LoanShark.Service.SocialService.Implementations
         /// </summary>
         /// <param name="chatID">The ID of the chat.</param>
         /// <returns>A list of User objects representing the participants of the chat.</returns>
-        public List<User> GetChatParticipantsList(int chatID)
+        public async Task<List<User>> GetChatParticipantsList(int chatID)
         {
-            List<User> participants = this.repository.GetChatParticipants(chatID);
+            List<User> participants = await this.repository.GetChatParticipants(chatID);
             return participants;
         }
     }
