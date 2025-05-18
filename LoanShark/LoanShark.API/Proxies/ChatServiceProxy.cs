@@ -1,4 +1,5 @@
-﻿using LoanShark.API.Models;
+﻿using LoanShark.API.JSONConverters;
+using LoanShark.API.Models;
 using LoanShark.Domain;
 using LoanShark.Domain.MessageClasses;
 using LoanShark.EF.Repository.SocialRepository;
@@ -50,6 +51,13 @@ namespace LoanShark.API.Proxies
     {
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+        // for deserializing messages into correct types
+        private readonly JsonSerializerOptions _jsonOptionsCustomMessages = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new MessageConverter() }
+        };
 
         public ChatServiceProxy(HttpClient httpClient)
         {
@@ -180,7 +188,7 @@ namespace LoanShark.API.Proxies
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/history");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<Message>>(content, _jsonOptions);
+            return JsonSerializer.Deserialize<List<Message>>(content, this._jsonOptionsCustomMessages);
         }
 
         public async Task AddUserToChat(int userID, int chatID)

@@ -91,21 +91,21 @@ namespace LoanShark.API.Controllers
 
             Message message = messageDto.MessageType switch
             {
-                "TextMessage" => new TextMessage(
+                "Text" => new TextMessage(
                     messageDto.MessageID,
                     messageDto.SenderID,
                     messageDto.ChatID,
                     DateTime.Parse(messageDto.Timestamp),
                     (messageDto as TextMessageViewModel)?.Content ?? string.Empty,
                     (messageDto as TextMessageViewModel)?.UsersReport ?? new List<int>()),
-                "ImageMessage" => new ImageMessage(
+                "Image" => new ImageMessage(
                     messageDto.MessageID,
                     messageDto.SenderID,
                     messageDto.ChatID,
                     DateTime.Parse(messageDto.Timestamp),
                     (messageDto as ImageMessageViewModel)?.ImageURL ?? string.Empty,
                     (messageDto as ImageMessageViewModel)?.UsersReport ?? new List<int>()),
-                "TransferMessage" => new TransferMessage(
+                "Transfer" => new TransferMessage(
                     messageDto.MessageID,
                     messageDto.SenderID,
                     messageDto.ChatID,
@@ -114,7 +114,7 @@ namespace LoanShark.API.Controllers
                     (messageDto as TransferMessageViewModel)?.Amount ?? 0f,
                     (messageDto as TransferMessageViewModel)?.Description ?? string.Empty,
                     (messageDto as TransferMessageViewModel)?.Currency ?? string.Empty),
-                "RequestMessage" => new RequestMessage(
+                "Request" => new RequestMessage(
                     messageDto.MessageID,
                     messageDto.SenderID,
                     messageDto.ChatID,
@@ -139,21 +139,21 @@ namespace LoanShark.API.Controllers
 
             Message message = messageDto.MessageType switch
             {
-                "TextMessage" => new TextMessage(
+                "Text" => new TextMessage(
                     messageDto.MessageID,
                     messageDto.SenderID,
                     messageDto.ChatID,
                     DateTime.Parse(messageDto.Timestamp),
                     (messageDto as TextMessageViewModel)?.Content ?? string.Empty,
                     (messageDto as TextMessageViewModel)?.UsersReport ?? new List<int>()),
-                "ImageMessage" => new ImageMessage(
+                "Image" => new ImageMessage(
                     messageDto.MessageID,
                     messageDto.SenderID,
                     messageDto.ChatID,
                     DateTime.Parse(messageDto.Timestamp),
                     (messageDto as ImageMessageViewModel)?.ImageURL ?? string.Empty,
                     (messageDto as ImageMessageViewModel)?.UsersReport ?? new List<int>()),
-                "TransferMessage" => new TransferMessage(
+                "Transfer" => new TransferMessage(
                     messageDto.MessageID,
                     messageDto.SenderID,
                     messageDto.ChatID,
@@ -162,7 +162,7 @@ namespace LoanShark.API.Controllers
                     (messageDto as TransferMessageViewModel)?.Amount ?? 0f,
                     (messageDto as TransferMessageViewModel)?.Description ?? string.Empty,
                     (messageDto as TransferMessageViewModel)?.Currency ?? string.Empty),
-                "RequestMessage" => new RequestMessage(
+                "Request" => new RequestMessage(
                     messageDto.MessageID,
                     messageDto.SenderID,
                     messageDto.ChatID,

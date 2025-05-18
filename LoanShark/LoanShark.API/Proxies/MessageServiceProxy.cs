@@ -6,6 +6,7 @@ using LoanShark.Domain;
 using LoanShark.Domain.MessageClasses;
 using System.Collections.Generic;
 using System.Text;
+using LoanShark.API.JSONConverters;
 
 namespace LoanShark.API.Proxies
 {
@@ -49,12 +50,14 @@ namespace LoanShark.API.Proxies
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task SendMessage(int senderID, int chatID, string content)
         {
+
             var dto = new TextMessageViewModel
             {
                 SenderID = senderID,
+                SenderUsername = "a",       // i think it is not used here anyway --- it is mandatory to pass it to the dto
                 ChatID = chatID,
                 Content = content,
-                MessageType = "TextMessage",
+                MessageType = "Text",
                 Timestamp = DateTime.UtcNow.ToString("o"),
                 UsersReport = new List<int>()
             };
@@ -82,7 +85,7 @@ namespace LoanShark.API.Proxies
                 SenderID = senderID,
                 ChatID = chatID,
                 ImageURL = imageURL,
-                MessageType = "ImageMessage",
+                MessageType = "Image",
                 Timestamp = DateTime.UtcNow.ToString("o"),
                 UsersReport = new List<int>()
             };
@@ -116,7 +119,7 @@ namespace LoanShark.API.Proxies
                 Status = status,
                 Amount = amount,
                 Currency = currency,
-                MessageType = "TransferMessage",
+                MessageType = "Transfer",
                 Timestamp = DateTime.UtcNow.ToString("o"),
                 ListOfReceiversID = new List<int>()
             };
@@ -150,7 +153,7 @@ namespace LoanShark.API.Proxies
                 Status = status,
                 Amount = amount,
                 Currency = currency,
-                MessageType = "RequestMessage",
+                MessageType = "Request",
                 Timestamp = DateTime.UtcNow.ToString("o")
             };
 
@@ -179,7 +182,7 @@ namespace LoanShark.API.Proxies
                     ChatID = text.GetChatID(),
                     Timestamp = text.GetTimestamp().ToString("o"),
                     SenderUsername = text.SenderUsername,
-                    MessageType = "TextMessage",
+                    MessageType = "Text",
                     Content = text.GetContent(),
                     UsersReport = text.GetUsersReport() ?? new List<int>()
                 },
@@ -190,7 +193,7 @@ namespace LoanShark.API.Proxies
                     ChatID = image.GetChatID(),
                     Timestamp = image.GetTimestamp().ToString("o"),
                     SenderUsername = image.SenderUsername,
-                    MessageType = "ImageMessage",
+                    MessageType = "Image",
                     ImageURL = image.GetImageURL(),
                     UsersReport = image.GetUsersReport() ?? new List<int>()
                 },
@@ -201,7 +204,7 @@ namespace LoanShark.API.Proxies
                     ChatID = transfer.GetChatID(),
                     Timestamp = transfer.GetTimestamp().ToString("o"),
                     SenderUsername = transfer.SenderUsername,
-                    MessageType = "TransferMessage",
+                    MessageType = "Transfer",
                     Status = transfer.GetStatus(),
                     Amount = transfer.GetAmount(),
                     Description = transfer.GetDescription(),
@@ -215,7 +218,7 @@ namespace LoanShark.API.Proxies
                     ChatID = request.GetChatID(),
                     Timestamp = request.GetTimestamp().ToString("o"),
                     SenderUsername = request.SenderUsername,
-                    MessageType = "RequestMessage",
+                    MessageType = "Request",
                     Status = request.GetStatus(),
                     Amount = request.GetAmount(),
                     Description = request.GetDescription(),

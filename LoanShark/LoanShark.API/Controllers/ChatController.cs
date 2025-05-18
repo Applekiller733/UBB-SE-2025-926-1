@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using LoanShark.Domain.MessageClasses;
 using LoanShark.API.Models;
 using LoanShark.Service.SocialService.Interfaces;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace LoanShark.API.Controllers
 {
@@ -13,10 +15,12 @@ namespace LoanShark.API.Controllers
     public class ChatController : ControllerBase
     {
         private readonly IChatService chatService;
+        private readonly IMessageService messageService;
 
-        public ChatController(IChatService chatService)
+        public ChatController(IChatService chatService, IMessageService messageService)
         {
             this.chatService = chatService;
+            this.messageService = messageService;
         }
 
         [HttpGet("current-user-id")]
@@ -87,9 +91,83 @@ namespace LoanShark.API.Controllers
         }
 
         [HttpGet("{chatId}/history")]
-        public async Task<ActionResult<List<Message>>> GetChatHistory(int chatId)
+        public async Task<IActionResult> GetChatHistory(int chatId)
         {
-            return Ok(await chatService.GetChatHistory(chatId));
+            var messages = await chatService.GetChatHistory(chatId);
+            var dtosTasks = messages.Select(async m =>
+            {
+                var messageType = await this.messageService.GetMessageTypeByMessageId(m.MessageID);
+
+                MessageViewModel viewModel = messageType.ToString() switch
+                {
+                    "Text" => new TextMessageViewModel
+                    {
+                        MessageID = m.MessageID,
+                        SenderID = m.SenderID,
+                        ChatID = m.ChatID,
+                        Timestamp = m.Timestamp.ToString("O"),
+                        SenderUsername = m.SenderUsername,
+                        MessageType = messageType.ToString(),
+                        Content = ((TextMessage)m).Content,
+                        UsersReport = ((TextMessage)m).UsersReport
+                    },
+                    //"Image" => new ImageMessageViewModel
+                    //{
+                    //    MessageID = m.MessageID,
+                    //    SenderID = m.SenderID,
+                    //    ChatID = m.ChatID,
+                    //    //Timestamp = m.Timestamp,
+                    //    //SenderUsername = m.SenderUsername,
+                    //    //MessageType = m.MessageType,
+                    //    //ImageURL = m.ImageURL,
+                    //    //UsersReport = m.UsersReport
+                    //},
+                    //"Transfer" => new TransferMessageViewModel
+                    //{
+                    //    MessageID = m.MessageID,
+                    //    SenderID = m.SenderID,
+                    //    ChatID = m.ChatID,
+                    //    //Timestamp = m.Timestamp,
+                    //    //SenderUsername = m.SenderUsername,
+                    //    //MessageType = m.MessageType,
+                    //    //Status = m.Status,
+                    //    //Amount = m.Amount,
+                    //    //Description = m.Description,
+                    //    //Currency = m.Currency,
+                    //    //ListOfReceiversID = m.ListOfReceiversID
+                    //},
+                    //"Request" => new RequestMessageViewModel
+                    //{
+                    //    MessageID = m.MessageID,
+                    //    SenderID = m.SenderID,
+                    //    ChatID = m.ChatID,
+                    //    //Timestamp = m.Timestamp,
+                    //    //SenderUsername = m.SenderUsername,
+                    //    //MessageType = m.MessageType,
+                    //    //Status = m.Status,
+                    //    //Amount = m.Amount,
+                    //    //Description = m.Description,
+                    //    //Currency = m.Currency
+                    //},
+             _ => throw new InvalidOperationException($"Unknown message type: {messageType}")
+                };
+                return viewModel;
+            }).ToList();
+
+            var dtos = await Task.WhenAll(dtosTasks);
+
+            //// Manually serialize using runtime types
+            //var options = new JsonSerializerOptions
+            //{
+            //    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            //    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            //    WriteIndented = true
+            //};
+
+            //string json = JsonSerializer.Serialize(dtos, options);
+            //return Content(json, "application/json");
+
+            return Ok(dtos);
         }
 
         [HttpPost("{chatId}/add-user/{userId}")]

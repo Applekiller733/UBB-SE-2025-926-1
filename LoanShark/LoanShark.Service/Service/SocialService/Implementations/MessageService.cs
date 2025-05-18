@@ -13,6 +13,7 @@ namespace LoanShark.Service.SocialService.Implementations
     using LoanShark.Domain;
     using LoanShark.Service.SocialService.Interfaces;
     using LoanShark.Domain.MessageClasses;
+    using LoanShark.Domain.Enums;
 
     /// <summary>
     /// Provides services for managing messages, including sending, deleting, and reporting messages.
@@ -138,6 +139,13 @@ namespace LoanShark.Service.SocialService.Implementations
             bool isInTimeout = user != null && this.userService.IsUserInTimeout(user);
             System.Diagnostics.Debug.WriteLine($"MessageService checking if user {user?.GetUsername()} is in timeout: {isInTimeout}");
             return isInTimeout;
+        }
+
+        public async Task<MessageType> GetMessageTypeByMessageId(int messageId)
+        {
+            var messageType = await this.repository.GetMessageTypeByMessageId(messageId);
+
+            return messageType;
         }
     }
 }

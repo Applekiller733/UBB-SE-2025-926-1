@@ -4,6 +4,7 @@
 
 namespace LoanShark.Domain.MessageClasses
 {
+    using LoanShark.Domain.Enums;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -51,13 +52,17 @@ namespace LoanShark.Domain.MessageClasses
         /// </summary>
         public string SenderUsername { get; set; }
 
-        private int MessageID { get; set; }
+        public int MessageID { get; set; }
 
-        private int SenderID { get; set; }
+        public int SenderID { get; set; }
 
-        private int ChatID { get; set; }
+        public int ChatID { get; set; }
 
-        private DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
+
+        // ? 
+        public MessageType MessageType { get; set; }
+
 
         /// <summary>
         /// Gets the unique identifier of the message.
