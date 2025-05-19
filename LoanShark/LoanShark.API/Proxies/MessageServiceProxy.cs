@@ -83,6 +83,7 @@ namespace LoanShark.API.Proxies
             var dto = new ImageMessageViewModel
             {
                 SenderID = senderID,
+                SenderUsername = "a",
                 ChatID = chatID,
                 ImageURL = imageURL,
                 MessageType = "Image",

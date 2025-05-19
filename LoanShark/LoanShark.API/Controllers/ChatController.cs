@@ -7,6 +7,7 @@ using LoanShark.API.Models;
 using LoanShark.Service.SocialService.Interfaces;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using LoanShark.API.JSONConverters;
 
 namespace LoanShark.API.Controllers
 {
@@ -111,45 +112,45 @@ namespace LoanShark.API.Controllers
                         Content = ((TextMessage)m).Content,
                         UsersReport = ((TextMessage)m).UsersReport
                     },
-                    //"Image" => new ImageMessageViewModel
-                    //{
-                    //    MessageID = m.MessageID,
-                    //    SenderID = m.SenderID,
-                    //    ChatID = m.ChatID,
-                    //    //Timestamp = m.Timestamp,
-                    //    //SenderUsername = m.SenderUsername,
-                    //    //MessageType = m.MessageType,
-                    //    //ImageURL = m.ImageURL,
-                    //    //UsersReport = m.UsersReport
-                    //},
-                    //"Transfer" => new TransferMessageViewModel
-                    //{
-                    //    MessageID = m.MessageID,
-                    //    SenderID = m.SenderID,
-                    //    ChatID = m.ChatID,
-                    //    //Timestamp = m.Timestamp,
-                    //    //SenderUsername = m.SenderUsername,
-                    //    //MessageType = m.MessageType,
-                    //    //Status = m.Status,
-                    //    //Amount = m.Amount,
-                    //    //Description = m.Description,
-                    //    //Currency = m.Currency,
-                    //    //ListOfReceiversID = m.ListOfReceiversID
-                    //},
-                    //"Request" => new RequestMessageViewModel
-                    //{
-                    //    MessageID = m.MessageID,
-                    //    SenderID = m.SenderID,
-                    //    ChatID = m.ChatID,
-                    //    //Timestamp = m.Timestamp,
-                    //    //SenderUsername = m.SenderUsername,
-                    //    //MessageType = m.MessageType,
-                    //    //Status = m.Status,
-                    //    //Amount = m.Amount,
-                    //    //Description = m.Description,
-                    //    //Currency = m.Currency
-                    //},
-             _ => throw new InvalidOperationException($"Unknown message type: {messageType}")
+                    "Image" => new ImageMessageViewModel
+                    {
+                        MessageID = m.MessageID,
+                        SenderID = m.SenderID,
+                        ChatID = m.ChatID,
+                        Timestamp = m.Timestamp.ToString("O"),
+                        SenderUsername = m.SenderUsername,
+                        MessageType = messageType.ToString(),
+                        ImageURL = ((ImageMessage)m).ImageURL,
+                        UsersReport = ((ImageMessage)m).UsersReport
+                    },
+                    "Transfer" => new TransferMessageViewModel
+                    {
+                        MessageID = m.MessageID,
+                        SenderID = m.SenderID,
+                        ChatID = m.ChatID,
+                        Timestamp = m.Timestamp.ToString("O"),
+                        SenderUsername = m.SenderUsername,
+                        MessageType = messageType.ToString(),
+                        Status = ((TransferMessage)m).Status,
+                        Amount = ((TransferMessage)m).Amount,
+                        Description = ((TransferMessage)m).Description,
+                        Currency = ((TransferMessage)m).Currency,
+                        ListOfReceiversID = ((TransferMessage)m).ListOfReceiversID
+                    },
+                    "Request" => new RequestMessageViewModel
+                    {
+                        MessageID = m.MessageID,
+                        SenderID = m.SenderID,
+                        ChatID = m.ChatID,
+                        Timestamp = m.Timestamp.ToString("O"),
+                        SenderUsername = m.SenderUsername,
+                        MessageType = messageType.ToString(),
+                        Status = ((RequestMessage)m).Status,
+                        Amount = ((RequestMessage)m).Amount,
+                        Description = ((RequestMessage)m).Description,
+                        Currency = ((RequestMessage)m).Currency
+                    },
+                    _ => throw new InvalidOperationException($"Unknown message type: {messageType}")
                 };
                 return viewModel;
             }).ToList();
@@ -167,7 +168,17 @@ namespace LoanShark.API.Controllers
             //string json = JsonSerializer.Serialize(dtos, options);
             //return Content(json, "application/json");
 
-            return Ok(dtos);
+            //return Ok(dtos);
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                Converters = { new MessageViewModelConverter() }
+            };
+
+            string json = JsonSerializer.Serialize(dtos, options);
+            return Content(json, "application/json");
         }
 
         [HttpPost("{chatId}/add-user/{userId}")]

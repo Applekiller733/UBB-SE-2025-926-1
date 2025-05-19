@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace LoanShark.API.Models
 {
-    //[JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
+    //[JsonPolymorphic(TypeDiscriminatorPropertyName = "messageType")]
     //[JsonDerivedType(typeof(TextMessageViewModel), "Text")]
     //[JsonDerivedType(typeof(ImageMessageViewModel), "Image")]
     //[JsonDerivedType(typeof(TransferMessageViewModel), "Transfer")]

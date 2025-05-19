@@ -1,11 +1,14 @@
-﻿using LoanShark.API.JSONConverters;
+﻿using LoanShark.API.Converters;
+using LoanShark.API.JSONConverters;
 using LoanShark.API.Models;
 using LoanShark.Domain;
 using LoanShark.Domain.MessageClasses;
 using LoanShark.EF.Repository.SocialRepository;
 using LoanShark.Service.SocialService.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System.Configuration;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LoanShark.API.Proxies
 {
@@ -51,17 +54,25 @@ namespace LoanShark.API.Proxies
     {
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly JsonSerializerOptions jsonSerializerOptionsMessageViewModel;   // options for deserializing a viewmodel
 
         // for deserializing messages into correct types
         private readonly JsonSerializerOptions _jsonOptionsCustomMessages = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
+            IncludeFields = true,
             Converters = { new MessageConverter() }
         };
 
         public ChatServiceProxy(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            this.jsonSerializerOptionsMessageViewModel = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                Converters = { new MessageViewModelConverter() }
+            };
         }
 
         public async Task<int> GetCurrentUserID()
@@ -188,7 +199,14 @@ namespace LoanShark.API.Proxies
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/history");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<Message>>(content, this._jsonOptionsCustomMessages);
+
+            // reading with custom viewModel deserializer
+            var dtos = JsonSerializer.Deserialize<List<MessageViewModel>>(content, this.jsonSerializerOptionsMessageViewModel);
+
+            var converter = new MessageViewModelToMessageConverter();
+            var messages = converter.Convert(dtos);
+
+            return messages;
         }
 
         public async Task AddUserToChat(int userID, int chatID)

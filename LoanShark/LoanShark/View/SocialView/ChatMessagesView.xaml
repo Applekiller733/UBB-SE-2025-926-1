@@ -54,7 +54,7 @@
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
                           >
 
-                <!--<ListView.ItemTemplateSelector>
+                <ListView.ItemTemplateSelector>
                     <local:MessageTemplateSelector 
                         TextMessageTemplateLeft="{StaticResource TextMessageTemplateLeft}"
                         TextMessageTemplateRight="{StaticResource TextMessageTemplateRight}"
@@ -64,7 +64,7 @@
                         TransferMessageTemplateRight="{StaticResource TransferMessageTemplateRight}"
                         RequestMessageTemplateLeft="{StaticResource RequestMessageTemplateLeft}"
                         RequestMessageTemplateRight="{StaticResource RequestMessageTemplateRight}"/>
-                </ListView.ItemTemplateSelector>-->
+                </ListView.ItemTemplateSelector>
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
@@ -72,7 +72,7 @@
                             <Setter.Value>
                                 <MenuFlyout>
                                      <!--<MenuFlyoutItem Text="Delete" Command="{StaticResource DeleteCommandProxy}" CommandParameter="{Binding}" />
-                                    <MenuFlyoutItem Text="Report" Command="{Binding ReportMessageCommand}" CommandParameter="{Binding}" />--> 
+                                     <MenuFlyoutItem Text="Report" Command="{StaticResource ReportMessageCommand}" CommandParameter="{Binding}" />--> 
                                 </MenuFlyout>
                             </Setter.Value>
                         </Setter>

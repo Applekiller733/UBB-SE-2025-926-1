@@ -49,4 +49,69 @@ public class ImgurImageUploader
             return result?.data?.link;
         }
     }
+
+
+    //public static async Task<string?> UploadImageAndGetUrl(StorageFile file)
+    //{
+    //    if (file == null)
+    //    {
+    //        Console.WriteLine("No file provided for upload");
+    //        return null;
+    //    }
+
+    //    try
+    //    {
+    //        using (var httpClient = new HttpClient())
+    //        {
+    //            // Read file as stream
+    //            using (var stream = await file.OpenStreamForReadAsync())
+    //            {
+    //                if (stream.Length > 10 * 1024 * 1024) // 10MB limit
+    //                {
+    //                    Console.WriteLine($"File {file.Name} is too large: {stream.Length} bytes");
+    //                    return null;
+    //                }
+
+    //                var content = new MultipartFormDataContent();
+    //                var fileContent = new StreamContent(stream);
+    //                fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+    //                content.Add(fileContent, "image", file.Name);
+
+    //                var request = new HttpRequestMessage(HttpMethod.Post, "https://api.imgur.com/3/image")
+    //                {
+    //                    Content = content
+    //                };
+    //                request.Headers.Authorization = new AuthenticationHeaderValue("Client-ID", ClientId);
+
+    //                Console.WriteLine($"Uploading image {file.Name} to Imgur");
+    //                var response = await httpClient.SendAsync(request);
+    //                response.EnsureSuccessStatusCode(); // Throws if not successful
+
+    //                string jsonResponse = await response.Content.ReadAsStringAsync();
+    //                Console.WriteLine($"Imgur response: {jsonResponse}");
+
+    //                var result = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+    //                string? imageUrl = result?.data?.link;
+    //                if (string.IsNullOrEmpty(imageUrl))
+    //                {
+    //                    Console.WriteLine("Failed to get image URL from Imgur response");
+    //                    return null;
+    //                }
+
+    //                Console.WriteLine($"Image uploaded successfully: {imageUrl}");
+    //                return imageUrl;
+    //            }
+    //        }
+    //    }
+    //    catch (HttpRequestException ex)
+    //    {
+    //        Console.WriteLine($"HTTP error uploading image: {ex.Message}");
+    //        return null;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Console.WriteLine($"Error uploading image: {ex.Message}");
+    //        return null;
+    //    }
+    //}
 }

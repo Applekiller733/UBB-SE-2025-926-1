@@ -431,6 +431,7 @@ namespace LoanShark.EF.Repository.SocialRepository
             var imageMessageEF = new MessageEF
             {
                 TypeID = messageTypeEF.TypeId,
+                Content = ".",      // add something because it it not nullable
                 UserID = userId,
                 ChatID = chatId,
                 ImageUrl = imageURL,

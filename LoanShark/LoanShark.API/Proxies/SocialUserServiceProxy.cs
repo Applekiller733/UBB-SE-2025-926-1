@@ -187,7 +187,8 @@ namespace LoanShark.API.Proxies
 
         public async Task<User> GetUserById(int userID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/Info");
+            //var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}/Info");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/SocialUser/{userID}");
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             var dto = JsonSerializer.Deserialize<UserViewModel>(json, new JsonSerializerOptions
