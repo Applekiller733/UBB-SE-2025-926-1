@@ -19,6 +19,10 @@ namespace LoanShark.MVC
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
             builder.Services.AddHttpClient<ITransactionHistoryService, TransactionHistoryProxy>();
 
+            // Posts(Feed) George
+            builder.Services.AddHttpClient<IFeedServiceProxy, FeedServiceProxy>();
+            builder.Services.AddHttpClient<INotificationServiceProxy, NotificationServiceProxy>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
