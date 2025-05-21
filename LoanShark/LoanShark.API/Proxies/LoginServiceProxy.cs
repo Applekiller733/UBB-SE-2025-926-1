@@ -51,7 +51,7 @@ namespace LoanShark.API.Proxies
         {
             try
             {
-                var response = await this.httpClient.GetAsync("https://localhost:7097/api/Login/GetUserInfoAfterLogin/{email}");
+                var response = await this.httpClient.GetAsync($"https://localhost:7097/api/Login/GetUserInfoAfterLogin/{email}");
 
                 if (!response.IsSuccessStatusCode)
                     throw new Exception("Failed to get user info");
@@ -69,7 +69,7 @@ namespace LoanShark.API.Proxies
         {
             try
             {
-                var response = await this.httpClient.GetAsync("https://localhost:7097/api/Login/GetUserBankAccounts/{userId}");
+                var response = await this.httpClient.GetAsync($"https://localhost:7097/api/Login/GetUserBankAccounts/{userId}");
 
                 if (!response.IsSuccessStatusCode)
                     throw new Exception("Failed to get bank accounts");

@@ -1,3 +1,6 @@
+using LoanShark.API.Proxies;
+using LoanShark.Service.BankService;
+using LoanShark.Service.Service.BankService;
 using LoanShark.Web.Extensions;
 
 namespace LoanShark.MVC
@@ -8,9 +11,15 @@ namespace LoanShark.MVC
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddSession();// for login
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddAllServiceProxies();
+            builder.Services.AddHttpClient<ILoginService, LoginServiceProxy>();
+            builder.Services.AddHttpClient<IMainPageService, MainPageServiceProxy>();
+            builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -21,6 +30,8 @@ namespace LoanShark.MVC
                 app.UseHsts();
             }
 
+            app.UseSession(); // for login
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -30,7 +41,7 @@ namespace LoanShark.MVC
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Index}/{id?}");
 
             app.Run();
         }
