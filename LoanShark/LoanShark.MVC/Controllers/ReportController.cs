@@ -44,19 +44,19 @@ namespace LoanShark.MVC.Controllers
                 // Based on the constructor parameters for Report
                 var reason = model.SelectedCategory == "Other" ? model.OtherReason : model.SelectedCategory;
 
-                // Create report using the constructor parameters in the correct order
+                // Create report
                 var report = new Report(
-                    model.MessageId,        // messageID
-                    model.ReportedUserId,   // reportedUserID
-                    currentUserId.ToString(),// reporterID (as string)
-                    reason,                  // reason
-                    model.SelectedCategory   // category
+                    model.MessageId,
+                    model.ReportedUserId,
+                    currentUserId.ToString(),
+                    reason,
+                    model.SelectedCategory
                 );
 
                 await _reportServiceProxy.SendReport(report);
 
                 TempData["SuccessMessage"] = "Report submitted successfully.";
-                return RedirectToAction("Index", "Messages"); // Redirect to messages or another appropriate page
+                return RedirectToAction("Index", "Main"); // Redirect to another page in case we add this to the final project
             }
             catch
             {
@@ -65,9 +65,10 @@ namespace LoanShark.MVC.Controllers
             }
         }
 
+        // Redirect to another page in case we add this to the final project
         public IActionResult Cancel()
         {
-            return RedirectToAction("Index", "Messages"); // Redirect to messages or another appropriate page
+            return RedirectToAction("Index", "Main");
         }
     }
 }
