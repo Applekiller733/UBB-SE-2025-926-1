@@ -1,0 +1,60 @@
+﻿@model LoanShark.MVC.Models.GenerateTransferViewModel
+@{
+    ViewData["Title"] = "GenerateTransfer";
+    var alertMessage = TempData["AlertMessage"] as string;
+}
+
+<h1 style="text-align: center;">Generate Transfer</h1>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card p-4 shadow-sm" style="background-color: #403d52; color: white;">
+                <form asp-action="ProcessTransfer" method="post">
+                    <input type="hidden" asp-for="ChatId" />
+                    <div class="form-group">
+                        <label>Transfer Type</label>
+                        <select asp-for="TransferTypeIndex" class="form-control" onchange="this.form.submit()">
+                            <option value="-1">Select Transfer Type</option>
+                            <option value="0">Transfer Money</option>
+                            <option value="1">Request Money</option>
+                            <option value="2">Split Bill</option>
+                        </select>
+                        <span asp-validation-for="TransferTypeIndex" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input asp-for="AmountText" class="form-control" onchange="this.form.submit()" />
+                        <span asp-validation-for="AmountText" class="text-danger"></span>
+                        @if (Model.ShowInsufficientFundsError)
+                        {
+                            <div class="text-danger">Insufficient funds</div>
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label>Currency</label>
+                        <select asp-for="CurrencyIndex" class="form-control" onchange="this.form.submit()">
+                            <option value="-1">Select Currency</option>
+                            <option value="0">USD</option>
+                            <option value="1">EUR</option>
+                            <option value="2">RON</option>
+                        </select>
+                        <span asp-validation-for="CurrencyIndex" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" maxlength="100"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-info mt-3" disabled="@(!Model.IsFormValid)">Transfer</button>
+                </form>
+                <a class="btn btn-danger mt-3" style="width: 200px;" asp-controller="MainPage" asp-action="Index">Back</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        var message = '@alertMessage';
+        if (message) {
+            alert(message);
+        }
+    </script>
+</div>
