@@ -59,10 +59,10 @@ namespace LoanShark.Domain
         public string TostringForMenu()
         {
             return "Sender IBAN: " + SenderIban + "\n" +
-                   "Receiver IBAN: " + ReceiverIban + "\n\n" +
+                   "Receiver IBAN: " + ReceiverIban + "\n" +
                    "Sent Amount: " + SenderAmount + " " + SenderCurrency + "\n" +
-                   "Received Amount: " + ReceiverAmount + " " + ReceiverCurrency + "\n\n" +
-                   "Date: " + TransactionDatetime + "\n\n" +
+                   "Received Amount: " + ReceiverAmount + " " + ReceiverCurrency + "\n" +
+                   "Date: " + TransactionDatetime + "\n" +
                    "Type: " + TransactionType;
         }
 
