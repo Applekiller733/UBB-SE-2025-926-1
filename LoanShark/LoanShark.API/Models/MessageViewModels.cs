@@ -1,11 +1,20 @@
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+
 namespace LoanShark.API.Models
 {
+    //[JsonPolymorphic(TypeDiscriminatorPropertyName = "messageType")]
+    //[JsonDerivedType(typeof(TextMessageViewModel), "Text")]
+    //[JsonDerivedType(typeof(ImageMessageViewModel), "Image")]
+    //[JsonDerivedType(typeof(TransferMessageViewModel), "Transfer")]
+    //[JsonDerivedType(typeof(RequestMessageViewModel), "Request")]
     public abstract class MessageViewModel
     {
         public int MessageID { get; set; }
         public int SenderID { get; set; }
         public int ChatID { get; set; }
         public string Timestamp { get; set; }
+        // ???????
         public string SenderUsername { get; set; }
         public string MessageType { get; set; }
     }
@@ -38,4 +47,21 @@ namespace LoanShark.API.Models
         public string Description { get; set; }
         public string Currency { get; set; }
     }
+
+    //public class MessageViewModel
+    //{
+    //    public int MessageID { get; set; }
+    //    public int SenderID { get; set; }
+    //    public int ChatID { get; set; }
+    //    public string Timestamp { get; set; }
+    //    // ???????
+    //    public string SenderUsername { get; set; }
+    //    public string MessageType { get; set; }
+    //    public string? Content { get; set; }
+    //    public List<int>? UsersReport { get; set; }
+    //    public string? Status { get; set; }
+    //    public float? Amount { get; set; }
+    //    public string? Currency { get; set; }
+    //    public List<int>? ListOfReceiversID { get; set; }
+    //}
 }

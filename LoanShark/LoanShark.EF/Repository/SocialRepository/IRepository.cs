@@ -10,6 +10,7 @@ namespace LoanShark.EF.Repository.SocialRepository
     using System.Text;
     using System.Threading.Tasks;
     using LoanShark.Domain;
+    using LoanShark.Domain.Enums;
     using LoanShark.Domain.MessageClasses;
     using NotificationModel = LoanShark.Domain.Notification;
 
@@ -264,5 +265,7 @@ namespace LoanShark.EF.Repository.SocialRepository
         Task<List<User>> GetUserFriendsList(int userId);
         Task<List<User>> GetUsersList();
         Task RemoveUserFromChat(int userId, int chatId);
+
+        Task<MessageType> GetMessageTypeByMessageId(int messageId);
     }
 }

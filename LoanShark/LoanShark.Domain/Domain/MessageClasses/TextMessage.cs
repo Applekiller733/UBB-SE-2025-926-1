@@ -4,11 +4,13 @@
 
 namespace LoanShark.Domain.MessageClasses
 {
+    using LoanShark.Domain.Enums;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection.Metadata.Ecma335;
     using System.Text;
+    using System.Text.Json.Serialization;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -54,20 +56,34 @@ namespace LoanShark.Domain.MessageClasses
             this.UsersReport = usersReport; // modified this to take the list passed by the constructor
         }
 
+        [JsonConstructor]
+        public TextMessage(int messageID, int senderID, int chatID, string timestamp, string senderUsername, MessageType messageType, string content, List<int> usersReport)
+            : base(messageID, senderID, chatID, DateTime.Parse(timestamp))
+        {
+            this.MessageID = messageID;
+            this.SenderID = senderID;
+            this.ChatID = chatID;
+            this.Timestamp = DateTime.Parse(timestamp);
+            this.SenderUsername = senderUsername;
+            this.MessageType = messageType;
+            this.Content = content;
+            this.UsersReport = usersReport ?? new();
+        }
+
         /// <summary>
         /// Gets or sets the content of the message.
         /// </summary>
         public string Content { get; set; }
 
-        private int MessageID { get; set; }
+        public int MessageID { get; set; }
 
-        private int SenderID { get; set; }
+        public int SenderID { get; set; }
 
-        private int ChatID { get; set; }
+        public int ChatID { get; set; }
 
-        private DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
 
-        private List<int> UsersReport { get; set; }
+        public List<int> UsersReport { get; set; }
 
         /// <summary>
         /// Gets the unique identifier of the message.

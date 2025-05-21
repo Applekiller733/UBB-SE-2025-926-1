@@ -1,9 +1,14 @@
-﻿using LoanShark.Domain;
+﻿using LoanShark.API.Converters;
+using LoanShark.API.JSONConverters;
+using LoanShark.API.Models;
+using LoanShark.Domain;
 using LoanShark.Domain.MessageClasses;
 using LoanShark.EF.Repository.SocialRepository;
 using LoanShark.Service.SocialService.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System.Configuration;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LoanShark.API.Proxies
 {
@@ -49,10 +54,25 @@ namespace LoanShark.API.Proxies
     {
         private readonly HttpClient _httpClient;
         private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        private readonly JsonSerializerOptions jsonSerializerOptionsMessageViewModel;   // options for deserializing a viewmodel
+
+        // for deserializing messages into correct types
+        private readonly JsonSerializerOptions _jsonOptionsCustomMessages = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            IncludeFields = true,
+            Converters = { new MessageConverter() }
+        };
 
         public ChatServiceProxy(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            this.jsonSerializerOptionsMessageViewModel = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                Converters = { new MessageViewModelConverter() }
+            };
         }
 
         public async Task<int> GetCurrentUserID()
@@ -156,7 +176,7 @@ namespace LoanShark.API.Proxies
                 chatName
             };
             var content = new StringContent(JsonSerializer.Serialize(request), System.Text.Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("https://localhost:7097/api/Chat", content);
+            var response = await _httpClient.PostAsync("https://localhost:7097/api/Chat/create-chat", content);
             response.EnsureSuccessStatusCode();
         }
 
@@ -179,7 +199,14 @@ namespace LoanShark.API.Proxies
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/history");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<Message>>(content, _jsonOptions);
+
+            // reading with custom viewModel deserializer
+            var dtos = JsonSerializer.Deserialize<List<MessageViewModel>>(content, this.jsonSerializerOptionsMessageViewModel);
+
+            var converter = new MessageViewModelToMessageConverter();
+            var messages = converter.Convert(dtos);
+
+            return messages;
         }
 
         public async Task AddUserToChat(int userID, int chatID)
@@ -203,7 +230,7 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<string>> GetChatParticipantsStringList(int chatID)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/participants/strings");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/participants/usernames");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<List<string>>(content, _jsonOptions);
@@ -214,7 +241,18 @@ namespace LoanShark.API.Proxies
             var response = await _httpClient.GetAsync($"https://localhost:7097/api/Chat/{chatID}/participants");
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<User>>(content, _jsonOptions);
+            var socialEF = JsonSerializer.Deserialize<List<SocialUserViewModel>>(content, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            var result = new List<User>();
+            foreach (var user in socialEF)
+            {
+                var newUser = new User(user.UserID, new Cnp(user.Cnp), user.Username, user.FirstName, user.LastName,
+                    new Email(user.Email), new PhoneNumber(user.PhoneNumber), new HashedPassword(user.HashedPassword.ToString()));
+                result.Add(newUser);
+            }
+            return result;
         }
     }
 

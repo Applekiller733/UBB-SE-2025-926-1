@@ -12,6 +12,7 @@ namespace LoanShark.EF.Repository.BankRepository
 {
     public interface ITransactionHistoryRepository
     {
+        public string iban { get; set; }
         Task<ObservableCollection<Transaction>> GetTransactionsNormal();
         Task<ObservableCollection<string>> GetTransactionsForMenu();
         Task<ObservableCollection<string>> GetTransactionsDetailed();
@@ -21,6 +22,7 @@ namespace LoanShark.EF.Repository.BankRepository
     // about the functions
     public class TransactionHistoryRepository : ITransactionHistoryRepository
     {
+        public string iban { get; set; }
         public TransactionHistoryRepository()
         {
         }

@@ -1,0 +1,42 @@
+﻿@{
+    var chartData = (Dictionary<string, int>)ViewBag.ChartData;
+    var labels = string.Join(",", chartData.Keys.Select(k => $"'{k}'"));
+    var values = string.Join(",", chartData.Values);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Pie Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div style="width: 500px; margin: 50px auto;">
+        <canvas id="myPieChart"></canvas>
+    </div>
+
+    <a class="btn btn-danger" style="width: 200px;margin: auto;" asp-controller="TransactionsHistory" asp-action="Index">Back</a>
+
+    <script>
+        const ctx = document.getElementById('myPieChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: [@Html.Raw(labels)],
+                datasets: [{
+                    label: 'Count',
+                    data: [@values],
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+</body>
+</html>

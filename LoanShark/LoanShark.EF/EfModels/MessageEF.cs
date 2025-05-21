@@ -27,7 +27,7 @@ namespace LoanShark.EF.EfModels
 
         [Column(TypeName = "NVARCHAR(260)")]
         [StringLength(260)]
-        public string Content { get; set; }
+        public string? Content { get; set; }
 
         [Column(TypeName = "VARCHAR(255)")]
         [StringLength(255)]

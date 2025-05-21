@@ -20,6 +20,11 @@ namespace LoanShark.MVC
             builder.Services.AddHttpClient<IMainPageService, MainPageServiceProxy>();
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
 
+
+            //Transactions Florin
+            builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
+            builder.Services.AddHttpClient<ITransactionHistoryService, TransactionHistoryProxy>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

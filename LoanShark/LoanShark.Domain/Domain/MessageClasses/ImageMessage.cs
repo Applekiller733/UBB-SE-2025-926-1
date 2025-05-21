@@ -59,15 +59,15 @@ namespace LoanShark.Domain.MessageClasses
         /// </summary>
         public string ImageURL { get; set; }
 
-        private int MessageID { get; set; }
+        public int MessageID { get; set; }
 
-        private int SenderID { get; set; }
+        public int SenderID { get; set; }
 
-        private int ChatID { get; set; }
+        public int ChatID { get; set; }
 
-        private DateTime Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
 
-        private List<int> UsersReport { get; set; }
+        public List<int> UsersReport { get; set; }
 
         /// <summary>
         /// Gets the unique identifier of the message.

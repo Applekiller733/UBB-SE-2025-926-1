@@ -42,7 +42,7 @@ namespace LoanShark.API.Proxies
         {
             try
             {
-                var response = await _httpClient.GetAsync($"https://localhost:7097/api/TransactionHistory/FilterByTypeForMenu?type={type}");
+                var response = await _httpClient.GetAsync($"https://localhost:7097/api/TransactionHistory/FilterByTypeForMenu?type={type}&iban={iban}");
                 response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadFromJsonAsync<ObservableCollection<string>>();
                 return result ?? new ObservableCollection<string>();

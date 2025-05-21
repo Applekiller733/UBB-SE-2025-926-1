@@ -29,13 +29,25 @@ namespace LoanShark.View.SocialView
 
         public DataTemplate RequestMessageTemplateRight { get; set; }
 
+        public IRepository Repository { get; set; }
+
         public int CurrentUserID { get; set; }
 
         public MessageTemplateSelector(IRepository repository)
         {
             this.repo = repository;      // THIS MIGHT EXPLODE IF REPOSITORY USERID IS NOT STATIC, ILL FIGURE IT OUT
-            this.CurrentUserID = repo.GetLoggedInUserID();
+            this.Repository = repository;
+            //this.CurrentUserID = repo.GetLoggedInUserID();
             //this.repository = repository;
+        }
+
+        // parameterless constructor for xaml!!!!
+        public MessageTemplateSelector() { }
+
+        // initializes the current user id
+        public void InitializeCurrentUserId(int currentUserId)
+        {
+            this.CurrentUserID = currentUserId;
         }
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)

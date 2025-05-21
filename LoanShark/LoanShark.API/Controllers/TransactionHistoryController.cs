@@ -32,10 +32,11 @@ namespace LoanShark.API.Controllers
         }
 
         [HttpGet("FilterByTypeForMenu")]
-        public async Task<ActionResult<ObservableCollection<string>>> FilterByTypeForMenu([FromQuery] string type)
+        public async Task<ActionResult<ObservableCollection<string>>> FilterByTypeForMenu([FromQuery] string type, [FromQuery] string iban)
         {
             try
             {
+                _transactionHistoryService.iban = iban;
                 var result = await _transactionHistoryService.FilterByTypeForMenu(type);
                 return Ok(result);
             }
