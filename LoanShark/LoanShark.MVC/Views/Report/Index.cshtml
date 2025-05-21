@@ -14,12 +14,6 @@
         </div>
     }
 
-    <!-- Pentru report la un mesaj go to this url
-        <a href="@Url.Action("Index", "Report", new { reportedUserId = user.Id, messageId = message.Id })" class="btn btn-warning btn-sm">
-            <i class="fas fa-flag"></i> Report
-        </a>
-     -->
-
     <form asp-action="Submit" method="post">
         <input type="hidden" asp-for="ReportedUserId" />
         <input type="hidden" asp-for="MessageId" />
