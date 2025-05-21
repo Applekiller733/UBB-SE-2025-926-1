@@ -1,0 +1,57 @@
+﻿@model LoanShark.MVC.Models.AddFriendsViewModel
+@{
+    ViewData["Title"] = "AddFriends";
+}
+
+<div class="container" style="padding: 20px;">
+    <div class="row align-items-center">
+        <!-- Title -->
+        <div class="col">
+            <h2>Add Friends</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Users List -->
+        <div class="col">
+            @if (Model.UsersList == null || !Model.UsersList.Any())
+            {
+                <p class="text-center" style="margin-top: 20px;">
+                    There aren't any users available.
+                </p>
+            }
+            else
+            {
+                <ul class="list-group">
+                    @foreach (var user in Model.UsersList)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>@user.Username</strong>
+                                <div class="text-muted" style="font-size: 12px;">@user.PhoneNumber</div>
+                            </div>
+                            <form asp-action="AddFriend" asp-controller="AddFriends" method="post">
+                                <input type="hidden" name="userId" value="@user.UserID" />
+                                <button type="submit" class="btn btn-primary btn-sm">+</button>
+                            </form>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+    }
+
+    .list-group-item {
+        padding: 10px;
+    }
+
+    .btn-sm {
+        margin-left: 10px;
+    }
+</style>

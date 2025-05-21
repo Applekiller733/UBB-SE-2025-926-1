@@ -1,0 +1,113 @@
+﻿@model LoanShark.MVC.Models.FriendsListViewModel
+
+@{
+    ViewData["Title"] = "FriendsList";
+}
+
+<div class="container" style="padding: 20px;">
+    <div class="row">
+        <!-- Left Column: Friends List -->
+        <div class="col-md-6">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h2>Friends</h2>
+                </div>
+                <div class="col-auto">
+                    <button id="addFriendButton" class="btn btn-primary btn-sm">+</button>
+                </div>
+            </div>
+
+            <div class="row" style="margin: 10px 0;">
+                <div class="col">
+                    <form asp-action="Index" asp-controller="FriendsList" method="get">
+                        <input type="text" class="form-control" name="searchQuery" value="@Model.SearchQuery" placeholder="Search friends..." />
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    @if (Model.NoFriendsVisibility)
+                    {
+                        <p class="text-center" style="margin-top: 20px;">
+                            You have no friends in the friends list. Add a friend to view it here. :)
+                        </p>
+                    }
+                    else
+                    {
+                        <ul class="list-group">
+                            @foreach (var friend in Model.FriendsList)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@friend.Username</strong>
+                                        <div class="text-muted" style="font-size: 12px;">@friend.PhoneNumber</div>
+                                    </div>
+                                    <form asp-action="RemoveFriend" asp-controller="FriendsList" method="post">
+                                        <input type="hidden" name="friendId" value="@friend.UserID" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                                    </form>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            @if (Model.ShowAddFriends)
+            {
+                @await Html.PartialAsync("~/Views/AddFriends/Index.cshtml", ViewData["AddFriendsModel"])
+
+            }
+            else
+            {
+                <div id="addFriendsContainer"></div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-submit search form
+        document.querySelector('input[name="searchQuery"]').addEventListener('input', function () {
+            this.form.submit();
+        });
+
+        // Load AddFriends view on button click
+        document.getElementById('addFriendButton').addEventListener('click', function () {
+            fetch('/AddFriends/Index')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('addFriendsContainer').innerHTML = html;
+                })
+                .catch(error => console.error('Error loading AddFriends:', error));
+        });
+
+        // Auto-load AddFriends view on page load
+        window.addEventListener('load', function () {
+            fetch('/AddFriends/Index')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('addFriendsContainer').innerHTML = html;
+                })
+                .catch(error => console.error('Error loading AddFriends:', error));
+        });
+    </script>
+}
+
+<style>
+    .container {
+        max-width: 1200px;
+    }
+
+    .list-group-item {
+        padding: 10px;
+    }
+
+    .btn-sm {
+        margin-left: 10px;
+    }
+</style>

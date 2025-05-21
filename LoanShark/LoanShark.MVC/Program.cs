@@ -19,6 +19,9 @@ namespace LoanShark.MVC
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
             builder.Services.AddHttpClient<ITransactionHistoryService, TransactionHistoryProxy>();
 
+            //AddFriends Mihai
+            builder.Services.AddHttpClient<ISocialUserServiceProxy, SocialUserServiceProxy>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
