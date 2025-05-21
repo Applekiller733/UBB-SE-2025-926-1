@@ -12,6 +12,7 @@ namespace LoanShark.EF.Repository.BankRepository
     public class TransactionHistoryRepositoryEF : ITransactionHistoryRepository
     {
         private readonly ILoanSharkDbContext _dbContext;
+        public string iban { get; set; }
 
         public TransactionHistoryRepositoryEF(ILoanSharkDbContext dbContext)
         {
@@ -22,7 +23,8 @@ namespace LoanShark.EF.Repository.BankRepository
         {
             try
             {
-                string currentIban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
+                //string currentIban = UserSession.Instance.GetUserData("current_bank_account_iban") ?? string.Empty;
+                string currentIban = iban;
 
                 var transactions = await _dbContext.Transaction
                     .Where(t => t.SenderIban == currentIban || t.ReceiverIban == currentIban)

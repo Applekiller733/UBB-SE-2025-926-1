@@ -48,6 +48,7 @@ namespace LoanShark.Service.BankService
         // retrieveForMenu() returns a list of transactions formatted for the menu
         public async Task<ObservableCollection<string>> RetrieveForMenu()
         {
+            Repo.iban = this.iban;
             ObservableCollection<Transaction> transactions = await Repo.GetTransactionsNormal();
             ObservableCollection<string> transactionsForMenu = new ObservableCollection<string>();
 
@@ -64,6 +65,7 @@ namespace LoanShark.Service.BankService
         // FilterByTypeForMenu() returns a list of transactions formatted for the menu filtered by the transaction type
         public async Task<ObservableCollection<string>> FilterByTypeForMenu(string type)
         {
+            Repo.iban = iban;
             ObservableCollection<Transaction> transactions = await Repo.GetTransactionsNormal();
             ObservableCollection<string> transactionsForMenu = new ObservableCollection<string>();
 
@@ -154,6 +156,7 @@ namespace LoanShark.Service.BankService
         // CreateCSV() creates a CSV file with the transactions
         public async Task CreateCSV()
         {
+            Repo.iban = this.iban;
             ObservableCollection<Transaction> transactions = await Repo.GetTransactionsNormal();
             StringBuilder csv = new StringBuilder();
             csv.AppendLine("Transaction ID,Sender IBAN,Receiver IBAN,Transaction Date,Sender Currency,Receiver Currency,Sender Amount,Receiver Amount,Transaction Type,Transaction Description");
@@ -178,6 +181,7 @@ namespace LoanShark.Service.BankService
         // GetTransactionTypeCounts() returns a dictionary with the transaction type counts
         public async Task<Dictionary<string, int>> GetTransactionTypeCounts()
         {
+            Repo.iban = iban;
             ObservableCollection<Transaction> transactions = await Repo.GetTransactionsNormal();
             return transactions
                 .Where(t => t.SenderIban == this.iban || t.ReceiverIban == this.iban)

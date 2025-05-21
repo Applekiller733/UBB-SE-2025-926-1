@@ -1,3 +1,5 @@
+using LoanShark.API.Proxies;
+using LoanShark.Service.BankService;
 using LoanShark.Web.Extensions;
 
 namespace LoanShark.MVC
@@ -11,6 +13,12 @@ namespace LoanShark.MVC
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddAllServiceProxies();
+
+
+            //Transactions Florin
+            builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
+            builder.Services.AddHttpClient<ITransactionHistoryService, TransactionHistoryProxy>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
