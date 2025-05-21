@@ -8,9 +8,69 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
+
+            <!-- Chat message templates -->
+            <DataTemplate x:Key="TextMessageTemplateLeft">
+                <StackPanel Margin="5">
+                    <TextBlock Text="{Binding SenderUsername}" Foreground="Gray" FontSize="10" />
+                    <TextBlock Text="{Binding Content}" Foreground="White" TextWrapping="Wrap" MaxWidth="400" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="TextMessageTemplateRight">
+                <StackPanel Margin="5" HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding SenderUsername}" Foreground="Gray" FontSize="10" HorizontalAlignment="Right" />
+                    <TextBlock Text="{Binding Content}" Foreground="White" TextWrapping="Wrap" MaxWidth="400" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="ImageMessageTemplateLeft">
+                <StackPanel Margin="5">
+                    <TextBlock Text="{Binding SenderUsername}" Foreground="Gray" FontSize="10" />
+                    <Image Source="{Binding ImageURL}" MaxWidth="200" Stretch="Uniform" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="ImageMessageTemplateRight">
+                <StackPanel Margin="5" HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding SenderUsername}" Foreground="Gray" FontSize="10" HorizontalAlignment="Right" />
+                    <Image Source="{Binding ImageURL}" MaxWidth="200" Stretch="Uniform" />
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="TransferMessageTemplateLeft">
+                <StackPanel Margin="5">
+                    <TextBlock Text="{Binding SenderUsername}" Foreground="Gray" FontSize="10" />
+                    <StackPanel>
+                        <TextBlock Text="{Binding Description}" Foreground="White" TextWrapping="Wrap" MaxWidth="400" />
+                        <TextBlock Text="{Binding Amount}" Foreground="White" />
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="TransferMessageTemplateRight">
+                <StackPanel Margin="5" HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding SenderUsername}" Foreground="Gray" FontSize="10" HorizontalAlignment="Right" />
+                    <StackPanel>
+                        <TextBlock Text="{Binding Description}" Foreground="White" TextWrapping="Wrap" MaxWidth="400" />
+                        <TextBlock Text="{Binding Amount}" Foreground="White" />
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="RequestMessageTemplateLeft">
+                <StackPanel Margin="5">
+                    <TextBlock Text="{Binding SenderUsername}" Foreground="Gray" FontSize="10" />
+                    <StackPanel>
+                        <TextBlock Text="{Binding Description}" Foreground="White" TextWrapping="Wrap" MaxWidth="400" />
+                        <TextBlock Text="{Binding Amount}" Foreground="White" />
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
+            <DataTemplate x:Key="RequestMessageTemplateRight">
+                <StackPanel Margin="5" HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding SenderUsername}" Foreground="Gray" FontSize="10" HorizontalAlignment="Right" />
+                    <StackPanel>
+                        <TextBlock Text="{Binding Description}" Foreground="White" TextWrapping="Wrap" MaxWidth="400" />
+                        <TextBlock Text="{Binding Amount}" Foreground="White" />
+                    </StackPanel>
+                </StackPanel>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

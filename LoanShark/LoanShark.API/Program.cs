@@ -65,6 +65,13 @@ namespace LoanShark.Web
             builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.AddScoped<ISocialUserService, SocialUserService>();
 
+
+            // json to handle polymorphism
+            //builder.Services.AddControllers().AddNewtonsoftJson(options =>
+            //{
+            //    options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto;
+            //});
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -27,7 +27,7 @@ namespace LoanShark.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ReportViewModel>> GetReportById(int id)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now, matching UserController
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now, matching UserController
             var report = await _reportService.GetReportById(id);
             if (report == null)
                 return NotFound();
@@ -46,7 +46,7 @@ namespace LoanShark.API.Controllers
         [HttpPost]
         public async Task<ActionResult> AddReport([FromBody] ReportViewModel reportDto)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             if (reportDto == null)
                 return BadRequest("Report data is required.");
 
@@ -65,7 +65,7 @@ namespace LoanShark.API.Controllers
         [HttpGet("exists/{messageId}/{reporterUserId}")]
         public async Task<ActionResult<bool>> CheckIfReportExists(int messageId, int reporterUserId)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             var exists = await _reportService.CheckIfReportExists(messageId, reporterUserId);
             return Ok(exists);
         }
@@ -73,7 +73,7 @@ namespace LoanShark.API.Controllers
         [HttpPost("increase-report-count/{reportedId}")]
         public async Task<ActionResult> IncreaseReportCount(int reportedId)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             await _reportService.IncreaseReportCount(reportedId);
             return NoContent();
         }
@@ -81,7 +81,7 @@ namespace LoanShark.API.Controllers
         [HttpPost("log-reports")]
         public async Task<ActionResult> LogReportedMessages([FromBody] List<ReportViewModel> reportDtos)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             if (reportDtos == null || reportDtos.Count == 0)
                 return BadRequest("Report data is required.");
 
@@ -100,7 +100,7 @@ namespace LoanShark.API.Controllers
         [HttpPost("send")]
         public async Task<ActionResult> SendReport([FromBody] ReportViewModel reportDto)
         {
-            UserSession.Instance.SetUserData("id_user", "1"); // Hardcoded for now
+            UserSession.Instance.SetUserData("id_user", "2"); // Hardcoded for now
             if (reportDto == null)
                 return BadRequest("Report data is required.");
 

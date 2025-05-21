@@ -42,7 +42,10 @@ namespace LoanShark.View.SocialView
             this.chatMessagesViewModel = new ChatMessagesViewModel(mainWindow, rightFrame, chatID, messageService, chatService, userService, reportService, this.repository);
 
             // ?
-            this.ChatListView.ItemTemplateSelector = this.chatMessagesViewModel.TemplateSelector;
+            if (this.chatMessagesViewModel.TemplateSelector != null)
+            {
+                this.ChatListView.ItemTemplateSelector = this.chatMessagesViewModel.TemplateSelector;
+            }
 
             this.generateTransferViewModel = new GenerateTransferViewModel(chatService, chatID);
             this.chatMessagesViewModel.ChatListView = this.ChatListView;

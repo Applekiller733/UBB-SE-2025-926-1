@@ -16,9 +16,15 @@ namespace LoanShark.Domain
     /// </summary>
     public class Chat
     {
-        private List<int> userIDsList;
+        private List<int> userIDs;
         private int chatID;
         private string chatName;
+
+        public List<int> UserIDs { get; set; }
+        
+        public int ChatID { get; set; }
+
+        public string ChatName { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Chat"/> class.
@@ -29,7 +35,7 @@ namespace LoanShark.Domain
         public Chat(int chatID, string chatName, List<int> userIds)
         {
             this.chatID = chatID;
-            this.userIDsList = userIds;
+            this.userIDs = userIds;
             this.chatName = chatName;
         }
 
@@ -48,7 +54,7 @@ namespace LoanShark.Domain
         /// <returns>The list of user IDs.</returns>
         public List<int> getUserIDsList()
         {
-            return this.userIDsList;
+            return this.userIDs;
         }
 
         /// <summary>
@@ -66,7 +72,7 @@ namespace LoanShark.Domain
         /// <returns>The user count.</returns>
         public int getUserCount()
         {
-            return this.userIDsList.Count;
+            return this.userIDs.Count;
         }
 
         /// <summary>
@@ -75,7 +81,7 @@ namespace LoanShark.Domain
         /// <param name="userID">The ID of the user to add.</param>
         public void AddUser(int userID)
         {
-            this.userIDsList.Add(userID);
+            this.userIDs.Add(userID);
         }
 
         /// <summary>
@@ -84,7 +90,7 @@ namespace LoanShark.Domain
         /// <param name="userID">The ID of the user to remove.</param>
         public void RemoveUser(int userID)
         {
-            this.userIDsList.Remove(userID);
+            this.userIDs.Remove(userID);
         }
 
         /// <summary>
@@ -94,7 +100,7 @@ namespace LoanShark.Domain
         /// <returns>True if the user is in the chat; otherwise, false.</returns>
         public bool IsUserInChat(int userID)
         {
-            return this.userIDsList.Contains(userID);
+            return this.userIDs.Contains(userID);
         }
 
         /// <summary>

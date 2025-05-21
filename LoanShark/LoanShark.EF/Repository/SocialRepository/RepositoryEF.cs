@@ -6,6 +6,7 @@ using LoanShark.EF.EFModels;
 using LoanShark.EF.Mappers;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -416,8 +417,11 @@ namespace LoanShark.EF.Repository.SocialRepository
         // Get the EF instance for this enum
         private async Task<MessageTypeEF> GetMessageTypeEFByTypeName(MessageType messageType)
         {
-            return await this.loanSharkDbContext.MessageType
-                .FirstAsync(message => message.TypeName.Equals(messageType.ToString()));
+            var typeName = messageType.ToString();
+            var result = await this.loanSharkDbContext.MessageType
+                .FirstOrDefaultAsync(message => message.TypeName.ToString().Equals(typeName));
+
+            return result ?? throw new InvalidOperationException($"MessageType '{typeName}' not found.");
         }
 
         public async Task AddImageMessage(int userId, int chatId, string imageURL)
@@ -427,6 +431,7 @@ namespace LoanShark.EF.Repository.SocialRepository
             var imageMessageEF = new MessageEF
             {
                 TypeID = messageTypeEF.TypeId,
+                Content = ".",      // add something because it it not nullable
                 UserID = userId,
                 ChatID = chatId,
                 ImageUrl = imageURL,
@@ -635,20 +640,22 @@ namespace LoanShark.EF.Repository.SocialRepository
 
         public async Task<List<Message>> GetMessagesList()
         {
-            var messages = await this.loanSharkDbContext.Message.ToListAsync();
+            var messages = await this.loanSharkDbContext.Message
+                .Include(message => message.MessageType)
+                .ToListAsync();
             List<Message> messagesList = new List<Message>();
 
             foreach (var message in messages)
             {
-                if (message.MessageType.TypeName.Equals(MessageType.Image.ToString()))
+                if (message.MessageType.TypeName == MessageType.Image)
                 {
                     messagesList.Add(MessageMapper.ToDomainImageMessage(message));
                 }
-                else if (message.MessageType.TypeName.Equals(MessageType.Text.ToString()))
+                else if (message.MessageType.TypeName == MessageType.Text)
                 {
                     messagesList.Add(MessageMapper.ToDomainTextMessage(message));
                 }
-                else if (message.MessageType.TypeName.Equals(MessageType.Transfer.ToString()))
+                else if (message.MessageType.TypeName == MessageType.Transfer)
                 {
                     messagesList.Add(MessageMapper.ToDomainTransferMessage(message));
                 }
@@ -718,5 +725,12 @@ namespace LoanShark.EF.Repository.SocialRepository
             await this.loanSharkDbContext.SaveChangesAsync();
         }
 
+        public async Task<MessageType> GetMessageTypeByMessageId(int messageId)
+        {
+            MessageEF message = await this.loanSharkDbContext.Message
+                .FindAsync(messageId);
+
+            return message.MessageType.TypeName;
+        }
     }
 }
