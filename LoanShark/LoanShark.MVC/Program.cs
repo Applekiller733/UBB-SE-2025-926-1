@@ -26,6 +26,10 @@ namespace LoanShark.MVC
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
             builder.Services.AddHttpClient<ITransactionHistoryService, TransactionHistoryProxy>();
 
+
+            //AddFriends Mihai
+            builder.Services.AddHttpClient<ISocialUserServiceProxy, SocialUserServiceProxy>();
+
             builder.Services.AddHttpClient<IChatServiceProxy, ChatServiceProxy>();
             builder.Services.AddHttpClient<ISocialUserServiceProxy, SocialUserServiceProxy>();
             builder.Services.AddHttpClient<IMessageServiceProxy, MessageServiceProxy>();
