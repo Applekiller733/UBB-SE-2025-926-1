@@ -19,16 +19,18 @@ namespace LoanShark.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string addFriendSearchQuery)
         {
-            // int currentUserId = await _userService.GetCurrentUser();
-            int currentUserId = 1;
+            int currentUserId = await _userService.GetCurrentUser();
             var nonFriends = await _userService.GetNonFriendsUsers(currentUserId);
             var viewModel = new AddFriendsViewModel
             {
-                SearchQuery = string.Empty,
+                SearchQuery = addFriendSearchQuery ?? string.Empty,
                 UsersList = nonFriends
-                    .Where(u => u.UserID != currentUserId) // Exclude current user
+                    .Where(u => u.UserID != currentUserId)
+                    .Where(u => string.IsNullOrEmpty(addFriendSearchQuery) ||
+                               u.Username.Contains(addFriendSearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                               u.PhoneNumber.ToString().Contains(addFriendSearchQuery, StringComparison.OrdinalIgnoreCase))
                     .Select(u => new User
                     {
                         UserID = u.UserID,
@@ -43,10 +45,9 @@ namespace LoanShark.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFriend(int userId)
         {
-            // int currentUserId = await _userService.GetCurrentUser();
-            int currentUserId = 1;
+            int currentUserId = await _userService.GetCurrentUser();
             await _userService.AddFriend(currentUserId, userId);
-            return RedirectToAction("Index", "FriendsList", new { showAddFriends = true });
+            return RedirectToAction("Index", "FriendsList", new { friendSearchQuery = string.Empty, showAddFriends = true });
         }
     }
 }

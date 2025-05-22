@@ -19,19 +19,18 @@ namespace LoanShark.MVC.Controllers
 
         // GET: /FriendsList
         [HttpGet]
-        public async Task<IActionResult> Index(string searchQuery, bool showAddFriends = false)
+        public async Task<IActionResult> Index(string friendSearchQuery, bool showAddFriends = false)
         {
-            //int currentUserId = await _userService.GetCurrentUser();
-            int currentUserId = 1;
+            int currentUserId = await _userService.GetCurrentUser();
             var friends = await _userService.GetFriendsByUser(currentUserId);
             var viewModel = new FriendsListViewModel
             {
-                SearchQuery = searchQuery ?? string.Empty,
+                SearchQuery = friendSearchQuery ?? string.Empty,
                 FriendsList = friends
                     .Where(f => f.UserID != currentUserId)
-                    .Where(f => string.IsNullOrEmpty(searchQuery) ||
-                               f.Username.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
-                               f.PhoneNumber.ToString().Contains(searchQuery, StringComparison.OrdinalIgnoreCase))
+                    .Where(f => string.IsNullOrEmpty(friendSearchQuery) ||
+                               f.Username.Contains(friendSearchQuery, StringComparison.OrdinalIgnoreCase) ||
+                               f.PhoneNumber.ToString().Contains(friendSearchQuery, StringComparison.OrdinalIgnoreCase))
                     .ToList(),
                 ShowAddFriends = showAddFriends
             };
@@ -62,10 +61,9 @@ namespace LoanShark.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveFriend(int friendId)
         {
-            //int currentUserId = await _userService.GetCurrentUser();
-            int currentUserId = 1;
+            int currentUserId = await _userService.GetCurrentUser();
             await _userService.RemoveFriend(currentUserId, friendId);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { friendSearchQuery = string.Empty, showAddFriends = true });
         }
     }
 }
