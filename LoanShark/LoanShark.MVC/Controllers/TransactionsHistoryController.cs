@@ -17,8 +17,8 @@ namespace LoanShark.MVC.Controllers
 
         public async Task<IActionResult> Index(string? Filter)
         {
-            //_transactionsHistoryService.iban = HttpContext.Session.GetString("current_bank_account_iban");
-            _transactionsHistoryService.iban = "RO10SEUPBMC6N7XG6GRUWOK3";
+            _transactionsHistoryService.iban = HttpContext.Session.GetString("current_bank_account_iban");
+            //_transactionsHistoryService.iban = "RO10SEUPBMC6N7XG6GRUWOK3";
 
             ObservableCollection <string> transactions;
 
@@ -55,8 +55,8 @@ namespace LoanShark.MVC.Controllers
 
         public async Task<IActionResult> ExportToCsv()
         {
-            //_transactionsHistoryService.iban = HttpContext.Session.GetString("current_bank_account_iban");
-            _transactionsHistoryService.iban = "RO10SEUPBMC6N7XG6GRUWOK3";
+            _transactionsHistoryService.iban = HttpContext.Session.GetString("current_bank_account_iban");
+            //_transactionsHistoryService.iban = "RO10SEUPBMC6N7XG6GRUWOK3";
 
             await _transactionsHistoryService.CreateCSV();
 
