@@ -11,9 +11,15 @@
         </div>
     </div>
 
+    <div class="row" style="margin: 10px 0;">
+        <div class="col">
+            <input type="text" class="form-control" id="addFriendSearchQuery" value="@Model.SearchQuery" placeholder="Search users..." />
+        </div>
+    </div>
+
     <div class="row">
         <!-- Users List -->
-        <div class="col">
+        <div class="col" id="addFriendsList">
             @if (Model.UsersList == null || !Model.UsersList.Any())
             {
                 <p class="text-center" style="margin-top: 20px;">
