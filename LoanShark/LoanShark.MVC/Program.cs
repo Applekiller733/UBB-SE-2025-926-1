@@ -21,6 +21,7 @@ namespace LoanShark.MVC
             builder.Services.AddHttpClient<ILoginService, LoginServiceProxy>();
             builder.Services.AddHttpClient<IMainPageService, MainPageServiceProxy>();
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
+            builder.Services.AddHttpClient<IBankAccountService, BankAccountServiceProxy>();
 
 
             //Transactions Florin
