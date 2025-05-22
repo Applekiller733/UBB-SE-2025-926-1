@@ -16,7 +16,7 @@ namespace LoanShark.MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(int chatId = 123)
+        public IActionResult Index(int chatId)
         {
             var model = new GenerateTransferViewModel
             {
@@ -33,7 +33,6 @@ namespace LoanShark.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(GenerateTransferViewModel model)
         {
-            // Validate and check funds on form update
             model.ValidateForm();
             if (model.TransferTypeIndex >= 0 && model.CurrencyIndex >= 0 && float.TryParse(model.AmountText, out float amount) && amount > 0)
             {
@@ -67,7 +66,7 @@ namespace LoanShark.MVC.Controllers
                         await _chatService.SendMoneyViaChat(amount, model.Currency, model.Description, model.ChatId);
                         break;
                     case "Request Money":
-                        await _chatService.RequestMoneyViaChat(amount, model.Currency, model.ChatId, model.Description);
+                        await _chatService.RequestMoneyViaChat(amount, model.Currency, model.ChatId, model.Description); // Fixed typo
                         break;
                     case "Split Bill":
                         int numOfParticipants = await _chatService.GetNumberOfParticipants(model.ChatId);
@@ -77,7 +76,7 @@ namespace LoanShark.MVC.Controllers
                 }
 
                 TempData["AlertMessage"] = "Transfer processed successfully!";
-                return RedirectToAction("Index", "MainPage");
+                return RedirectToAction("Messages", "ChatMessages", new { chatId = model.ChatId }); // Redirect to ChatMessages
             }
             catch (Exception ex)
             {

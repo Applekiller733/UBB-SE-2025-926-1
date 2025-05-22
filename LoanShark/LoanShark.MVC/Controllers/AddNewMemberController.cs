@@ -12,28 +12,23 @@ namespace LoanShark.MVC.Controllers
     {
         private readonly ISocialUserServiceProxy _userService;
         private readonly IChatServiceProxy _chatService;
-        private List<FriendDTO> _newlyAddedFriends;
-        private List<FriendDTO> _allUnaddedFriends;
 
         public AddNewMemberController(ISocialUserServiceProxy userService, IChatServiceProxy chatService)
         {
             _userService = userService;
             _chatService = chatService;
-            _newlyAddedFriends = new List<FriendDTO>();
-            _allUnaddedFriends = new List<FriendDTO>();
         }
 
-        public async Task<IActionResult> Index(string? searchQuery, int chatId = 2)
+        public async Task<IActionResult> Index(string? searchQuery, int chatId, List<FriendDTO> newlyAddedFriends = null)
         {
             try
             {
                 int currentUserId = await _userService.GetCurrentUser();
                 string chatName = await _chatService.GetChatNameByID(chatId) ?? "Unknown Chat";
 
-                // Load all unadded friends (using GetNonFriendsUsers for broader eligibility)
                 var allPotentialUsers = await _userService.GetNonFriendsUsers(currentUserId);
                 var currentChatMembers = await _chatService.GetChatParticipantsList(chatId);
-                _allUnaddedFriends = allPotentialUsers
+                var allUnaddedFriends = allPotentialUsers
                     .Where(f => f != null && !currentChatMembers.Any(p => p?.GetUserId() == f.GetUserId()))
                     .Select(f => new FriendDTO
                     {
@@ -42,17 +37,17 @@ namespace LoanShark.MVC.Controllers
                         PhoneNumber = f.PhoneNumber?.ToString()
                     })
                     .ToList();
-                Console.WriteLine($"Loaded {_allUnaddedFriends.Count} unadded friends for chat {chatId}");
 
-                // Filter unadded friends
+                // Use the passed newlyAddedFriends or initialize if null
+                newlyAddedFriends = newlyAddedFriends ?? new List<FriendDTO>();
+
                 var unaddedFriends = string.IsNullOrEmpty(searchQuery)
-                    ? _allUnaddedFriends
-                    : _allUnaddedFriends
+                    ? allUnaddedFriends
+                    : allUnaddedFriends
                         .Where(f => f.Username.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ||
                                     (f.PhoneNumber?.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) ?? false))
                         .ToList();
 
-                // Get current chat members
                 var currentChatMembersDto = currentChatMembers
                     .Select(p => new FriendDTO
                     {
@@ -67,65 +62,94 @@ namespace LoanShark.MVC.Controllers
                     ChatName = chatName,
                     CurrentChatMembers = currentChatMembersDto,
                     UnaddedFriends = unaddedFriends,
-                    NewlyAddedFriends = _newlyAddedFriends,
-                    SearchQuery = searchQuery
+                    NewlyAddedFriends = newlyAddedFriends,
+                    SearchQuery = searchQuery,
+                    ChatId = chatId
                 };
 
                 return View(viewModel);
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"Error in Index: {ex.Message}");
                 TempData["AlertMessage"] = $"Error loading data: {ex.Message}. Using defaults.";
                 return View(new AddNewMemberViewModel
                 {
                     ChatName = "Unknown Chat",
                     CurrentChatMembers = new List<FriendDTO>(),
                     UnaddedFriends = new List<FriendDTO>(),
-                    NewlyAddedFriends = _newlyAddedFriends,
-                    SearchQuery = searchQuery
+                    NewlyAddedFriends = newlyAddedFriends ?? new List<FriendDTO>(),
+                    SearchQuery = searchQuery,
+                    ChatId = chatId
                 });
             }
         }
 
         [HttpPost]
-        public IActionResult AddToSelected(string userId)
+        public async Task<IActionResult> AddToSelected(string userId, int chatId, List<FriendDTO> newlyAddedFriends)
         {
-            var friend = _allUnaddedFriends.FirstOrDefault(f => f.UserId == userId);
-            if (friend != null && !_newlyAddedFriends.Any(f => f.UserId == userId))
+            var allUnaddedFriends = await GetUnaddedFriends(chatId); // Await the task to get the result
+            var friend = allUnaddedFriends.Where(f => f.UserId == userId).FirstOrDefault(); // Use FirstOrDefault to avoid exceptions
+            if (friend != null && !newlyAddedFriends.Any(f => f.UserId == userId))
             {
-                _newlyAddedFriends.Add(friend);
+                newlyAddedFriends.Add(friend);
                 TempData["AlertMessage"] = $"Added {friend.Username} to selection.";
             }
+            else
+            {
+                TempData["AlertMessage"] = "Friend not found or already added.";
+            }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { chatId, newlyAddedFriends });
         }
 
         [HttpPost]
-        public IActionResult RemoveFromSelected(string userId)
+        public IActionResult RemoveFromSelected(string userId, int chatId, List<FriendDTO> newlyAddedFriends)
         {
-            var friend = _newlyAddedFriends.FirstOrDefault(f => f.UserId == userId);
+            var friend = newlyAddedFriends.Where(f => f.UserId == userId).First();
             if (friend != null)
             {
-                _newlyAddedFriends.Remove(friend);
+                newlyAddedFriends.Remove(friend);
                 TempData["AlertMessage"] = $"Removed {friend.Username} from selection.";
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { chatId, newlyAddedFriends });
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUsersToChat(int chatId = 2)
+        public async Task<IActionResult> AddUsersToChat(int chatId, List<FriendDTO> newlyAddedFriends)
         {
-            foreach (var friend in _newlyAddedFriends)
+            try
             {
-                await _chatService.AddUserToChat(int.Parse(friend.UserId), chatId);
+                foreach (var friend in newlyAddedFriends)
+                {
+                    await _chatService.AddUserToChat(int.Parse(friend.UserId), chatId);
+                }
+
+                newlyAddedFriends.Clear();
+                TempData["AlertMessage"] = "New members added to chat successfully!";
+                return RedirectToAction("Messages", "ChatMessages", new { chatId });
             }
+            catch (Exception ex)
+            {
+                TempData["AlertMessage"] = $"Error adding members: {ex.Message}";
+                return RedirectToAction("Index", new { chatId, newlyAddedFriends });
+            }
+        }
 
-            _newlyAddedFriends.Clear();
-            TempData["AlertMessage"] = "New members added to chat successfully!";
-
-            return RedirectToAction("Index", "MainPage");
+        private async Task<List<FriendDTO>> GetUnaddedFriends(int chatId)
+        {
+            int currentUserId = await _userService.GetCurrentUser();
+            var allPotentialUsers = await _userService.GetNonFriendsUsers(currentUserId);
+            var currentChatMembers = await _chatService.GetChatParticipantsList(chatId);
+            return allPotentialUsers
+                .Where(f => f != null && !currentChatMembers.Any(p => p?.GetUserId() == f.GetUserId()))
+                .Select(f => new FriendDTO
+                {
+                    UserId = f.GetUserId().ToString(),
+                    Username = f.Username,
+                    PhoneNumber = f.PhoneNumber?.ToString()
+                })
+                .ToList();
         }
     }
 }

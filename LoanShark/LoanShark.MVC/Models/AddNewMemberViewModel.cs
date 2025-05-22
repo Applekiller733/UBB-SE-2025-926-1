@@ -9,6 +9,7 @@ namespace LoanShark.MVC.Models
         public List<FriendDTO> UnaddedFriends { get; set; }
         public List<FriendDTO> NewlyAddedFriends { get; set; }
         public string SearchQuery { get; set; }
+        public int ChatId { get; set; } // Added to store chatId
     }
 
     public class FriendDTO

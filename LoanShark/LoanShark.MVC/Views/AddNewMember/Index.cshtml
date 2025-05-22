@@ -1,6 +1,6 @@
 ﻿@model LoanShark.MVC.Models.AddNewMemberViewModel
 @{
-    ViewData["Title"] = "AddNewMember";
+    ViewData["Title"] = "Add New Member";
     var alertMessage = TempData["AlertMessage"] as string;
 }
 
@@ -14,6 +14,7 @@
             <div class="card p-4 shadow-sm">
                 <h4>Friends</h4>
                 <form asp-action="Index" method="get">
+                    <input type="hidden" name="chatId" value="@Model.ChatId" />
                     <input asp-for="SearchQuery" class="form-control mb-3" placeholder="Search by username or phone..." />
                     <button type="submit" class="btn btn-info">Search</button>
                 </form>
@@ -29,6 +30,13 @@
                                 </div>
                                 <form asp-action="AddToSelected" method="post">
                                     <input type="hidden" name="userId" value="@friend.UserId" />
+                                    <input type="hidden" name="chatId" value="@Model.ChatId" />
+                                    @for (int i = 0; i < Model.NewlyAddedFriends?.Count; i++)
+                                    {
+                                        <input type="hidden" name="newlyAddedFriends[@i].UserId" value="@Model.NewlyAddedFriends[i].UserId" />
+                                        <input type="hidden" name="newlyAddedFriends[@i].Username" value="@Model.NewlyAddedFriends[i].Username" />
+                                        <input type="hidden" name="newlyAddedFriends[@i].PhoneNumber" value="@Model.NewlyAddedFriends[i].PhoneNumber" />
+                                    }
                                     <button type="submit" class="btn btn-sm btn-success">+</button>
                                 </form>
                             </div>
@@ -72,6 +80,13 @@
                                 @friend.Username
                                 <form asp-action="RemoveFromSelected" method="post">
                                     <input type="hidden" name="userId" value="@friend.UserId" />
+                                    <input type="hidden" name="chatId" value="@Model.ChatId" />
+                                    @for (int i = 0; i < Model.NewlyAddedFriends?.Count; i++)
+                                    {
+                                        <input type="hidden" name="newlyAddedFriends[@i].UserId" value="@Model.NewlyAddedFriends[i].UserId" />
+                                        <input type="hidden" name="newlyAddedFriends[@i].Username" value="@Model.NewlyAddedFriends[i].Username" />
+                                        <input type="hidden" name="newlyAddedFriends[@i].PhoneNumber" value="@Model.NewlyAddedFriends[i].PhoneNumber" />
+                                    }
                                     <button type="submit" class="btn btn-sm btn-danger">−</button>
                                 </form>
                             </div>
@@ -84,6 +99,13 @@
                 }
 
                 <form asp-action="AddUsersToChat" method="post">
+                    <input type="hidden" name="chatId" value="@Model.ChatId" />
+                    @for (int i = 0; i < Model.NewlyAddedFriends?.Count; i++)
+                    {
+                        <input type="hidden" name="newlyAddedFriends[@i].UserId" value="@Model.NewlyAddedFriends[i].UserId" />
+                        <input type="hidden" name="newlyAddedFriends[@i].Username" value="@Model.NewlyAddedFriends[i].Username" />
+                        <input type="hidden" name="newlyAddedFriends[@i].PhoneNumber" value="@Model.NewlyAddedFriends[i].PhoneNumber" />
+                    }
                     <button type="submit" class="btn btn-info mt-3" style="width: 100%;">Done</button>
                 </form>
             </div>
@@ -91,7 +113,7 @@
     </div>
 
     <div class="text-center mt-3">
-        <a class="btn btn-danger" style="width: 200px;" asp-controller="ChatList" asp-action="Index">Back</a>
+        <a class="btn btn-danger" style="width: 200px;" asp-controller="ChatMessages" asp-action="Messages" asp-route-chatId="@Model.ChatId">Back</a>
     </div>
 </div>
 
