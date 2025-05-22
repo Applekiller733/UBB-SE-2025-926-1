@@ -12,8 +12,8 @@
             <p>@Model.CurrentChatParticipantsString</p>
         </div>
         <div class="col-auto">
-            <a asp-controller="ChatMessages" asp-action="AddMember" asp-route-chatId="@Model.CurrentChatID" class="btn btn-secondary me-2">Add Member</a>
-            <a asp-controller="ChatMessages" asp-action="LeaveChat" asp-route-chatId="@Model.CurrentChatID" class="btn btn-danger">Leave Chat</a>
+            <a asp-controller="AddNewMember" asp-action="Index" asp-route-chatId="@Model.CurrentChatID" class="btn btn-secondary me-2">Add Member</a>
+            <a asp-controller="LeaveChat" asp-action="Index" asp-route-chatId="@Model.CurrentChatID" class="btn btn-danger">Leave Chat</a>
         </div>
     </div>
 
@@ -76,7 +76,7 @@
             <input type="file" name="imageFile" accept=".jpg,.jpeg,.png" class="form-control" />
             <button type="submit" class="btn btn-primary">+</button>
         </form>
-        <a asp-controller="ChatMessages" asp-action="GenerateTransfer" asp-route-chatId="@Model.CurrentChatID" class="btn btn-primary mt-2">Send Transfer</a>
+        <a asp-controller="GenerateTransfer" asp-action="Index" asp-route-chatId="@Model.CurrentChatID" class="btn btn-primary mt-2">Send Transfer</a>
     </div>
 </div>
 
