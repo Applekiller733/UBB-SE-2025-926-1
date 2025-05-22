@@ -1,4 +1,6 @@
 using LoanShark.API.Proxies;
+using LoanShark.MVC.Controllers;
+using LoanShark.MVC.Models;
 using LoanShark.Service.BankService;
 using LoanShark.Service.Service.BankService;
 using LoanShark.Web.Extensions;
@@ -20,14 +22,20 @@ namespace LoanShark.MVC
             builder.Services.AddHttpClient<IMainPageService, MainPageServiceProxy>();
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
 
-
             //Transactions Florin
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
             builder.Services.AddHttpClient<ITransactionHistoryService, TransactionHistoryProxy>();
 
-            // Posts(Feed) George
+            builder.Services.AddHttpClient<IChatServiceProxy, ChatServiceProxy>();
+            builder.Services.AddHttpClient<ISocialUserServiceProxy, SocialUserServiceProxy>();
+            builder.Services.AddHttpClient<IMessageServiceProxy, MessageServiceProxy>();
+            builder.Services.AddHttpClient<IReportServiceProxy, ReportServiceProxy>();
+            builder.Services.AddHttpClient<ImgurImageUploader>();
+            builder.Services.AddSingleton<ImgurImageUploader>();
+
             builder.Services.AddHttpClient<IFeedServiceProxy, FeedServiceProxy>();
             builder.Services.AddHttpClient<INotificationServiceProxy, NotificationServiceProxy>();
+
 
             var app = builder.Build();
 
