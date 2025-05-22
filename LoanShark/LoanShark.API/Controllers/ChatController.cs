@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using LoanShark.Domain.MessageClasses;
 using LoanShark.API.Models;
 using LoanShark.Service.SocialService.Interfaces;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using LoanShark.API.JSONConverters;
 
 namespace LoanShark.API.Controllers
 {
@@ -13,10 +16,12 @@ namespace LoanShark.API.Controllers
     public class ChatController : ControllerBase
     {
         private readonly IChatService chatService;
+        private readonly IMessageService messageService;
 
-        public ChatController(IChatService chatService)
+        public ChatController(IChatService chatService, IMessageService messageService)
         {
             this.chatService = chatService;
+            this.messageService = messageService;
         }
 
         [HttpGet("current-user-id")]
@@ -87,9 +92,93 @@ namespace LoanShark.API.Controllers
         }
 
         [HttpGet("{chatId}/history")]
-        public async Task<ActionResult<List<Message>>> GetChatHistory(int chatId)
+        public async Task<IActionResult> GetChatHistory(int chatId)
         {
-            return Ok(await chatService.GetChatHistory(chatId));
+            var messages = await chatService.GetChatHistory(chatId);
+            var dtosTasks = messages.Select(async m =>
+            {
+                var messageType = await this.messageService.GetMessageTypeByMessageId(m.MessageID);
+
+                MessageViewModel viewModel = messageType.ToString() switch
+                {
+                    "Text" => new TextMessageViewModel
+                    {
+                        MessageID = m.MessageID,
+                        SenderID = m.SenderID,
+                        ChatID = m.ChatID,
+                        Timestamp = m.Timestamp.ToString("O"),
+                        SenderUsername = m.SenderUsername,
+                        MessageType = messageType.ToString(),
+                        Content = ((TextMessage)m).Content,
+                        UsersReport = ((TextMessage)m).UsersReport
+                    },
+                    "Image" => new ImageMessageViewModel
+                    {
+                        MessageID = m.MessageID,
+                        SenderID = m.SenderID,
+                        ChatID = m.ChatID,
+                        Timestamp = m.Timestamp.ToString("O"),
+                        SenderUsername = m.SenderUsername,
+                        MessageType = messageType.ToString(),
+                        ImageURL = ((ImageMessage)m).ImageURL,
+                        UsersReport = ((ImageMessage)m).UsersReport
+                    },
+                    "Transfer" => new TransferMessageViewModel
+                    {
+                        MessageID = m.MessageID,
+                        SenderID = m.SenderID,
+                        ChatID = m.ChatID,
+                        Timestamp = m.Timestamp.ToString("O"),
+                        SenderUsername = m.SenderUsername,
+                        MessageType = messageType.ToString(),
+                        Status = ((TransferMessage)m).Status,
+                        Amount = ((TransferMessage)m).Amount,
+                        Description = ((TransferMessage)m).Description,
+                        Currency = ((TransferMessage)m).Currency,
+                        ListOfReceiversID = ((TransferMessage)m).ListOfReceiversID
+                    },
+                    "Request" => new RequestMessageViewModel
+                    {
+                        MessageID = m.MessageID,
+                        SenderID = m.SenderID,
+                        ChatID = m.ChatID,
+                        Timestamp = m.Timestamp.ToString("O"),
+                        SenderUsername = m.SenderUsername,
+                        MessageType = messageType.ToString(),
+                        Status = ((RequestMessage)m).Status,
+                        Amount = ((RequestMessage)m).Amount,
+                        Description = ((RequestMessage)m).Description,
+                        Currency = ((RequestMessage)m).Currency
+                    },
+                    _ => throw new InvalidOperationException($"Unknown message type: {messageType}")
+                };
+                return viewModel;
+            }).ToList();
+
+            var dtos = await Task.WhenAll(dtosTasks);
+
+            //// Manually serialize using runtime types
+            //var options = new JsonSerializerOptions
+            //{
+            //    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            //    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            //    WriteIndented = true
+            //};
+
+            //string json = JsonSerializer.Serialize(dtos, options);
+            //return Content(json, "application/json");
+
+            //return Ok(dtos);
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                Converters = { new MessageViewModelConverter() }
+            };
+
+            string json = JsonSerializer.Serialize(dtos, options);
+            return Content(json, "application/json");
         }
 
         [HttpPost("{chatId}/add-user/{userId}")]
@@ -128,7 +217,20 @@ namespace LoanShark.API.Controllers
         [HttpGet("{chatId}/participants")]
         public async Task<ActionResult<List<User>>> GetParticipants(int chatId)
         {
-            return Ok(await chatService.GetChatParticipantsList(chatId));
+            var friends = await chatService.GetChatParticipantsList(chatId);
+            var dtos = friends.Select(f => new SocialUserViewModel
+            {
+                UserID = f.UserID,
+                Username = f.Username,
+                FirstName = f.FirstName,
+                LastName = f.LastName,
+                Email = f.Email?.ToString(),
+                PhoneNumber = f.PhoneNumber?.ToString(),
+                Cnp = f.Cnp?.ToString(),
+                HashedPassword = f.HashedPassword?.ToString(),
+                ReportedCount = f.ReportedCount
+            }).ToList();
+            return Ok(dtos);
         }
     }
 }

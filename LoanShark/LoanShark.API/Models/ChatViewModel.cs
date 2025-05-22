@@ -5,6 +5,8 @@
         public int ChatID { get; set; }
 
         public List<int> UserIDs { get; set; }
+
+        public string ChatName { get; set; }
     }
     public class RequestMoneyDto
     {

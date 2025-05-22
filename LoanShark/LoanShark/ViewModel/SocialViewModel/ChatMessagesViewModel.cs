@@ -25,6 +25,7 @@ namespace LoanShark.ViewModel.SocialViewModel
     using Windows.Storage.Pickers;
     using WinRT.Interop;
     using LoanShark.EF.Repository.SocialRepository;
+    using LoanShark.Domain.Enums;
 
     public class ChatMessagesViewModel : INotifyPropertyChanged
     {
@@ -43,6 +44,7 @@ namespace LoanShark.ViewModel.SocialViewModel
         // ?
         private IRepository repository;
 
+        // ?
         public MessageTemplateSelector TemplateSelector => this.templateSelector;
 
         public int CurrentChatID { get; set; }
@@ -105,7 +107,11 @@ namespace LoanShark.ViewModel.SocialViewModel
         {
             string convertedContent = EmoticonConverter.ConvertEmoticonsToEmojis(this.MessageContent);
             this.MessageService.SendMessage(this.CurrentUserID, this.CurrentChatID, convertedContent);
+
+            //this.LoadAllMessagesForChat();  // force loading after sending
+
             this.CheckForNewMessages();
+
             this.MessageContent = string.Empty;
         }
 
@@ -130,7 +136,10 @@ namespace LoanShark.ViewModel.SocialViewModel
             if (file != null)
             {
                 string imageUrl = await ImgurImageUploader.UploadImageAndGetUrl(file);
-                this.MessageService.SendImage(this.CurrentUserID, this.CurrentChatID, imageUrl);
+                await this.MessageService.SendImage(this.CurrentUserID, this.CurrentChatID, imageUrl);
+
+                //this.LoadAllMessagesForChat();   // force loading after sending
+
                 this.CheckForNewMessages();
             }
         }
@@ -206,34 +215,51 @@ namespace LoanShark.ViewModel.SocialViewModel
             this.UserService = usrService;
             this.ReportService = reportService;
             this.CurrentChatID = currentChatID;
-            LoadUserIdChatStuff();
+            this.templateSelector = new MessageTemplateSelector(this.repository)
+            {
+                //    //TextMessageTemplateLeft = (DataTemplate)App.Current.Resources["TextMessageTemplateLeft"],
+                //    //TextMessageTemplateRight = (DataTemplate)App.Current.Resources["TextMessageTemplateRight"],
+                //    //ImageMessageTemplateLeft = (DataTemplate)App.Current.Resources["ImageMessageTemplateLeft"],
+                //    //ImageMessageTemplateRight = (DataTemplate)App.Current.Resources["ImageMessageTemplateRight"],
+                //    //TransferMessageTemplateLeft = (DataTemplate)App.Current.Resources["TransferMessageTemplateLeft"],
+                //    //TransferMessageTemplateRight = (DataTemplate)App.Current.Resources["TransferMessageTemplateRight"],
+                //    //RequestMessageTemplateLeft = (DataTemplate)App.Current.Resources["RequestMessageTemplateLeft"],
+                //    //RequestMessageTemplateRight = (DataTemplate)App.Current.Resources["RequestMessageTemplateRight"],
+
+                TextMessageTemplateLeft = App.Current.Resources["TextMessageTemplateLeft"] as DataTemplate ?? throw new InvalidOperationException("TextMessageTemplateLeft not found"),
+                TextMessageTemplateRight = App.Current.Resources["TextMessageTemplateRight"] as DataTemplate ?? throw new InvalidOperationException("TextMessageTemplateRight not found"),
+                ImageMessageTemplateLeft = App.Current.Resources["ImageMessageTemplateLeft"] as DataTemplate ?? throw new InvalidOperationException("ImageMessageTemplateLeft not found"),
+                ImageMessageTemplateRight = App.Current.Resources["ImageMessageTemplateRight"] as DataTemplate ?? throw new InvalidOperationException("ImageMessageTemplateRight not found"),
+                TransferMessageTemplateLeft = App.Current.Resources["TransferMessageTemplateLeft"] as DataTemplate ?? throw new InvalidOperationException("TransferMessageTemplateLeft not found"),
+                TransferMessageTemplateRight = App.Current.Resources["TransferMessageTemplateRight"] as DataTemplate ?? throw new InvalidOperationException("TransferMessageTemplateRight not found"),
+                RequestMessageTemplateLeft = App.Current.Resources["RequestMessageTemplateLeft"] as DataTemplate ?? throw new InvalidOperationException("RequestMessageTemplateLeft not found"),
+                RequestMessageTemplateRight = App.Current.Resources["RequestMessageTemplateRight"] as DataTemplate ?? throw new InvalidOperationException("RequestMessageTemplateRight not found"),
+            };
+
             this.SendMessageCommand = new RelayCommand(this.SendMessage);
             this.SendImageCommand = new RelayCommand(this.SendImage);
             this.DeleteMessageCommand = new RelayCommand<Message>(this.DeleteMessage);
             this.ReportMessageCommand = new RelayCommand<Message>(this.ReportMessage);
-            this.templateSelector = new MessageTemplateSelector(this.repository)
-            {
-                TextMessageTemplateLeft = (DataTemplate)App.Current.Resources["TextMessageTemplateLeft"],
-                TextMessageTemplateRight = (DataTemplate)App.Current.Resources["TextMessageTemplateRight"],
-                ImageMessageTemplateLeft = (DataTemplate)App.Current.Resources["ImageMessageTemplateLeft"],
-                ImageMessageTemplateRight = (DataTemplate)App.Current.Resources["ImageMessageTemplateRight"],
-                TransferMessageTemplateLeft = (DataTemplate)App.Current.Resources["TransferMessageTemplateLeft"],
-                TransferMessageTemplateRight = (DataTemplate)App.Current.Resources["TransferMessageTemplateRight"],
-                RequestMessageTemplateLeft = (DataTemplate)App.Current.Resources["RequestMessageTemplateLeft"],
-                RequestMessageTemplateRight = (DataTemplate)App.Current.Resources["RequestMessageTemplateRight"],
-            };
+
+            LoadUserIdChatStuff();
+            this.templateSelector.CurrentUserID = this.CurrentUserID;
 
             // Initial load of messages
-            this.LoadAllMessagesForChat();
+            //this.LoadAllMessagesForChat();
             this.ScrollToBottom();
 
             // Start polling for new messages
             this.StartMessagePolling();
+            this.SetupMessageTracking();    // ?????
         }
 
         private async void LoadUserIdChatStuff()
         {
             this.CurrentUserID = await this.UserService.GetCurrentUser();
+            if (this.templateSelector != null)
+            {
+                this.templateSelector.InitializeCurrentUserId(this.CurrentUserID); // Set CurrentUserID after async fetch
+            }
             this.CurrentChatName = await this.ChatService.GetChatNameByID(this.CurrentChatID);
             this.CurrentChatParticipants = await this.ChatService.GetChatParticipantsStringList(this.CurrentChatID);
         }
@@ -311,61 +337,74 @@ namespace LoanShark.ViewModel.SocialViewModel
         // Helper method to add a message to the chat
         private async void AddMessageToChat(Message message)
         {
-            // Process message based on its type
-            if (message is TextMessage textMessage)
+            //// Process message based on its type
+            //if (message is TextMessage textMessage)
+            //{
+            //    TextMessage newTextMessage = new TextMessage(
+            //        textMessage.GetMessageID(),
+            //        textMessage.GetSenderID(),
+            //        textMessage.GetChatID(),
+            //        textMessage.GetTimestamp(),
+            //        textMessage.GetContent(),
+            //        textMessage.GetUsersReport());
+            //    var user = await this.UserService.GetUserById(textMessage.GetSenderID());
+            //    newTextMessage.SenderUsername = user.GetUsername();
+            //    this.ChatMessages.Add(newTextMessage);
+            //}
+            //else if (message is ImageMessage imageMessage)
+            //{
+            //    ImageMessage newImageMessage = new ImageMessage(
+            //        imageMessage.GetMessageID(),
+            //        imageMessage.GetSenderID(),
+            //        imageMessage.GetChatID(),
+            //        imageMessage.GetTimestamp(),
+            //        imageMessage.GetImageURL(),
+            //        imageMessage.GetUsersReport());
+            //    var user = await this.UserService.GetUserById(newImageMessage.GetSenderID());
+            //    newImageMessage.SenderUsername = user.GetUsername();
+            //    this.ChatMessages.Add(newImageMessage);
+            //}
+            //else if (message is TransferMessage transferMessage)
+            //{
+            //    TransferMessage newTransferMessage = new TransferMessage(
+            //        transferMessage.GetMessageID(),
+            //        transferMessage.GetSenderID(),
+            //        transferMessage.GetChatID(),
+            //        transferMessage.GetStatus(),
+            //        transferMessage.GetAmount(),
+            //        transferMessage.GetDescription(),
+            //        transferMessage.GetCurrency());
+            //    var user = await this.UserService.GetUserById(newTransferMessage.GetSenderID());
+            //    newTransferMessage.SenderUsername = user.GetUsername();
+            //    this.ChatMessages.Add(newTransferMessage);
+            //}
+            //else if (message is RequestMessage requestMessage)
+            //{
+            //    RequestMessage newRequestMessage = new RequestMessage(
+            //        requestMessage.GetMessageID(),
+            //        requestMessage.GetSenderID(),
+            //        requestMessage.GetChatID(),
+            //        requestMessage.GetStatus(),
+            //        requestMessage.GetAmount(),
+            //        requestMessage.GetDescription(),
+            //        requestMessage.GetCurrency());
+            //    var user = await this.UserService.GetUserById(newRequestMessage.GetSenderID());
+            //    newRequestMessage.SenderUsername = user.GetUsername();
+            //    this.ChatMessages.Add(newRequestMessage);
+            //}
+
+            // simplified???
+            var user = await this.UserService.GetUserById(message.GetSenderID());
+            message.SenderUsername = user.GetUsername();
+            message.MessageType = message switch
             {
-                TextMessage newTextMessage = new TextMessage(
-                    textMessage.GetMessageID(),
-                    textMessage.GetSenderID(),
-                    textMessage.GetChatID(),
-                    textMessage.GetTimestamp(),
-                    textMessage.GetContent(),
-                    textMessage.GetUsersReport());
-                var user = await this.UserService.GetUserById(textMessage.GetSenderID());
-                newTextMessage.SenderUsername = user.GetUsername();
-                this.ChatMessages.Add(newTextMessage);
-            }
-            else if (message is ImageMessage imageMessage)
-            {
-                ImageMessage newImageMessage = new ImageMessage(
-                    imageMessage.GetMessageID(),
-                    imageMessage.GetSenderID(),
-                    imageMessage.GetChatID(),
-                    imageMessage.GetTimestamp(),
-                    imageMessage.GetImageURL(),
-                    imageMessage.GetUsersReport());
-                var user = await this.UserService.GetUserById(newImageMessage.GetSenderID());
-                newImageMessage.SenderUsername = user.GetUsername();
-                this.ChatMessages.Add(newImageMessage);
-            }
-            else if (message is TransferMessage transferMessage)
-            {
-                TransferMessage newTransferMessage = new TransferMessage(
-                    transferMessage.GetMessageID(),
-                    transferMessage.GetSenderID(),
-                    transferMessage.GetChatID(),
-                    transferMessage.GetStatus(),
-                    transferMessage.GetAmount(),
-                    transferMessage.GetDescription(),
-                    transferMessage.GetCurrency());
-                var user = await this.UserService.GetUserById(newTransferMessage.GetSenderID());
-                newTransferMessage.SenderUsername = user.GetUsername();
-                this.ChatMessages.Add(newTransferMessage);
-            }
-            else if (message is RequestMessage requestMessage)
-            {
-                RequestMessage newRequestMessage = new RequestMessage(
-                    requestMessage.GetMessageID(),
-                    requestMessage.GetSenderID(),
-                    requestMessage.GetChatID(),
-                    requestMessage.GetStatus(),
-                    requestMessage.GetAmount(),
-                    requestMessage.GetDescription(),
-                    requestMessage.GetCurrency());
-                var user = await this.UserService.GetUserById(newRequestMessage.GetSenderID());
-                newRequestMessage.SenderUsername = user.GetUsername();
-                this.ChatMessages.Add(newRequestMessage);
-            }
+                TextMessage _ => MessageType.Text,
+                ImageMessage _ => MessageType.Image,
+                TransferMessage _ => MessageType.Transfer,
+                RequestMessage _ => MessageType.Request,
+                _ => throw new InvalidOperationException($"Unknown message type for message ID {message.GetMessageID()}")
+            };
+            this.ChatMessages.Add(message);
         }
 
         public void SetupMessageTracking()

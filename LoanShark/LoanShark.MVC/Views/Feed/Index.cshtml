@@ -1,0 +1,27 @@
+﻿@model IEnumerable<LoanShark.Domain.Post>
+
+@{
+    ViewData["Title"] = "Feed";
+}
+
+<h1>Feed</h1>
+
+<div id="posts-container">
+    @foreach (var post in Model)
+    {
+        <div class="post-item" id="post-@post.PostID">
+            <h3>@post.Title</h3>
+            <small>@post.Category</small>
+            <p>@post.Content</p>
+            <p>@post.Timestamp</p>
+        </div>
+    }
+</div>
+
+<style>
+    .post-item {
+        border: 1px solid black;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+</style>

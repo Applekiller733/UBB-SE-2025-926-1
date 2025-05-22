@@ -1,0 +1,35 @@
+﻿@model LoanShark.MVC.Models.LoginViewModel
+
+@{
+	ViewBag.Title = "Loan Shark - Login";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+	<div class="text-center">
+		<h2 class="mb-4">Welcome to Loan Shark</h2>
+
+		@if (Model.IsErrorVisible)
+		{
+			<div class="alert alert-danger" style="width: 250px; margin: 0 auto;">
+				@Model.ErrorMessage
+			</div>
+		}
+
+		<form asp-action="Login" method="post" class="mt-3">
+			<div class="mb-3">
+				<input asp-for="Email" class="form-control" placeholder="Email" style="width: 250px; margin: 0 auto;" />
+			</div>
+			<div class="mb-3">
+				<input asp-for="Password" class="form-control" type="password" placeholder="Password" style="width: 250px; margin: 0 auto;" />
+			</div>
+			<button type="submit" class="btn btn-primary" style="width: 100px;">Login</button>
+		</form>
+
+		<div class="mt-4 d-flex justify-content-center align-items-center">
+			<span class="me-2">Don't have an account?</span>
+			<form asp-action="Register" method="get">
+				<button class="btn btn-link p-0" type="submit">Sign up</button>
+			</form>
+		</div>
+	</div>
+</div>

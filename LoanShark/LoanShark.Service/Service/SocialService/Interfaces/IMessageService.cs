@@ -10,6 +10,7 @@ namespace LoanShark.Service.SocialService.Interfaces
     using System.Text;
     using System.Threading.Tasks;
     using LoanShark.Data;
+    using LoanShark.Domain.Enums;
     using LoanShark.Domain.MessageClasses;
     using LoanShark.EF.Repository.SocialRepository;
 
@@ -69,5 +70,7 @@ namespace LoanShark.Service.SocialService.Interfaces
         Task SendRequestMessage(int userID, int chatID, string content, string status, float amount, string currency);
 
         Task ReportMessage(Message message);
+
+        Task<MessageType> GetMessageTypeByMessageId(int messageId);
     }
 }

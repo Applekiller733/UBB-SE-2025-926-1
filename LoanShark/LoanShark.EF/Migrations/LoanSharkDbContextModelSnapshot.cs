@@ -400,7 +400,6 @@ namespace LoanShark.EF.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasMaxLength(260)
                         .HasColumnType("NVARCHAR(260)");
 

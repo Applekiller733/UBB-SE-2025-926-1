@@ -106,14 +106,13 @@ namespace LoanShark.ViewModel.SocialViewModel
                 selectedFriendsIDs.Add(friend.GetUserId());
             }
 
-            this.chatService.CreateChat(selectedFriendsIDs, this.GroupName);
-            this.chatListViewModel.LoadChats();
+            await this.chatService.CreateChat(selectedFriendsIDs, this.GroupName);
+            this.chatListViewModel.LoadCurrentUserChats();
         }
 
         private void AddFriendToSelectedList(object parameter)
         {
             var friend = parameter as User;
-            this.SelectedFriends = this.Friends;
             if (friend != null && !this.SelectedFriends.Contains(friend))
             {
                 this.SelectedFriends.Add(friend);
