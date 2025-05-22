@@ -3,7 +3,6 @@ using LoanShark.Domain;
 using LoanShark.API.Proxies;
 using LoanShark.Service.BankService;
 using LoanShark.MVC.Models;
-using LoanShark.ViewModel.BankViewModel;
 using Microsoft.AspNetCore.Http;
 
 namespace LoanShark.MVC.Controllers
