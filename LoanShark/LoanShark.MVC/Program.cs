@@ -21,6 +21,8 @@ namespace LoanShark.MVC
             builder.Services.AddHttpClient<ILoginService, LoginServiceProxy>();
             builder.Services.AddHttpClient<IMainPageService, MainPageServiceProxy>();
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
+            builder.Services.AddHttpClient<IBankAccountService, BankAccountServiceProxy>();
+
 
             //Transactions Florin
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
@@ -57,6 +59,7 @@ namespace LoanShark.MVC
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseRouting();
 
