@@ -1,0 +1,106 @@
+﻿@model IEnumerable<LoanShark.MVC.Models.NotificationViewModel>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<h1>Notifications</h1>
+
+<div id="notifications-container">
+        @foreach (var notification in Model)
+        {
+            <div class="notification-item" id="notification-@notification.Id">
+                <p>@notification.Content</p>
+                <form asp-action="Clear" method="post">         
+                    <input type="hidden" name="notificationId" value="@notification.Id" />
+                    <button type="submit" class="clear-button">Clear</button>   @*form submit triggers the httppost by default?*@
+                </form>
+            </div>
+        }
+    <form asp-action="ClearAll" method="post">
+        <button type="submit" class="clear-all-button">Clear All</button>
+    </form>
+</div>
+
+<style>
+    body {
+        text-align: center;
+    }
+
+    #notifications-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        min-height: 100px;
+    }
+
+    .notification-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        margin-bottom: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .notification-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .notification-item p {
+        margin: 0;
+        flex-grow: 1;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .clear-button {
+        padding: 8px 16px;
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+    }
+
+    .clear-button:hover {
+        background-color: #c82333;
+    }
+
+    .clear-button:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.3);
+    }
+
+    .clear-all-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+        transition: background-color 0.2s ease;
+    }
+
+    .clear-all-button:hover {
+        background-color: #0056b3;
+    }
+
+    .clear-all-button:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+    }
+</style>

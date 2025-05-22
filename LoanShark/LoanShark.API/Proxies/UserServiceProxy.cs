@@ -79,7 +79,7 @@ namespace LoanShark.API.Proxies
         public async Task<string> DeleteUser(string password)
         {
             var content = JsonContent.Create(password);
-            var response = await _httpClient.PostAsync("api/User/delete", content);
+            var response = await _httpClient.PostAsync("https://localhost:7097/api/User/delete", content);
             return await response.Content.ReadAsStringAsync();
         }
 

@@ -1,0 +1,55 @@
+﻿@model TakeLoanViewModel
+@{
+    ViewBag.Title = "Take Loan";
+}
+
+<div class="container py-4" style="max-width: 500px; margin: auto;">
+    <h2 class="text-center mb-4">Take Loan</h2>
+
+    <form asp-action="Take" method="post" novalidate>
+        <div class="mb-3">
+            <label asp-for="SelectedBankAccount" class="form-label fw-semibold">Bank Account</label>
+            <small class="text-muted d-block mb-1">Choose the account where the loan amount will be deposited</small>
+            <select asp-for="SelectedBankAccount" asp-items="@(new SelectList(Model.BankAccounts))" class="form-select" aria-describedby="bankAccountHelp">
+                <option value="">Select Bank Account</option>
+            </select>
+            <span asp-validation-for="SelectedBankAccount" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Amount" class="form-label fw-semibold">Loan Amount</label>
+            <small class="text-muted d-block mb-1">Enter the amount you wish to borrow in the currency of the selected account</small>
+            <input asp-for="Amount" class="form-control" placeholder="Enter Amount" />
+            <div class="form-text">Amount cannot exceed one million</div>
+            <span asp-validation-for="Amount" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="SelectedMonths" class="form-label fw-semibold">Loan Duration</label>
+            <small class="text-muted d-block mb-1">Select the number of months for repayment</small>
+            <select asp-for="SelectedMonths" asp-items="@(new SelectList(Model.Months))" class="form-select" aria-describedby="monthsHelp">
+                <option value="">Select Number of Months</option>
+            </select>
+            <span asp-validation-for="SelectedMonths" class="text-danger"></span>
+        </div>
+
+        <div class="bg-dark text-light p-3 rounded mb-3" style="border:1px solid #445A63;">
+            <h5 class="fw-semibold">Loan Details</h5>
+            <p>Tax Percentage: @Model.TaxPercentage %</p>
+            <p class="fw-bold">Amount To Pay: @Model.AmountToPay</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.TakeErrorMessage))
+        {
+                    <div class="alert alert-danger text-center">@Model.TakeErrorMessage</div>
+        }
+
+       <button type="submit" name="action" value="calculate" class="btn btn-secondary">Calculate</button>
+        <button type="submit" name="action" value="take" class="btn btn-primary">Take Loan</button>
+
+        <a href="@Url.Action("Index", "Loans")" class="btn btn-secondary d-block mx-auto px-4">Back</a>
+    </form>
+</div>
+
+
+
