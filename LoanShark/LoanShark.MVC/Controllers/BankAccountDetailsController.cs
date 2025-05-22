@@ -16,7 +16,7 @@ namespace LoanShark.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(string iban)
+        public async Task<IActionResult> Index(string iban)
         {
             if (string.IsNullOrEmpty(iban))
                 return RedirectToAction("Index", "MainPage");

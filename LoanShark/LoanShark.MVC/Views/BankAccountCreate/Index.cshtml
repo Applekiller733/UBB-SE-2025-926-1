@@ -1,134 +1,52 @@
-﻿@model BankAccountCreateModel
+﻿@model LoanShark.MVC.Models.BankAccountCreateModel
 
 @{
-    ViewData["Title"] = "Create Bank Account";
+	ViewData["Title"] = "Create Bank Account";
 }
 
 <h2>Create Bank Account</h2>
 
 <div class="container">
-    <div class="header">
-        <a href="@Url.Action("Index", "MainPage")" class="back-button">&#x2190;</a>
-        <h1>Create Bank Account</h1>
-    </div>
+	<div class="header">
+		<a href="@Url.Action("Index", "MainPage")" class="back-button">&#x2190;</a>
+		<h1>Create Bank Account</h1>
+	</div>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="notification">
-            @TempData["SuccessMessage"]
-        </div>
-    }
+	@if (TempData["SuccessMessage"] != null)
+	{
+		<div class="notification">
+			@TempData["SuccessMessage"]
+		</div>
+	}
 
-   <form asp-action="Create" method="post" class="form-container">
-        <div class="form-group">
-            <label>Select currency:</label>
-            <div class="currency-list">
-                @foreach (var currency in Model.AvailableCurrencies)
-                {
-                    <label class="currency-item">
-                        <input type="radio" 
-                               name="SelectedCurrencyName" 
-                               value="@currency.Name" 
-                               @(currency.Name == Model.SelectedCurrency?.Name ? "checked" : "") />
-                        <span>@currency.Name</span>
-                    </label>
-                }
-            </div>
-            <span asp-validation-for="SelectedCurrency" class="text-danger"></span>
-        </div>
+	<form asp-action="Index" method="post" class="form-container">
+		<div class="form-group">
+			<label>Select currency:</label>
+			<div class="currency-list">
+				@for (int i = 0; i < Model.AvailableCurrencies.Count; i++)
+				{
+					<label class="currency-item">
+						<input type="radio"
+						       name="SelectedCurrencyIndex"
+						       value="@i"
+						       @(Model.AvailableCurrencies[i].IsChecked ? "checked" : "") />
+						<span>@Model.AvailableCurrencies[i].Name</span>
 
-        <div class="form-group">
-            <label for="CustomName">Custom Name</label>
-            <input asp-for="CustomName" class="form-control" placeholder="Custom Name" />
-            <span asp-validation-for="CustomName" class="text-danger"></span>
-        </div>
+						<input type="hidden" asp-for="AvailableCurrencies[(i)].Name" />
+						<input type="hidden" asp-for="AvailableCurrencies[(i)].IsChecked" />
 
-        <button type="submit" class="btn-confirm">Confirm creation</button>
-    </form>
+					</label>
+				}
+			</div>
+			<span asp-validation-for="SelectedCurrency" class="text-danger"></span>
+		</div>
+
+		<div class="form-group">
+			<label for="CustomName">Custom Name</label>
+			<input asp-for="CustomName" class="form-control" placeholder="Custom Name" />
+			<span asp-validation-for="CustomName" class="text-danger"></span>
+		</div>
+
+		<button type="submit" class="btn-confirm">Confirm creation</button>
+	</form>
 </div>
-
-@section Styles {
-    <style>
-        .container {
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 30px;
-            border: 2px solid gray;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            font-family: Arial, sans-serif;
-        }
-        .header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .back-button {
-            font-size: 24px;
-            text-decoration: none;
-            color: #333;
-            margin-right: 15px;
-            font-weight: bold;
-        }
-        .header h1 {
-            flex-grow: 1;
-            text-align: center;
-            margin: 0;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .notification {
-            background-color: #e0ffe0;
-            color: #2a7a2a;
-            border: 1px solid #2a7a2a;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .currency-list {
-            border: 2px solid gray;
-            border-radius: 5px;
-            max-height: 150px;
-            overflow-y: auto;
-            padding: 10px;
-        }
-        .currency-item {
-            display: flex;
-            align-items: center;
-            padding: 5px 0;
-        }
-        .currency-item input[type="radio"] {
-            margin-right: 10px;
-        }
-        .form-control {
-            width: 100%;
-            padding: 8px 12px;
-            font-size: 16px;
-            border: 1px solid gray;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        .text-danger {
-            color: red;
-            font-size: 14px;
-        }
-        .btn-confirm {
-            display: block;
-            margin: 0 auto;
-            padding: 10px 25px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            font-size: 18px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        .btn-confirm:hover {
-            background-color: #45a049;
-        }
-    </style>
-}
