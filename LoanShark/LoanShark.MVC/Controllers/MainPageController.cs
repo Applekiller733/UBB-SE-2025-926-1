@@ -128,7 +128,7 @@ namespace LoanShark.MVC.Controllers
             if (string.IsNullOrEmpty(iban))
                 return RedirectToAction("Index");
 
-            return RedirectToAction("Index", "Loan");
+            return RedirectToAction("Index", "Loans");
         }
 
         [HttpGet]

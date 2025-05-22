@@ -25,6 +25,7 @@ namespace LoanShark.EF.Repository.BankRepository
                     Amount = loan.Amount,
                     Currency = loan.Currency,
                     DateDeadline = loan.DateDeadline,
+                    DateTaken = loan.DateTaken,
                     TaxPercentage = loan.TaxPercentage,
                     NumberMonths = loan.NumberMonths,
                     State = "unpaid",

@@ -35,6 +35,8 @@ namespace LoanShark.MVC
 
             builder.Services.AddHttpClient<IFeedServiceProxy, FeedServiceProxy>();
             builder.Services.AddHttpClient<INotificationServiceProxy, NotificationServiceProxy>();
+            builder.Services.AddHttpClient<ILoanService, LoanServiceProxy>();
+            builder.Services.AddHttpClient<IUserService, UserServiceProxy>();
 
 
             var app = builder.Build();

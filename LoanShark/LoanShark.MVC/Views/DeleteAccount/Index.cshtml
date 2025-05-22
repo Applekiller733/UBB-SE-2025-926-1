@@ -1,0 +1,29 @@
+﻿@model LoanShark.MVC.Models.DeleteAccountViewModel
+@{
+    ViewBag.Title = "Delete Account";
+}
+
+<div class="container py-5" style="max-width: 500px;">
+    <div class="text-center mb-4">
+        <h2>Are you sure you want to delete your account?</h2>
+        <p class="text-muted">This action cannot be undone. Please enter your password to confirm.</p>
+    </div>
+
+    <form asp-action="DeleteAccount" method="post">
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label fw-semibold">Password</label>
+            <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+                <div class="alert alert-danger text-center">@Model.ErrorMessage</div>
+        }
+
+        <button type="submit" class="btn btn-danger w-100">Delete Account</button>
+        <a href="@Url.Action("Index", "MainPage")" class="btn btn-secondary d-block mx-auto px-4">Back</a>
+    </form>
+      
+</div>
+
