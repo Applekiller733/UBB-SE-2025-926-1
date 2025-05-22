@@ -2,6 +2,7 @@ using LoanShark.API.Proxies;
 using LoanShark.MVC.Controllers;
 using LoanShark.MVC.Models;
 using LoanShark.Service.BankService;
+using LoanShark.Service.Service.BankService;
 using LoanShark.Web.Extensions;
 
 namespace LoanShark.MVC
@@ -12,21 +13,29 @@ namespace LoanShark.MVC
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddSession();// for login
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddAllServiceProxies();
+            builder.Services.AddHttpClient<ILoginService, LoginServiceProxy>();
+            builder.Services.AddHttpClient<IMainPageService, MainPageServiceProxy>();
+            builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
 
             //Transactions Florin
             builder.Services.AddHttpClient<ITransactionsService, TransactionsServiceProxy>();
             builder.Services.AddHttpClient<ITransactionHistoryService, TransactionHistoryProxy>();
 
-            //Zelu
             builder.Services.AddHttpClient<IChatServiceProxy, ChatServiceProxy>();
             builder.Services.AddHttpClient<ISocialUserServiceProxy, SocialUserServiceProxy>();
             builder.Services.AddHttpClient<IMessageServiceProxy, MessageServiceProxy>();
             builder.Services.AddHttpClient<IReportServiceProxy, ReportServiceProxy>();
             builder.Services.AddHttpClient<ImgurImageUploader>();
             builder.Services.AddSingleton<ImgurImageUploader>();
+
+            builder.Services.AddHttpClient<IFeedServiceProxy, FeedServiceProxy>();
+            builder.Services.AddHttpClient<INotificationServiceProxy, NotificationServiceProxy>();
+
 
             var app = builder.Build();
 
@@ -38,6 +47,8 @@ namespace LoanShark.MVC
                 app.UseHsts();
             }
 
+            app.UseSession(); // for login
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -47,7 +58,7 @@ namespace LoanShark.MVC
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Index}/{id?}");
 
             app.Run();
         }
