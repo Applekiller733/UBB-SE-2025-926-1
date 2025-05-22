@@ -25,12 +25,12 @@ namespace LoanShark.API.Proxies
 
         public async Task<List<BankAccount>?> GetUserBankAccounts(int userID)
         {
-            return await _httpClient.GetFromJsonAsync<List<BankAccount>>($"api/bankaccount/user/{userID}");
+            return await _httpClient.GetFromJsonAsync<List<BankAccount>>($"https://localhost:7097/api/bankaccount/user/{userID}");
         }
 
         public async Task<BankAccount?> FindBankAccount(string iban)
         {
-            return await _httpClient.GetFromJsonAsync<BankAccount>($"api/bankaccount/{iban}");
+            return await _httpClient.GetFromJsonAsync<BankAccount>($"https://localhost:7097/api/bankaccount/{iban}");
         }
 
         public async Task<bool> CreateBankAccount(int userID, string customName, string currency)
@@ -41,36 +41,36 @@ namespace LoanShark.API.Proxies
                 CustomName = customName,
                 Currency = currency
             };
-            var response = await _httpClient.PostAsJsonAsync("api/bankaccount", payload);
+            var response = await _httpClient.PostAsJsonAsync("https://localhost:7097/api/bankaccount", payload);
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> RemoveBankAccount(string iban)
         {
-            var response = await _httpClient.DeleteAsync($"api/bankaccount/{iban}");
+            var response = await _httpClient.DeleteAsync($"https://localhost:7097/api/bankaccount/{iban}");
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> CheckIBANExists(string iban)
         {
-            var response = await _httpClient.GetAsync($"api/bankaccount/exists/{iban}");
+            var response = await _httpClient.GetAsync($"https://localhost:7097/api/bankaccount/exists/{iban}");
             return response.IsSuccessStatusCode && bool.Parse(await response.Content.ReadAsStringAsync());
         }
 
         public async Task<string> GenerateIBAN()
         {
-            return await _httpClient.GetStringAsync("api/bankaccount/generate-iban");
+            return await _httpClient.GetStringAsync("https://localhost:7097/api/bankaccount/generate-iban");
         }
 
         public async Task<List<string>> GetCurrencies()
         {
-            return await _httpClient.GetFromJsonAsync<List<string>>("api/bankaccount/currencies");
+            return await _httpClient.GetFromJsonAsync<List<string>>("https://localhost:7097/api/bankaccount/currencies");
         }
 
         public async Task<bool> VerifyUserCredentials(string email, string password)
         {
             var payload = new { Email = email, Password = password };
-            var response = await _httpClient.PostAsJsonAsync("api/bankaccount/verify", payload);
+            var response = await _httpClient.PostAsJsonAsync("https://localhost:7097/api/bankaccount/verify", payload);
             return response.IsSuccessStatusCode && bool.Parse(await response.Content.ReadAsStringAsync());
         }
 
@@ -87,7 +87,7 @@ namespace LoanShark.API.Proxies
             };
 
             var json = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync($"api/bankaccount/{iban}", json);
+            var response = await _httpClient.PutAsync($"https://localhost:7097/api/bankaccount/{iban}", json);
             return response.IsSuccessStatusCode;
         }
     }

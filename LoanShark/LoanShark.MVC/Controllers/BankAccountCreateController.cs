@@ -17,7 +17,7 @@ namespace LoanShark.MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Index()
         {
             var model = new BankAccountCreateModel
             {
@@ -30,39 +30,41 @@ namespace LoanShark.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(BankAccountCreateModel model)
+        public async Task<IActionResult> Index(BankAccountCreateModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                model.AvailableCurrencies = (await _bankAccountService.GetCurrencies())
-                    .Select(currencyName => new CurrencyItemModel { Name = currencyName })
-                    .ToList();
-
-                return View(model);
-            }
-
             var userId = HttpContext.Session.GetInt32("userId");
             if (userId == null)
             {
                 TempData["Error"] = "User session expired. Please log in again.";
-                return RedirectToAction("Login", "User");
+                return RedirectToAction("Index", "Account");
             }
 
-            var selectedCurrency = model.SelectedCurrency?.Name;
-            if (string.IsNullOrWhiteSpace(selectedCurrency))
+            if (Request.Form.TryGetValue("SelectedCurrencyIndex", out var selectedIndexStr)
+                && int.TryParse(selectedIndexStr, out int selectedIndex)
+                && selectedIndex >= 0 && selectedIndex < model.AvailableCurrencies.Count)
             {
+                model.AvailableCurrencies[selectedIndex].IsChecked = true;
+                model.SelectedCurrency = model.AvailableCurrencies[selectedIndex];
+            }
+            else
+            {
+                TempData["Error"] = "Please select a currency.";
                 model.AvailableCurrencies = (await _bankAccountService.GetCurrencies())
                     .Select(name => new CurrencyItemModel { Name = name })
                     .ToList();
+                return View(model);
+            }
 
-                ModelState.AddModelError(string.Empty, "Please select a currency.");
+            if (string.IsNullOrWhiteSpace(model.CustomName))
+            {
+                ModelState.AddModelError(nameof(model.CustomName), "Please enter a custom name.");
                 return View(model);
             }
 
             var success = await _bankAccountService.CreateBankAccount(
                 userId.Value,
-                model.CustomName ?? string.Empty,
-                selectedCurrency
+                model.CustomName,
+                model.SelectedCurrency.Name
             );
 
             if (!success)
@@ -72,7 +74,8 @@ namespace LoanShark.MVC.Controllers
             }
 
             TempData["Success"] = "Bank account created successfully!";
-            return RedirectToAction("Index", "BankAccount");
+            return RedirectToAction("Index", "MainPage");
         }
+
     }
 }

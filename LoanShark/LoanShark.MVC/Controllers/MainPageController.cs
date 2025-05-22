@@ -80,7 +80,7 @@ namespace LoanShark.MVC.Controllers
             }
 
             // No route values passed
-            return RedirectToAction("Details", "BankAccountDetails");
+            return RedirectToAction("Index","BankAccountDetails", new { iban });
         }
 
 
@@ -92,7 +92,7 @@ namespace LoanShark.MVC.Controllers
             if (string.IsNullOrEmpty(iban))
                 return RedirectToAction("Index");
 
-            return RedirectToAction("Index", "Transaction"); // Must have TransactionController
+            return RedirectToAction("Index", "Transactions"); // Must have TransactionController
         }
 
         [HttpPost]
@@ -102,7 +102,7 @@ namespace LoanShark.MVC.Controllers
             if (string.IsNullOrEmpty(iban))
                 return RedirectToAction("Index");
 
-            return RedirectToAction("Index", "TransactionHistory"); // Must have TransactionHistoryController
+            return RedirectToAction("Index", "TransactionsHistory"); // Must have TransactionHistoryController
         }
 
         [HttpPost]
@@ -112,7 +112,7 @@ namespace LoanShark.MVC.Controllers
             if (string.IsNullOrEmpty(iban))
                 return RedirectToAction("Index");
 
-            return RedirectToAction("Index", "BankAccountSettings");
+            return RedirectToAction("Details", "BankAccountList", new { iban });
         }
 
         [HttpPost]
