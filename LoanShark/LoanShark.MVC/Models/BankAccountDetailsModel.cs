@@ -9,4 +9,5 @@ namespace LoanShark.MVC.Models
         public BankAccount BankAccount { get; set; }
 
     }
+
 }

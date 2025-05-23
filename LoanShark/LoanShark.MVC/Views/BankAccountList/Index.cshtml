@@ -24,9 +24,16 @@
 									<strong>@account.Name</strong><br />
 									IBAN: @account.Iban
 								</div>
-								<a asp-action="Details" asp-route-iban="@account.Iban" class="btn btn-sm btn-info">View</a>
+								<div>
+									<a asp-action="Index" asp-route-iban="@account.Iban" class="btn btn-sm btn-info">View</a> 
+									<a asp-controller="BankAccountUpdate" asp-action="Edit" asp-route-iban="@account.Iban" class="btn btn-sm btn-warning">
+										Bank Account Settings
+									</a>
+								</div>
 							</li>
 						}
+
+
 					</ul>
 				</div>
 			}

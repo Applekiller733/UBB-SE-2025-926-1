@@ -29,14 +29,15 @@ namespace LoanShark.Controllers
             {
                 Iban = account.Iban,
                 Name = account.Name,
-                DailyLimit = (double)account.DailyLimit,
-                MaximumPerTransaction = (double)account.MaximumPerTransaction,
+                DailyLimit = account.DailyLimit,
+                MaximumPerTransaction = account.MaximumPerTransaction,
                 MaximumNrTransactions = account.MaximumNrTransactions,
                 IsBlocked = account.Blocked
             };
 
             return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Edit(BankAccountEditModel model)
