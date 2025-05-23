@@ -105,8 +105,7 @@ namespace LoanShark.MVC.Controllers
         public async Task<IActionResult> Delete(string iban)
         {
             await _bankAccountService.RemoveBankAccount(iban);
-            return RedirectToAction("Index");
-            return this.View(selectedAccount);
+            return RedirectToAction("Index", "MainPage");
 
         }
 
