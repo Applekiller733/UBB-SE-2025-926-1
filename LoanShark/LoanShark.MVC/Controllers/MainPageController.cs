@@ -18,7 +18,7 @@ namespace LoanShark.MVC.Controllers
             _mainPageService = mainPageService;
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult SelectBankAccount(string iban)
         {
             if (!string.IsNullOrEmpty(iban))
@@ -38,6 +38,10 @@ namespace LoanShark.MVC.Controllers
                 return RedirectToAction("Index", "Account");
 
             var accounts = await _mainPageService.GetUserBankAccounts(userId.Value);
+            if (HttpContext.Session.GetString("current_bank_account_iban") == null && accounts.Count > 0)
+                HttpContext.Session.SetString("current_bank_account_iban", accounts[0].Iban);
+            TempData["SelectedAccountIban"] = HttpContext.Session.GetString("current_bank_account_iban");
+
             var vm = new MainPageViewModel
             {
                 WelcomeText = $"Welcome, {HttpContext.Session.GetString("first_name")}!",
@@ -45,6 +49,7 @@ namespace LoanShark.MVC.Controllers
                 BalanceButtonContent = TempData["BalanceButtonContent"]?.ToString() ?? "Check Balance",
                 SelectedAccountIban = TempData["SelectedAccountIban"]?.ToString()
             };
+           
 
 
             return View("Index", vm);
@@ -82,6 +87,7 @@ namespace LoanShark.MVC.Controllers
             // No route values passed
             return RedirectToAction("Index","BankAccountDetails", new { iban });
         }
+
 
 
 
@@ -140,7 +146,7 @@ namespace LoanShark.MVC.Controllers
         [HttpGet]
         public IActionResult AccountSettings()
         {
-            return RedirectToAction("Index", "AccountSettings");
+            return RedirectToAction("Index", "UserInformation");
         }
 
         [HttpGet]

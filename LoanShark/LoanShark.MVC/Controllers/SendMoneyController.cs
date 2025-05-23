@@ -11,7 +11,7 @@ namespace LoanShark.MVC.Controllers
 
         public SendMoneyController(ITransactionsService transactionsService)
         {
-            transactionsService = transactionsService;
+            this.transactionsService = transactionsService;
         }
 
         [HttpGet]

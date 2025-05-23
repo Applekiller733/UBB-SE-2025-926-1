@@ -65,6 +65,7 @@ namespace LoanShark.MVC.Controllers
             if (account == null)
                 return NotFound();
 
+
             var model = new BankAccountEditModel
             {
                 Iban = account.Iban,
@@ -105,8 +106,9 @@ namespace LoanShark.MVC.Controllers
         {
             await _bankAccountService.RemoveBankAccount(iban);
             return RedirectToAction("Index");
-        }
+            return this.View(selectedAccount);
 
+        }
 
         [HttpPost]
         public IActionResult SetCurrentBankAccount(string iban)
@@ -118,7 +120,7 @@ namespace LoanShark.MVC.Controllers
 
         private int GetCurrentUserId()
         {
-            return int.TryParse(HttpContext.Session.GetString("id_user"), out int id) ? id : 0;
+            return int.TryParse(HttpContext.Session.GetString("userId"), out int id) ? id : 0;
         }
     }
 }
