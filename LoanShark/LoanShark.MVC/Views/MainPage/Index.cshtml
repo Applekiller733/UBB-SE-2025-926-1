@@ -18,12 +18,14 @@
 
 <!-- Welcome Text -->
 <h2 class="text-center mb-4">@Model.WelcomeText</h2>
+<h5 class="text-center mb-4">Current accout: @Model.SelectedAccountIban</h5>
 
 <!-- FlipView Alternative: Dropdown List for Accounts -->
 <div class="text-center mb-4">
 	<div class="d-flex justify-content-center align-items-center mb-2">
-		<form asp-action="SelectBankAccount" method="post" class="d-flex">
-			<select name="iban" class="form-select w-auto">
+		<form asp-action="SelectBankAccount" method="get" class="d-flex">
+			<select name="iban" class="form-select w-auto" onchange="this.form.submit()">
+                <option value=""> -- Select an account -- </option>
 				@foreach (var account in Model.BankAccounts)
 				{
 					<option value="@account.Iban">@account.Name - @account.Iban</option>

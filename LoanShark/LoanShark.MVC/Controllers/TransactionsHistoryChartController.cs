@@ -14,8 +14,8 @@ namespace LoanShark.MVC.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            //_transactionsHistoryService.iban = HttpContext.Session.GetString("current_bank_account_iban");
-            _transactionsHistoryService.iban = "RO10SEUPBMC6N7XG6GRUWOK3";
+            _transactionsHistoryService.iban = HttpContext.Session.GetString("current_bank_account_iban");
+            //_transactionsHistoryService.iban = "RO10SEUPBMC6N7XG6GRUWOK3";
     
             var transactionTypesCount = await _transactionsHistoryService.GetTransactionTypeCounts();
 
