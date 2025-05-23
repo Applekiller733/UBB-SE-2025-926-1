@@ -33,7 +33,8 @@ namespace LoanShark.Service.SocialService.Implementations
         {
             this.repo = repo;
             this.notificationService = notificationService;
-            this.userID = this.GetCurrentUser();
+            //this.userID = this.GetCurrentUser();
+            this.userID = 5;
         }
 
         /// <summary>
