@@ -7,7 +7,7 @@
 <div class="container mt-5">
     <h2>Update Bank Account</h2>
 
-    <form asp-action="Edit" method="post" class="mt-4">
+    <form asp-action="Edit" asp-controller="BankAccountList" method="post" class="mt-4">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <input type="hidden" asp-for="Iban" />
