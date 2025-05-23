@@ -36,13 +36,14 @@ namespace LoanShark.MVC.Controllers
 
             if (selectedAccount == null)
                 return NotFound();
-
+            //List<BankAccount> l = new List<BankAccount>();
+            //l.Add(selectedAccount);
             return this.View(selectedAccount);
         }
 
         private int GetCurrentUserId()
         {
-            return int.TryParse(HttpContext.Session.GetString("id_user"), out int id) ? id : 0;
+            return int.TryParse(HttpContext.Session.GetString("userId"), out int id) ? id : 0;
         }
     }
 }
