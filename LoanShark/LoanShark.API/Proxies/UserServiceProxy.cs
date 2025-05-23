@@ -66,7 +66,7 @@ namespace LoanShark.API.Proxies
                 PhoneNumber = phoneNumber,
                 Password = password
             };
-            var response = await _httpClient.PostAsJsonAsync("api/User/create", content);
+            var response = await _httpClient.PostAsJsonAsync("https://localhost:7097/api/User/create", content);
             //return response.IsSuccessStatusCode;
         }
 

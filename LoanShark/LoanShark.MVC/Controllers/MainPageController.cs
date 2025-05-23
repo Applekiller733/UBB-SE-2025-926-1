@@ -38,7 +38,7 @@ namespace LoanShark.MVC.Controllers
                 return RedirectToAction("Index", "Account");
 
             var accounts = await _mainPageService.GetUserBankAccounts(userId.Value);
-            if (HttpContext.Session.GetString("current_bank_account_iban") == null)
+            if (HttpContext.Session.GetString("current_bank_account_iban") == null && accounts.Count > 0)
                 HttpContext.Session.SetString("current_bank_account_iban", accounts[0].Iban);
             TempData["SelectedAccountIban"] = HttpContext.Session.GetString("current_bank_account_iban");
 
@@ -146,7 +146,7 @@ namespace LoanShark.MVC.Controllers
         [HttpGet]
         public IActionResult AccountSettings()
         {
-            return RedirectToAction("Index", "AccountSettings");
+            return RedirectToAction("Index", "UserInformation");
         }
 
         [HttpGet]
