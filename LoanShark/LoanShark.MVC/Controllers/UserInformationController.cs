@@ -9,7 +9,7 @@ namespace LoanShark.MVC.Controllers
         {
             var model = new UserInformationViewModel
             {
-                Username = HttpContext.Session.GetString("userEmail"), // fallback if Username not in session
+                Username = HttpContext.Session.GetString("first_name") + HttpContext.Session.GetString("last_name"), // fallback if Username not in session
                 Email = HttpContext.Session.GetString("userEmail"),
                 FirstName = HttpContext.Session.GetString("first_name"),
                 LastName = HttpContext.Session.GetString("last_name"),
